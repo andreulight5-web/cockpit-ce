@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// Asset imports — Vite handles spaces, colons and the `~` folder.
-import monstreCalin from '../../assets/characters/monstre~/Câlin : attachant.webp'
-import monstreSurexcite from '../../assets/characters/monstre~/Surexcité : hyperactif.webp'
+// Asset imports — accented filenames break on Linux (NFC/NFD mismatch),
+// so the 3 files with accents have been renamed to ASCII.
+import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
+import monstreSurexcite from '../../assets/characters/monstre~/monstre-surexcite.webp'
 import mamanComplice from '../../assets/characters/maman/Complice : qui rigole.webp'
-import mamanFiere from '../../assets/characters/maman/Fière de son enfant.webp'
+import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 
 const STORAGE_KEY = 'cockpit_onboarding'
