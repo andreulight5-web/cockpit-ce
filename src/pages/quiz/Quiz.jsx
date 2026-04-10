@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Character from '../../components/ui/Character'
 
 const quizzes = [
   { id: 1, title: 'Les bases du TDAH', status: 'done' },
@@ -37,7 +38,7 @@ export default function Quiz() {
         {/* Le Monstre card */}
         <div className="card fade-up" style={styles.monstreCard}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-md)' }}>
-            <span style={{ fontSize: '3rem' }}>🐾</span>
+            <Character name="monstre" mood="surexcite" size={56} />
             <div style={{ flex: 1 }}>
               <h3>Le Monstre</h3>
               <p style={{ fontSize: '0.75rem', color: 'var(--gray-600)' }}>
@@ -55,7 +56,8 @@ export default function Quiz() {
             </div>
           </div>
           <div className="badge" style={{ background: 'var(--mint)', color: 'var(--navy)', marginTop: 'var(--sp-md)' }}>
-            👩 Validé par Maman
+            <Character name="maman" mood="fiere" size={16} />
+            Validé par Maman
           </div>
         </div>
 

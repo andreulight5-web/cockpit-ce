@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Character from '../../components/ui/Character'
 
 const lecons = [
   { id: 1, title: 'Comprendre le TDAH', status: 'done' },
@@ -36,7 +37,7 @@ export default function Cours() {
         <Link to="/" style={styles.back}>← Retour</Link>
         <div style={styles.bannerRow}>
           <div style={styles.cortexCircle}>
-            <span style={{ fontSize: '1.75rem' }}>🧠</span>
+            <Character name="cortex" mood="bienveillant" size={42} />
           </div>
           <div>
             <h1 style={{ color: 'var(--white)', fontSize: '1.5rem' }}>Cours Barkley</h1>
@@ -65,7 +66,8 @@ export default function Cours() {
             }}
             onClick={() => setMode('maman')}
           >
-            👩 Mode Maman
+            <Character name="maman" mood="neutre" size={20} />
+            Mode Maman
           </button>
           <button
             className="btn"
@@ -76,7 +78,9 @@ export default function Cours() {
             }}
             onClick={() => setMode('duo')}
           >
-            👩👨 Mode Duo
+            <Character name="maman" mood="neutre" size={20} />
+            <Character name="papa" mood="neutre" size={20} />
+            Mode Duo
           </button>
         </div>
 

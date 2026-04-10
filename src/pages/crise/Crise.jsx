@@ -34,7 +34,6 @@ export default function Crise() {
   const [step, setStep] = useState(0)
   const navigate = useNavigate()
   const etape = etapes[step]
-  const progress = ((step + 1) / etapes.length) * 100
 
   return (
     <div style={styles.container}>

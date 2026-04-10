@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import BottomNav from './components/layout/BottomNav'
 import Portal from './pages/portal/Portal'
 import Cours from './pages/cours/Cours'
@@ -7,12 +8,29 @@ import Ressources from './pages/ressources/Ressources'
 import Crise from './pages/crise/Crise'
 import Journal from './pages/journal/Journal'
 import Profil from './pages/profil/Profil'
+import Login from './pages/auth/Login'
+import Onboarding from './pages/onboarding/Onboarding'
 import './App.css'
 
 function AppLayout() {
   const location = useLocation()
-  const hiddenNavRoutes = ['/crise']
+  const navigate = useNavigate()
+  const hiddenNavRoutes = ['/crise', '/login', '/onboarding']
   const showNav = !hiddenNavRoutes.includes(location.pathname)
+
+  // First-launch redirect → /onboarding
+  useEffect(() => {
+    if (location.pathname === '/onboarding') return
+    let done = false
+    try {
+      const raw = localStorage.getItem('cockpit_onboarding')
+      if (raw) done = !!JSON.parse(raw)?.onboardingDone
+    } catch {
+      // ignore
+    }
+    if (!done) navigate('/onboarding', { replace: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -24,6 +42,8 @@ function AppLayout() {
         <Route path="/crise" element={<Crise />} />
         <Route path="/journal" element={<Journal />} />
         <Route path="/profil" element={<Profil />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
       {showNav && <BottomNav />}
     </>

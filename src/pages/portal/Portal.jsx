@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom'
+import Character from '../../components/ui/Character'
 
 const personnages = [
-  { emoji: '👩', label: 'Maman' },
-  { emoji: '👨', label: 'Papa' },
-  { emoji: '🧠', label: 'Cortex' },
-  { emoji: '🐾', label: 'Monstre' },
+  { name: 'maman', label: 'Maman', mood: 'neutre' },
+  { name: 'papa', label: 'Papa', mood: 'neutre' },
+  { name: 'cortex', label: 'Cortex', mood: 'neutre' },
+  { name: 'monstre', label: 'Monstre', mood: 'neutre' },
 ]
 
 const cards = [
   {
     to: '/cours',
-    icon: '🧠',
+    character: 'cortex',
+    mood: 'passionne',
     iconBg: 'rgba(255,255,255,0.25)',
     title: 'Cours Barkley',
     sub: 'Avec Professeur Cortex',
@@ -25,7 +27,8 @@ const cards = [
   },
   {
     to: '/quiz',
-    icon: '🐾',
+    character: 'monstre',
+    mood: 'malicieux',
     iconBg: 'rgba(75,21,40,0.15)',
     title: 'Quiz & XP',
     sub: 'Avec Le Monstre',
@@ -73,7 +76,7 @@ export default function Portal() {
               </p>
             </div>
             <div style={styles.avatarCircle}>
-              <span style={{ fontSize: '1.5rem' }}>👩</span>
+              <Character name="maman" mood="neutre" size={32} />
             </div>
           </div>
         </div>
@@ -101,7 +104,7 @@ export default function Portal() {
           {personnages.map((p) => (
             <div key={p.label} style={styles.chip}>
               <div style={styles.chipEmoji}>
-                <span style={{ fontSize: '1rem' }}>{p.emoji}</span>
+                <Character name={p.name} mood={p.mood} size={22} />
               </div>
               <span style={{ color: 'var(--white)', fontSize: '0.6875rem', fontWeight: 500 }}>
                 {p.label}
@@ -158,8 +161,13 @@ export default function Portal() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '1.375rem',
                 flexShrink: 0,
+                overflow: 'hidden',
               }}>
-                {c.icon}
+                {c.character ? (
+                  <Character name={c.character} mood={c.mood} size={36} />
+                ) : (
+                  c.icon
+                )}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{ color: c.color, fontSize: '1rem', margin: 0 }}>{c.title}</h3>
