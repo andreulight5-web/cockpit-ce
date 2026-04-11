@@ -240,7 +240,7 @@ function Screen2Histoire({ onNext }) {
           { src: monstreCalin, alt: 'Monstre câlin' },
           { src: mamanComplice, alt: 'Maman complice' },
         ]}
-        bubble="Mais ensemble... on peut y arriver. 💛"
+        bubble="Mais ensemble... on peut y arriver, ensemble !"
         bubbleSide="top"
         confetti
       />
@@ -363,67 +363,69 @@ function Screen3CacheCache({ type, setType, onNext }) {
           fontSize: 22,
           fontWeight: 700,
           textAlign: 'center',
-          marginBottom: 24,
+          marginBottom: 16,
         }}
       >
         {found ? 'Trouvé ! 🎉' : 'Trouve Le Monstre !'}
       </h2>
 
-      {!found && (
-        <div style={styles.parentRow}>
-          <div style={styles.parentSlot} onClick={handleMamanTap}>
+      {/* Vertically centered content area */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', gap: 20 }}>
+        {!found && (
+          <div style={styles.parentRow}>
+            <div style={styles.parentSlot} onClick={handleMamanTap}>
+              <img
+                src={monstreCache}
+                alt="Monstre caché"
+                className="peekaboo"
+                style={styles.hiddenMonstre}
+                draggable={false}
+              />
+              <img src={mamanComplice} alt="Maman" style={styles.parentImg} draggable={false} />
+              <span style={styles.parentLabel}>Maman</span>
+            </div>
+            <div style={styles.parentSlot}>
+              <img src={papaEncourageant} alt="Papa" style={styles.parentImg} draggable={false} />
+              <span style={styles.parentLabel}>Papa</span>
+            </div>
+          </div>
+        )}
+
+        {found && (
+          <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%' }}>
+            <div style={styles.bubble}>
+              <Typewriter text="Tu m'as trouvé ! 😄 Et toi, t'es..." />
+              <div style={styles.bubbleTail} />
+            </div>
             <img
-              src={monstreCache}
-              alt="Monstre caché"
-              className="peekaboo"
-              style={styles.hiddenMonstre}
+              src={monstreDecouvert}
+              alt="Monstre découvert"
+              className="spin-once bounce-loop"
+              style={{ height: 220, maxWidth: '70%', objectFit: 'contain' }}
               draggable={false}
             />
-            <img src={mamanComplice} alt="Maman" style={styles.parentImg} draggable={false} />
-            <span style={styles.parentLabel}>Maman</span>
+            <LightConfetti />
           </div>
-          <div style={styles.parentSlot}>
-            <img src={papaEncourageant} alt="Papa" style={styles.parentImg} draggable={false} />
-            <span style={styles.parentLabel}>Papa</span>
+        )}
+
+        {showCards && (
+          <div className="fade-in" style={{ display: 'flex', gap: 16, width: '100%', justifyContent: 'center' }}>
+            <ChoiceCard
+              kind="maman"
+              label="👩 Maman"
+              selected={type === 'maman'}
+              onSelect={handleCardSelect}
+            />
+            <ChoiceCard
+              kind="papa"
+              label="👨 Papa"
+              selected={type === 'papa'}
+              onSelect={handleCardSelect}
+            />
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {found && (
-        <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '100%' }}>
-          <div style={styles.bubble}>
-            <Typewriter text="Tu m'as trouvé ! 😄 Et toi, t'es..." />
-            <div style={styles.bubbleTail} />
-          </div>
-          <img
-            src={monstreDecouvert}
-            alt="Monstre découvert"
-            className="spin-once bounce-loop"
-            style={{ maxHeight: '26vh', maxWidth: '60%', objectFit: 'contain' }}
-            draggable={false}
-          />
-          <LightConfetti />
-        </div>
-      )}
-
-      {showCards && (
-        <div className="fade-in" style={{ display: 'flex', gap: 16, marginTop: 24, width: '100%', justifyContent: 'center' }}>
-          <ChoiceCard
-            kind="maman"
-            label="👩 Maman"
-            selected={type === 'maman'}
-            onSelect={handleCardSelect}
-          />
-          <ChoiceCard
-            kind="papa"
-            label="👨 Papa"
-            selected={type === 'papa'}
-            onSelect={handleCardSelect}
-          />
-        </div>
-      )}
-
-      <div style={{ flex: 1 }} />
       {showCards && type && (
         <button
           onClick={onNext}
@@ -777,31 +779,32 @@ const styles = {
   },
   parentRow: {
     display: 'flex',
-    gap: 16,
+    gap: 20,
     width: '100%',
     justifyContent: 'center',
-    marginTop: 16,
+    alignItems: 'flex-end',
   },
   parentSlot: {
     position: 'relative',
     flex: 1,
-    maxWidth: 160,
+    maxWidth: 180,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     cursor: 'pointer',
   },
   parentImg: {
-    width: '100%',
-    aspectRatio: '1',
+    width: 'auto',
+    height: 220,
     objectFit: 'contain',
     borderRadius: 16,
   },
   hiddenMonstre: {
     position: 'absolute',
-    top: -16,
-    right: -8,
-    width: '50%',
+    top: -60,
+    right: -30,
+    width: 130,
+    height: 'auto',
     pointerEvents: 'none',
     zIndex: 2,
   },
