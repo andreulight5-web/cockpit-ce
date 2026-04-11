@@ -1,15 +1,30 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { playSound } from '../../lib/audio'
 
-// Asset imports — ASCII names only (NFC/NFD issue on Linux build).
+// === Asset imports — ASCII names only (Linux NFC/NFD safe) ===
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreSurexcite from '../../assets/characters/monstre~/monstre-surexcite.webp'
-import mamanComplice from '../../assets/characters/maman/Complice : qui rigole.webp'
+import monstreChuchote from '../../assets/characters/monstre~/monstre-chuchote.webp'
+import monstreMalicieux from '../../assets/characters/monstre~/Malicieux.webp'
+import monstreTriste from '../../assets/characters/monstre~/monstre-triste.webp'
+import monstreCache from '../../assets/characters/monstre~/monstre-cache.webp'
+import monstreDecouvert from '../../assets/characters/monstre~/monstre-decouvert.webp'
+import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
+
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
+import mamanComplice from '../../assets/characters/maman/maman-complice.webp'
+import mamanInquiete from '../../assets/characters/maman/maman-inquiete.webp'
+import mamanMain from '../../assets/characters/maman/maman-main-tendue.webp'
+
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 
 const STORAGE_KEY = 'cockpit_onboarding'
-const TRANSITION_MS = 350
+const TRANSITION_MS = 400
+const TOTAL_STEPS = 6
+
+// Background colors per screen (used by progress bar to colorize current step)
+const BG = ['#0F172A', '#0F172A', '#0D9373', '#F2B8C6', '#0F172A', '#FFE17B']
 
 export default function Onboarding() {
   const navigate = useNavigate()
@@ -25,9 +40,8 @@ export default function Onboarding() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        if (parsed?.onboardingDone) navigate('/login?mode=signup', { replace: true })
+      if (raw && JSON.parse(raw)?.onboardingDone) {
+        navigate('/login?mode=signup', { replace: true })
       }
     } catch {
       // ignore
@@ -36,6 +50,7 @@ export default function Onboarding() {
 
   const goTo = (target) => {
     if (phase === 'out') return
+    playSound('pop')
     setPhase('out')
     setTimeout(() => {
       setStep(target)
@@ -48,9 +63,9 @@ export default function Onboarding() {
   const finish = () => {
     const payload = {
       type,
-      prenomParent: prenomParent.trim(),
       prenomEnfant: prenomEnfant.trim(),
       age,
+      prenomParent: prenomParent.trim(),
       onboardingDone: true,
     }
     try {
@@ -61,211 +76,396 @@ export default function Onboarding() {
     navigate('/login?mode=signup', { replace: true })
   }
 
-  const canAdvance = {
-    0: true,
-    1: !!type,
-    2: prenomEnfant.trim().length > 0,
-    3: prenomParent.trim().length > 0,
-    4: true,
-  }[step]
-
-  const screenClass = phase === 'out' ? 'slide-out-left' : 'slide-in-right'
+  const screenClass = phase === 'out' ? 'screen-out' : 'screen-in'
+  const progress = ((step + 1) / TOTAL_STEPS) * 100
+  const nextBg = BG[Math.min(step + 1, TOTAL_STEPS - 1)]
 
   return (
     <div style={styles.root}>
       <style>{css}</style>
 
-      <div key={step} className={`screen ${screenClass}`} style={styles.screen}>
-        {step === 0 && <Screen0 onNext={next} />}
-        {step === 1 && <Screen1 type={type} setType={setType} canAdvance={canAdvance} onNext={next} />}
-        {step === 2 && (
-          <Screen2
+      {/* Top progress bar */}
+      <div style={styles.progressTrack}>
+        <div
+          style={{
+            ...styles.progressFill,
+            width: `${progress}%`,
+            background: nextBg === '#0F172A' ? '#FFE17B' : nextBg,
+          }}
+        />
+      </div>
+
+      <div key={step} className={screenClass} style={styles.screen}>
+        {step === 0 && <Screen1Intro onNext={next} />}
+        {step === 1 && <Screen2Histoire onNext={next} />}
+        {step === 2 && <Screen3CacheCache type={type} setType={setType} onNext={next} />}
+        {step === 3 && (
+          <Screen4Enfant
             prenomEnfant={prenomEnfant}
             setPrenomEnfant={setPrenomEnfant}
             age={age}
             setAge={setAge}
-            canAdvance={canAdvance}
             onNext={next}
           />
         )}
-        {step === 3 && (
-          <Screen3Bis
+        {step === 4 && (
+          <Screen5Parent
             prenomParent={prenomParent}
             setPrenomParent={setPrenomParent}
-            canAdvance={canAdvance}
             onNext={next}
           />
         )}
-        {step === 4 && <Screen4 prenomParent={prenomParent} onFinish={finish} />}
-      </div>
-
-      {/* Progress dots */}
-      <div style={styles.dots}>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <span
-            key={i}
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: i === step ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
-              transition: 'background 0.3s',
-            }}
-          />
-        ))}
+        {step === 5 && <Screen6Final prenomParent={prenomParent} prenomEnfant={prenomEnfant} onFinish={finish} />}
       </div>
     </div>
   )
 }
 
-/* ==================== SCREEN 0 — Navy intro ==================== */
-function Screen0({ onNext }) {
-  return (
-    <section style={{ ...styles.section, background: '#0F172A' }}>
-      <div style={styles.imageWrap}>
-        <img
-          src={monstreCalin}
-          alt="Le Monstre câlin"
-          className="enter-up bounce-loop"
-          style={{ maxHeight: '60vh', maxWidth: '90%', objectFit: 'contain' }}
-        />
-      </div>
-      <div style={styles.textWrap}>
-        <Typewriter text="Bonjour 👋" delay={0} style={styles.kicker} />
-        <Typewriter
-          text="Je suis Le Monstre"
-          delay={400}
-          style={{ ...styles.title, color: '#FFFFFF' }}
-        />
-        <Typewriter
-          text="Je vais t'aider à traverser les crises"
-          delay={1100}
-          style={{ ...styles.subtitle, color: '#A8DED1' }}
-        />
-      </div>
-      <button
-        onClick={onNext}
-        className="btn-pulse"
-        style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF' }}
-      >
-        Commencer →
-      </button>
-    </section>
-  )
-}
+/* ============================================================
+   SCREEN 1 — "Le Monstre apparaît"
+   ============================================================ */
+function Screen1Intro({ onNext }) {
+  const phrases = [
+    { text: 'Psst... t\'es là ?', img: monstreCalin },
+    { text: 'Je m\'appelle Le Monstre ⚡', img: monstreChuchote },
+    { text: 'Je suis le TDAH de ton enfant.', img: monstreMalicieux },
+  ]
+  const [idx, setIdx] = useState(0)
+  const [hopKey, setHopKey] = useState(0)
 
-/* ==================== SCREEN 1 — Teal Maman/Papa ==================== */
-function Screen1({ type, setType, canAdvance, onNext }) {
-  const [bursts, setBursts] = useState({}) // { maman: id, papa: id }
+  useEffect(() => {
+    if (idx >= phrases.length - 1) return
+    // Estimate typewriter duration: 60ms per char + 800ms read pause
+    const duration = phrases[idx].text.length * 60 + 1500
+    const t = setTimeout(() => {
+      playSound('pop', { volume: 0.4 })
+      setIdx((i) => i + 1)
+    }, duration)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idx])
 
-  const handleSelect = (kind) => {
-    setType(kind)
-    setBursts((b) => ({ ...b, [kind]: Date.now() }))
-    setTimeout(() => {
-      setBursts((b) => {
-        const copy = { ...b }
-        delete copy[kind]
-        return copy
-      })
-    }, 700)
+  const showButton = idx === phrases.length - 1
+  const phrase = phrases[idx]
+
+  const handleMonstreTap = () => {
+    playSound('tap')
+    setHopKey((k) => k + 1)
   }
 
   return (
-    <section style={{ ...styles.section, background: '#0D9373', justifyContent: 'flex-start', paddingTop: 80 }}>
-      <h2
-        className="enter-up"
-        style={{ color: '#FFFFFF', fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, textAlign: 'center', marginBottom: 40 }}
-      >
-        Tu es...
-      </h2>
-      <div style={styles.choiceRow}>
-        <ChoiceCard
-          kind="maman"
-          label="Maman 👩"
-          img={mamanComplice}
-          selected={type === 'maman'}
-          onSelect={handleSelect}
-          burst={bursts.maman}
-          enterClass="enter-left"
-        />
-        <ChoiceCard
-          kind="papa"
-          label="Papa 👨"
-          img={papaEncourageant}
-          selected={type === 'papa'}
-          onSelect={handleSelect}
-          burst={bursts.papa}
-          enterClass="enter-right"
+    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'flex-end', paddingBottom: 100 }}>
+      {/* Speech bubble */}
+      <div style={styles.bubbleWrap}>
+        <div key={idx} className="bubble-pop" style={styles.bubble}>
+          <Typewriter text={phrase.text} />
+          <div style={styles.bubbleTail} />
+        </div>
+      </div>
+
+      {/* Monstre */}
+      <div className="enter-from-bottom" style={{ marginTop: 16, display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <img
+          key={`monstre-${idx}-${hopKey}`}
+          src={phrase.img}
+          alt="Le Monstre"
+          onClick={handleMonstreTap}
+          className="bounce-loop hop-on-tap"
+          style={{
+            maxHeight: '40vh',
+            maxWidth: '70%',
+            objectFit: 'contain',
+            cursor: 'pointer',
+            userSelect: 'none',
+          }}
+          draggable={false}
         />
       </div>
-      <div style={{ flex: 1 }} />
-      {canAdvance && (
+
+      <div style={{ height: 32 }} />
+
+      {showButton ? (
         <button
           onClick={onNext}
           className="fade-in btn-pulse"
-          style={{ ...styles.btnBase, background: '#FFE17B', color: '#0F172A' }}
+          style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF' }}
         >
-          Suivant →
+          Je t'écoute →
         </button>
+      ) : (
+        <div style={{ height: 56 }} />
       )}
     </section>
   )
 }
 
-function ChoiceCard({ label, img, selected, onSelect, kind, burst, enterClass }) {
+/* ============================================================
+   SCREEN 2 — "L'histoire" (3 micro-scènes)
+   ============================================================ */
+function Screen2Histoire({ onNext }) {
+  const [scene, setScene] = useState(0) // 0=A, 1=B, 2=C
+
+  const advance = () => {
+    if (scene < 2) {
+      playSound('pop', { volume: 0.4 })
+      setScene((s) => s + 1)
+    }
+  }
+
+  const renderScene = () => {
+    if (scene === 0) {
+      return (
+        <SceneCard
+          key="A"
+          characters={[{ src: monstreTriste, alt: 'Monstre triste' }]}
+          bubble="Moi aussi j'ai du mal... je sais pas me contrôler."
+          bubbleSide="top"
+        />
+      )
+    }
+    if (scene === 1) {
+      return (
+        <SceneCard
+          key="B"
+          characters={[{ src: mamanInquiete, alt: 'Maman inquiète' }]}
+          bubble="Ta maman ne sait plus quoi faire."
+          bubbleSide="top"
+        />
+      )
+    }
+    return (
+      <SceneCard
+        key="C"
+        characters={[
+          { src: monstreCalin, alt: 'Monstre câlin' },
+          { src: mamanComplice, alt: 'Maman complice' },
+        ]}
+        bubble="Mais ensemble... on peut y arriver. 💛"
+        bubbleSide="top"
+        confetti
+      />
+    )
+  }
+
   return (
-    <div className={`choice-wrap ${enterClass}`} style={styles.choiceWrap}>
-      <button
-        onClick={() => onSelect(kind)}
-        className="choice-card"
-        style={{
-          ...styles.choiceCard,
-          border: selected ? '2px solid #FFE17B' : '2px solid transparent',
-          transform: selected ? 'scale(1.05)' : 'scale(1)',
-          boxShadow: selected ? '0 8px 24px rgba(255,225,123,0.3)' : 'none',
-        }}
-      >
-        <img src={img} alt={label} style={styles.choiceImg} />
-        <span style={styles.choiceLabel}>{label}</span>
-      </button>
-      {burst && <StarBurst key={burst} />}
+    <section
+      style={{ ...styles.section, background: '#0F172A', justifyContent: 'center', cursor: 'pointer' }}
+      onClick={scene < 2 ? advance : undefined}
+    >
+      {renderScene()}
+
+      <div style={{ position: 'absolute', bottom: 100, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+        {scene < 2 ? (
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter, sans-serif', fontSize: 12, fontStyle: 'italic' }}>
+            Tape pour continuer ✨
+          </p>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onNext()
+            }}
+            className="fade-in btn-pulse"
+            style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF', maxWidth: 280 }}
+          >
+            On commence ?
+          </button>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function SceneCard({ characters, bubble, confetti }) {
+  return (
+    <div className="fade-in-slow" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+      <div style={styles.bubble}>
+        <Typewriter text={bubble} />
+        <div style={styles.bubbleTail} />
+      </div>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', justifyContent: 'center' }}>
+        {characters.map((c, i) => (
+          <img
+            key={i}
+            src={c.src}
+            alt={c.alt}
+            className="enter-from-bottom"
+            style={{
+              maxHeight: '34vh',
+              maxWidth: characters.length > 1 ? '40vw' : '60vw',
+              objectFit: 'contain',
+              animationDelay: `${i * 0.15}s`,
+            }}
+            draggable={false}
+          />
+        ))}
+      </div>
+      {confetti && <LightConfetti />}
     </div>
   )
 }
 
-function StarBurst() {
-  // 5 stars exploding outward — random radius computed once on mount
-  const [stars] = useState(() =>
-    Array.from({ length: 5 }).map((_, i) => {
-      const angle = (i / 5) * Math.PI * 2
-      const radius = 70 + Math.random() * 20
-      return {
-        tx: Math.cos(angle) * radius,
-        ty: Math.sin(angle) * radius,
-      }
-    })
+function LightConfetti() {
+  const [items] = useState(() =>
+    Array.from({ length: 14 }).map(() => ({
+      emoji: ['🎉', '⭐', '💛', '✨'][Math.floor(Math.random() * 4)],
+      left: Math.random() * 100,
+      delay: Math.random() * 0.6,
+      duration: 2 + Math.random() * 1.2,
+    }))
   )
-
   return (
-    <div style={styles.burstWrap}>
-      {stars.map((s, i) => (
+    <div style={styles.confettiLayer}>
+      {items.map((c, i) => (
         <span
           key={i}
-          className="star-burst"
+          className="confetti"
           style={{
-            '--tx': `${s.tx}px`,
-            '--ty': `${s.ty}px`,
+            left: `${c.left}%`,
+            animationDelay: `${c.delay}s`,
+            animationDuration: `${c.duration}s`,
+            fontSize: 18,
           }}
         >
-          ⭐
+          {c.emoji}
         </span>
       ))}
     </div>
   )
 }
 
-/* ==================== SCREEN 2 — Pink child name+age ==================== */
-function Screen2({ prenomEnfant, setPrenomEnfant, age, setAge, canAdvance, onNext }) {
+/* ============================================================
+   SCREEN 3 — Mini-jeu cache-cache + sélection rôle
+   ============================================================ */
+function Screen3CacheCache({ type, setType, onNext }) {
+  const [found, setFound] = useState(false)
+  const [showCards, setShowCards] = useState(false)
+
+  const handleMamanTap = () => {
+    if (found) return
+    playSound('tap')
+    setFound(true)
+    setTimeout(() => setShowCards(true), 800)
+  }
+
+  const handleCardSelect = (kind) => {
+    playSound('pop')
+    setType(kind)
+  }
+
+  return (
+    <section style={{ ...styles.section, background: '#0D9373', justifyContent: 'flex-start', paddingTop: 56 }}>
+      <h2
+        className="enter-from-top"
+        style={{
+          color: '#FFFFFF',
+          fontFamily: 'Poppins, sans-serif',
+          fontSize: 22,
+          fontWeight: 700,
+          textAlign: 'center',
+          marginBottom: 24,
+        }}
+      >
+        {found ? 'Trouvé ! 🎉' : 'Trouve Le Monstre !'}
+      </h2>
+
+      {!found && (
+        <div style={styles.parentRow}>
+          <div style={styles.parentSlot} onClick={handleMamanTap}>
+            <img
+              src={monstreCache}
+              alt="Monstre caché"
+              className="peekaboo"
+              style={styles.hiddenMonstre}
+              draggable={false}
+            />
+            <img src={mamanComplice} alt="Maman" style={styles.parentImg} draggable={false} />
+            <span style={styles.parentLabel}>Maman</span>
+          </div>
+          <div style={styles.parentSlot}>
+            <img src={papaEncourageant} alt="Papa" style={styles.parentImg} draggable={false} />
+            <span style={styles.parentLabel}>Papa</span>
+          </div>
+        </div>
+      )}
+
+      {found && (
+        <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '100%' }}>
+          <div style={styles.bubble}>
+            <Typewriter text="Tu m'as trouvé ! 😄 Et toi, t'es..." />
+            <div style={styles.bubbleTail} />
+          </div>
+          <img
+            src={monstreDecouvert}
+            alt="Monstre découvert"
+            className="spin-once bounce-loop"
+            style={{ maxHeight: '26vh', maxWidth: '60%', objectFit: 'contain' }}
+            draggable={false}
+          />
+          <LightConfetti />
+        </div>
+      )}
+
+      {showCards && (
+        <div className="fade-in" style={{ display: 'flex', gap: 16, marginTop: 24, width: '100%', justifyContent: 'center' }}>
+          <ChoiceCard
+            kind="maman"
+            label="👩 Maman"
+            selected={type === 'maman'}
+            onSelect={handleCardSelect}
+          />
+          <ChoiceCard
+            kind="papa"
+            label="👨 Papa"
+            selected={type === 'papa'}
+            onSelect={handleCardSelect}
+          />
+        </div>
+      )}
+
+      <div style={{ flex: 1 }} />
+      {showCards && type && (
+        <button
+          onClick={onNext}
+          className="fade-in btn-pulse"
+          style={{ ...styles.btnBase, background: '#FFE17B', color: '#0F172A' }}
+        >
+          C'est moi !
+        </button>
+      )}
+    </section>
+  )
+}
+
+function ChoiceCard({ kind, label, selected, onSelect }) {
+  return (
+    <button
+      onClick={() => onSelect(kind)}
+      style={{
+        flex: 1,
+        maxWidth: 130,
+        padding: '14px 12px',
+        borderRadius: 14,
+        border: selected ? '2px solid #FFE17B' : '2px solid rgba(255,255,255,0.2)',
+        background: selected ? 'rgba(255,225,123,0.15)' : 'rgba(255,255,255,0.08)',
+        color: '#FFFFFF',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: 15,
+        fontWeight: 600,
+        cursor: 'pointer',
+        transform: selected ? 'scale(1.05)' : 'scale(1)',
+        transition: 'transform 0.25s, border 0.2s, background 0.2s',
+      }}
+    >
+      {label}
+    </button>
+  )
+}
+
+/* ============================================================
+   SCREEN 4 — Ton enfant (prénom + âge)
+   ============================================================ */
+function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
   const [bouncing, setBouncing] = useState(false)
   const bounceTimer = useRef(null)
 
@@ -276,29 +476,30 @@ function Screen2({ prenomEnfant, setPrenomEnfant, age, setAge, canAdvance, onNex
     bounceTimer.current = setTimeout(() => setBouncing(false), 300)
   }
 
-  useEffect(() => {
-    return () => {
-      if (bounceTimer.current) clearTimeout(bounceTimer.current)
-    }
-  }, [])
+  useEffect(() => () => bounceTimer.current && clearTimeout(bounceTimer.current), [])
+
+  // Pick monstre by age range
+  const monstreByAge =
+    age <= 6 ? monstreCalin : age <= 10 ? monstreRigole : monstreSurexcite
+  const monstreSize =
+    age <= 6 ? '20vh' : age <= 10 ? '22vh' : '24vh'
+
+  const canAdvance = prenomEnfant.trim().length > 0
 
   return (
-    <section style={{ ...styles.section, background: '#F2B8C6', justifyContent: 'flex-start', paddingTop: 48 }}>
-      <div className="enter-down" style={{ display: 'flex', justifyContent: 'center', height: '34vh', alignItems: 'center' }}>
-        <img src={mamanFiere} alt="Maman fière" style={{ maxHeight: '100%', maxWidth: '70%', objectFit: 'contain' }} />
+    <section style={{ ...styles.section, background: '#F2B8C6', justifyContent: 'flex-start', paddingTop: 40 }}>
+      <img
+        src={mamanFiere}
+        alt="Maman fière"
+        className="enter-from-top"
+        style={{ maxHeight: '20vh', objectFit: 'contain', alignSelf: 'center' }}
+        draggable={false}
+      />
+      <div style={{ ...styles.bubble, marginTop: 16, alignSelf: 'center' }}>
+        <Typewriter text="Et ton petit monstre, il s'appelle ?" />
+        <div style={styles.bubbleTail} />
       </div>
-      <h2
-        style={{
-          color: '#4B1528',
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: 20,
-          fontWeight: 700,
-          textAlign: 'center',
-          margin: '20px 0 24px',
-        }}
-      >
-        Comment s'appelle ton enfant ?
-      </h2>
+
       <input
         type="text"
         value={prenomEnfant}
@@ -307,12 +508,21 @@ function Screen2({ prenomEnfant, setPrenomEnfant, age, setAge, canAdvance, onNex
         className="glow-input glow-input-pink"
         style={styles.nameInputDark}
       />
-      <div style={{ marginTop: 32, textAlign: 'center' }}>
+
+      <div style={{ marginTop: 28, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+        <img
+          key={`age-${age <= 6 ? 'a' : age <= 10 ? 'b' : 'c'}`}
+          src={monstreByAge}
+          alt="Monstre"
+          className="fade-in"
+          style={{ height: monstreSize, objectFit: 'contain' }}
+          draggable={false}
+        />
         <div
           className={bouncing ? 'bounce-value' : ''}
-          style={{ color: '#4B1528', fontFamily: 'Poppins, sans-serif', fontSize: 36, fontWeight: 800, display: 'inline-block' }}
+          style={{ color: '#4B1528', fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, display: 'inline-block' }}
         >
-          {age} <span style={{ fontSize: 16, fontWeight: 500 }}>ans</span>
+          {age} <span style={{ fontSize: 14, fontWeight: 500 }}>ans</span>
         </div>
         <input
           type="range"
@@ -321,9 +531,10 @@ function Screen2({ prenomEnfant, setPrenomEnfant, age, setAge, canAdvance, onNex
           value={age}
           onChange={(e) => handleAgeChange(Number(e.target.value))}
           className="age-slider"
-          style={{ width: '80%', marginTop: 12, display: 'block', margin: '12px auto 0' }}
+          style={{ width: '70%' }}
         />
       </div>
+
       <div style={{ flex: 1 }} />
       {canAdvance && (
         <button
@@ -338,26 +549,26 @@ function Screen2({ prenomEnfant, setPrenomEnfant, age, setAge, canAdvance, onNex
   )
 }
 
-/* ==================== SCREEN 3bis — Navy parent name ==================== */
-function Screen3Bis({ prenomParent, setPrenomParent, canAdvance, onNext }) {
+/* ============================================================
+   SCREEN 5 — Et toi ? (prénom parent)
+   ============================================================ */
+function Screen5Parent({ prenomParent, setPrenomParent, onNext }) {
+  const canAdvance = prenomParent.trim().length > 0
   return (
-    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'flex-start', paddingTop: 48 }}>
-      <div style={{ display: 'flex', justifyContent: 'center', height: '32vh', alignItems: 'center' }}>
-        <img
-          src={mamanFiere}
-          alt="Maman"
-          className="rotate-gently"
-          style={{ maxHeight: '100%', maxWidth: '60%', objectFit: 'contain' }}
-        />
+    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'flex-start', paddingTop: 56 }}>
+      <div style={{ ...styles.bubble, marginBottom: 16, alignSelf: 'center' }}>
+        <Typewriter text="Et toi, comment tu t'appelles ?" />
+        <div style={styles.bubbleTail} />
       </div>
-      <h2
-        className="enter-up"
-        style={{ color: '#FFFFFF', fontFamily: 'Poppins, sans-serif', fontSize: 22, fontWeight: 700, textAlign: 'center', margin: '24px 0 8px' }}
-      >
-        Et toi, comment tu t'appelles ?
-      </h2>
-      <p style={{ color: '#A8DED1', fontFamily: 'Inter, sans-serif', fontSize: 14, textAlign: 'center', margin: '0 0 32px' }}>
-        Pour que je m'adresse à toi comme il faut 💛
+      <img
+        src={mamanMain}
+        alt="Maman qui tend la main"
+        className="sway"
+        style={{ maxHeight: '30vh', objectFit: 'contain', alignSelf: 'center' }}
+        draggable={false}
+      />
+      <p style={{ color: '#A8DED1', fontFamily: 'Inter, sans-serif', fontSize: 14, textAlign: 'center', margin: '20px 0 24px' }}>
+        Pour qu'on s'adresse à toi comme il faut 💛
       </p>
       <div style={{ position: 'relative', width: '80%', margin: '0 auto' }}>
         <input
@@ -377,29 +588,34 @@ function Screen3Bis({ prenomParent, setPrenomParent, canAdvance, onNext }) {
           className="fade-in btn-pulse"
           style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF' }}
         >
-          Suivant →
+          C'est parti →
         </button>
       )}
     </section>
   )
 }
 
-/* ==================== SCREEN 4 — Yellow finish ==================== */
-function Screen4({ prenomParent, onFinish }) {
-  // Computed once on mount — random positions for falling confetti
+/* ============================================================
+   SCREEN 6 — Explosion finale
+   ============================================================ */
+function Screen6Final({ prenomParent, prenomEnfant, onFinish }) {
   const [confetti] = useState(() => {
-    const emojis = ['🎉', '⚡', '⭐']
-    return Array.from({ length: 24 }).map((_, i) => ({
+    const emojis = ['🎉', '⚡', '⭐', '🧡']
+    return Array.from({ length: 30 }).map((_, i) => ({
       emoji: emojis[i % emojis.length],
       left: Math.random() * 100,
       delay: Math.random() * 2,
-      duration: 2.5 + Math.random() * 1.5,
+      duration: 2.2 + Math.random() * 1.6,
+      size: 18 + Math.random() * 14,
     }))
   })
 
+  useEffect(() => {
+    playSound('success', { volume: 0.6 })
+  }, [])
+
   return (
     <section style={{ ...styles.section, background: '#FFE17B', position: 'relative', overflow: 'hidden' }}>
-      {/* Falling confetti */}
       <div style={styles.confettiLayer}>
         {confetti.map((c, i) => (
           <span
@@ -407,6 +623,7 @@ function Screen4({ prenomParent, onFinish }) {
             className="confetti"
             style={{
               left: `${c.left}%`,
+              fontSize: c.size,
               animationDelay: `${c.delay}s`,
               animationDuration: `${c.duration}s`,
             }}
@@ -421,17 +638,25 @@ function Screen4({ prenomParent, onFinish }) {
           src={monstreSurexcite}
           alt="Le Monstre surexcité"
           className="spin-once bounce-fast"
-          style={{ maxHeight: '50vh', maxWidth: '85%', objectFit: 'contain' }}
+          style={{ maxHeight: '46vh', maxWidth: '80%', objectFit: 'contain' }}
+          draggable={false}
         />
       </div>
-      <div style={styles.textWrap}>
-        <h1 style={{ color: '#412402', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>
-          C'est parti{prenomParent ? ` ${prenomParent}` : ''} ! 🎉
+
+      <div style={{ textAlign: 'center', padding: '0 16px', marginBottom: 24 }}>
+        <h1 style={{ color: '#412402', fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, margin: '0 0 8px' }}>
+          C'est parti{prenomParent ? ` ${prenomParent}` : ''} !
         </h1>
-        <p style={{ color: '#633806', fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.5 }}>
+        <p style={{ color: '#633806', fontFamily: 'Inter, sans-serif', fontSize: 16, lineHeight: 1.5, margin: '0 0 6px' }}>
           Ton Cockpit est prêt ⚡
         </p>
+        {prenomEnfant && (
+          <p style={{ color: '#633806', fontFamily: 'Inter, sans-serif', fontSize: 14, fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
+            {prenomEnfant} et toi, vous n'êtes plus seuls.
+          </p>
+        )}
       </div>
+
       <button
         onClick={onFinish}
         className="shimmer-btn"
@@ -443,30 +668,47 @@ function Screen4({ prenomParent, onFinish }) {
   )
 }
 
-/* ==================== Typewriter helper ==================== */
-function Typewriter({ text, delay = 0, style }) {
+/* ============================================================
+   Helpers
+   ============================================================ */
+function Typewriter({ text, delay = 0 }) {
   return (
-    <p style={style}>
+    <span style={{ display: 'inline-block' }}>
       {text.split('').map((char, i) => (
         <span
           key={i}
           className="tw-char"
-          style={{ animationDelay: `${delay + i * 30}ms` }}
+          style={{ animationDelay: `${delay + i * 35}ms` }}
         >
           {char === ' ' ? '\u00A0' : char}
         </span>
       ))}
-    </p>
+    </span>
   )
 }
 
-/* ==================== Styles & CSS ==================== */
+/* ============================================================
+   Styles
+   ============================================================ */
 const styles = {
   root: {
     position: 'relative',
     width: '100%',
     height: '100dvh',
     overflow: 'hidden',
+  },
+  progressTrack: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 4,
+    background: 'rgba(255,255,255,0.12)',
+    zIndex: 50,
+  },
+  progressFill: {
+    height: '100%',
+    transition: 'width 0.4s ease, background 0.4s ease',
   },
   screen: {
     width: '100%',
@@ -481,6 +723,7 @@ const styles = {
     justifyContent: 'space-between',
     padding: '48px 24px 96px',
     boxSizing: 'border-box',
+    position: 'relative',
   },
   imageWrap: {
     flex: 1,
@@ -489,98 +732,95 @@ const styles = {
     justifyContent: 'center',
     width: '100%',
   },
-  textWrap: {
+  bubbleWrap: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingBottom: 0,
+  },
+  bubble: {
+    background: '#FFFFFF',
+    color: '#0F172A',
+    borderRadius: 20,
+    padding: '14px 20px',
+    maxWidth: '85%',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 15,
+    fontWeight: 600,
+    boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+    position: 'relative',
     textAlign: 'center',
-    padding: '0 16px',
-    marginBottom: 24,
+    lineHeight: 1.45,
   },
-  kicker: {
-    color: 'rgba(255,255,255,0.7)',
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: 14,
-    fontWeight: 500,
-    margin: 0,
-    minHeight: 20,
-  },
-  title: {
-    fontFamily: 'Poppins, sans-serif',
-    fontSize: 28,
-    fontWeight: 700,
-    margin: '4px 0 8px',
-    minHeight: 36,
-  },
-  subtitle: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 14,
-    lineHeight: 1.5,
-    margin: 0,
-    minHeight: 22,
+  bubbleTail: {
+    position: 'absolute',
+    bottom: -8,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: 0,
+    height: 0,
+    borderLeft: '10px solid transparent',
+    borderRight: '10px solid transparent',
+    borderTop: '10px solid #FFFFFF',
   },
   btnBase: {
     border: 'none',
     borderRadius: 999,
     padding: '16px 32px',
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: 600,
+    fontWeight: 700,
     fontSize: 16,
     cursor: 'pointer',
     width: '100%',
     maxWidth: 320,
     transition: 'transform 0.15s, opacity 0.15s',
   },
-  choiceRow: {
+  parentRow: {
     display: 'flex',
     gap: 16,
     width: '100%',
     justifyContent: 'center',
-    perspective: 800,
+    marginTop: 16,
   },
-  choiceWrap: {
+  parentSlot: {
     position: 'relative',
     flex: 1,
-    maxWidth: 150,
-  },
-  choiceCard: {
-    width: '100%',
-    background: 'rgba(255,255,255,0.1)',
-    borderRadius: 16,
-    padding: 16,
+    maxWidth: 160,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 12,
     cursor: 'pointer',
-    transition: 'transform 0.25s ease, border 0.2s, box-shadow 0.25s',
   },
-  choiceImg: {
+  parentImg: {
     width: '100%',
     aspectRatio: '1',
     objectFit: 'contain',
-    borderRadius: 12,
+    borderRadius: 16,
   },
-  choiceLabel: {
+  hiddenMonstre: {
+    position: 'absolute',
+    top: -16,
+    right: -8,
+    width: '50%',
+    pointerEvents: 'none',
+    zIndex: 2,
+  },
+  parentLabel: {
     color: '#FFFFFF',
     fontFamily: 'Poppins, sans-serif',
     fontWeight: 600,
     fontSize: 14,
-  },
-  burstWrap: {
-    position: 'absolute',
-    inset: 0,
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 6,
   },
   nameInputDark: {
     width: '80%',
-    margin: '0 auto',
+    margin: '24px auto 0',
     background: 'transparent',
     border: 'none',
     borderBottom: '2px solid #4B1528',
     padding: '12px 4px',
     fontFamily: 'Poppins, sans-serif',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 600,
     color: '#4B1528',
     textAlign: 'center',
@@ -595,24 +835,13 @@ const styles = {
     borderBottom: '2px solid #FFFFFF',
     padding: '12px 4px',
     fontFamily: 'Poppins, sans-serif',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 600,
     color: '#FFFFFF',
     textAlign: 'center',
     outline: 'none',
     display: 'block',
     transition: 'box-shadow 0.25s, border-color 0.25s',
-  },
-  dots: {
-    position: 'absolute',
-    bottom: 24,
-    left: 0,
-    right: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    gap: 8,
-    pointerEvents: 'none',
-    zIndex: 10,
   },
   confettiLayer: {
     position: 'absolute',
@@ -622,57 +851,100 @@ const styles = {
   },
 }
 
+/* ============================================================
+   CSS keyframes & utility classes
+   ============================================================ */
 const css = `
 /* ===== Screen transitions ===== */
-@keyframes slideOutLeft {
-  0%   { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-30%); opacity: 0; }
+@keyframes screenOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-30%); opacity: 0; }
 }
-@keyframes slideInFromRight {
-  0%   { transform: translateX(30%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+@keyframes screenIn {
+  from { transform: translateX(30%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
 }
-.slide-out-left { animation: slideOutLeft 0.35s ease forwards; }
-.slide-in-right { animation: slideInFromRight 0.35s ease forwards; }
+.screen-out { animation: screenOut 0.4s ease forwards; }
+.screen-in  { animation: screenIn 0.4s ease forwards; }
 
-/* ===== Element entry animations ===== */
-@keyframes enterUp {
-  from { transform: translateY(60px); opacity: 0; }
+/* ===== Element entries ===== */
+@keyframes enterBottom {
+  from { transform: translateY(80px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
-@keyframes enterDown {
+@keyframes enterTop {
   from { transform: translateY(-60px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
-@keyframes enterLeft {
-  from { transform: translateX(-80px); opacity: 0; }
-  to   { transform: translateX(0); opacity: 1; }
-}
-@keyframes enterRight {
-  from { transform: translateX(80px); opacity: 0; }
-  to   { transform: translateX(0); opacity: 1; }
-}
-.enter-up    { animation: enterUp 0.6s ease-out both; }
-.enter-down  { animation: enterDown 0.5s ease-out both; }
-.enter-left  { animation: enterLeft 0.5s ease-out both; }
-.enter-right { animation: enterRight 0.5s ease-out both; }
+.enter-from-bottom { animation: enterBottom 0.8s ease-out both; }
+.enter-from-top    { animation: enterTop 0.5s ease-out both; }
 
-/* ===== Loop animations ===== */
+/* ===== Bubble pop ===== */
+@keyframes bubblePop {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.bubble-pop { animation: bubblePop 0.25s ease-out; }
+
+/* ===== Bounce loops ===== */
 @keyframes bounceLoop {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-8px); }
 }
 @keyframes bounceFast {
   0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
+  50%      { transform: translateY(-12px); }
 }
 .bounce-loop { animation: bounceLoop 1.8s ease-in-out infinite; }
 .bounce-fast { animation: bounceFast 0.4s ease-in-out infinite; }
 
-/* Combine entry + loop on monstre */
-.enter-up.bounce-loop {
-  animation: enterUp 0.6s ease-out, bounceLoop 1.8s ease-in-out 0.6s infinite;
+/* Combine bottom entry + bounce loop */
+.enter-from-bottom.bounce-loop {
+  animation:
+    enterBottom 0.8s ease-out,
+    bounceLoop 1.8s ease-in-out 0.8s infinite;
 }
+
+/* ===== Hop on tap ===== */
+@keyframes hopOnTap {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.hop-on-tap {
+  animation: hopOnTap 0.3s ease-out, bounceLoop 1.8s ease-in-out 0.3s infinite;
+}
+
+/* ===== Peekaboo (monstre caché) ===== */
+@keyframes peekaboo {
+  0%, 80%, 100% { transform: translateX(0) rotate(0); }
+  85%           { transform: translateX(-3px) rotate(-3deg); }
+  90%           { transform: translateX(3px) rotate(3deg); }
+  95%           { transform: translateX(-2px) rotate(-2deg); }
+}
+.peekaboo { animation: peekaboo 3.5s ease-in-out infinite; }
+
+/* ===== Spin once ===== */
+@keyframes spinOnce {
+  from { transform: rotate(0); }
+  to   { transform: rotate(360deg); }
+}
+.spin-once {
+  animation: spinOnce 0.6s ease-out;
+}
+.spin-once.bounce-loop {
+  animation: spinOnce 0.6s ease-out, bounceLoop 1.8s ease-in-out 0.6s infinite;
+}
+.spin-once.bounce-fast {
+  animation: spinOnce 0.6s ease-out, bounceFast 0.4s ease-in-out 0.6s infinite;
+}
+
+/* ===== Sway (Maman main tendue) ===== */
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+.sway { animation: sway 3s ease-in-out infinite; }
 
 /* ===== Pulse button ===== */
 @keyframes btnPulse {
@@ -690,45 +962,23 @@ const css = `
 .tw-char {
   display: inline-block;
   opacity: 0;
-  animation: twChar 0.25s ease-out forwards;
+  animation: twChar 0.22s ease-out forwards;
 }
 
-/* ===== Star burst ===== */
-@keyframes starBurst {
-  0%   { transform: translate(0,0) scale(0.3); opacity: 1; }
-  60%  { opacity: 1; }
-  100% { transform: translate(var(--tx), var(--ty)) scale(1.2); opacity: 0; }
-}
-.star-burst {
-  position: absolute;
-  font-size: 22px;
-  pointer-events: none;
-  animation: starBurst 0.7s ease-out forwards;
-}
-
-/* ===== Choice card hover tilt ===== */
-.choice-card {
-  transform-style: preserve-3d;
-}
-.choice-card:hover {
-  transform: rotateY(5deg) scale(1.02) !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-}
-
-/* ===== Glow input ===== */
+/* ===== Glow inputs ===== */
 .glow-input-pink:focus {
-  box-shadow: 0 4px 16px -4px rgba(13,147,115,0.5);
+  box-shadow: 0 6px 20px -6px rgba(168,222,209,0.7);
   border-color: #0D9373 !important;
 }
 .glow-input-navy:focus {
-  box-shadow: 0 4px 16px -4px rgba(168,222,209,0.6);
+  box-shadow: 0 6px 20px -6px rgba(168,222,209,0.6);
   border-color: #A8DED1 !important;
 }
 
 /* ===== Bounce value (age) ===== */
 @keyframes bounceValue {
   0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.15); }
+  50%      { transform: scale(1.18); }
 }
 .bounce-value { animation: bounceValue 0.3s ease-out; }
 
@@ -750,7 +1000,7 @@ const css = `
   background: #4B1528;
   border: 3px solid #FFFFFF;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 .age-slider::-moz-range-thumb {
   width: 24px;
@@ -760,13 +1010,6 @@ const css = `
   border: 3px solid #FFFFFF;
   cursor: pointer;
 }
-
-/* ===== Rotate gently (Maman screen 3bis) ===== */
-@keyframes rotateGently {
-  0%, 100% { transform: rotate(-3deg); }
-  50%      { transform: rotate(3deg); }
-}
-.rotate-gently { animation: rotateGently 3s ease-in-out infinite; }
 
 /* ===== Blinking cursor ===== */
 @keyframes blink {
@@ -778,19 +1021,10 @@ const css = `
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
+  font-size: 28px;
   color: #FFFFFF;
   pointer-events: none;
   animation: blink 1s steps(1) infinite;
-}
-
-/* ===== Spin once + bounce fast (screen 4 monstre) ===== */
-@keyframes spinOnce {
-  from { transform: rotate(0); }
-  to   { transform: rotate(360deg); }
-}
-.spin-once.bounce-fast {
-  animation: spinOnce 0.8s ease-out, bounceFast 0.4s ease-in-out 0.8s infinite;
 }
 
 /* ===== Shimmer button ===== */
@@ -802,9 +1036,9 @@ const css = `
   background: linear-gradient(
     100deg,
     #0F172A 0%,
-    #0F172A 40%,
+    #0F172A 38%,
     #1E3050 50%,
-    #0F172A 60%,
+    #0F172A 62%,
     #0F172A 100%
   );
   background-size: 200% 100%;
@@ -819,7 +1053,7 @@ const css = `
 .confetti {
   position: absolute;
   top: 0;
-  font-size: 24px;
+  font-size: 22px;
   animation: confettiFall linear forwards;
 }
 
@@ -828,5 +1062,11 @@ const css = `
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-in { animation: fadeIn 0.35s ease-out both; }
+.fade-in { animation: fadeIn 0.4s ease-out both; }
+
+@keyframes fadeInSlow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in-slow { animation: fadeInSlow 0.6s ease-out both; }
 `
