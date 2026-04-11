@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Character from '../../components/ui/Character'
 
@@ -59,6 +60,19 @@ const cards = [
 ]
 
 export default function Portal() {
+  const [prenomParent] = useState(() => {
+    try {
+      const raw = localStorage.getItem('cockpit_onboarding')
+      if (raw) {
+        const data = JSON.parse(raw)
+        if (data?.prenomParent) return data.prenomParent
+      }
+    } catch {
+      // ignore
+    }
+    return ''
+  })
+
   return (
     <div className="page">
       {/* Hero */}
@@ -84,7 +98,7 @@ export default function Portal() {
         {/* Title */}
         <div className="fade-up fade-up-d1">
           <p style={{ color: 'var(--gray-400)', fontSize: '0.875rem', marginBottom: 4 }}>
-            Bonjour Marie 👋
+            Bonjour {prenomParent || 'parent'} 👋
           </p>
           <h1 style={{
             fontFamily: 'var(--font-heading)',
