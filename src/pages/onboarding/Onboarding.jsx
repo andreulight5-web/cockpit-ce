@@ -81,36 +81,72 @@ export default function Onboarding() {
 }
 
 /* ==============================================================
-   BubbleBackground — floating background bubbles
+   BubbleBackground — colorful random floating bubbles
    ============================================================== */
-function BubbleBackground({ light = false }) {
+const BUBBLE_PALETTE = ['#FFE17B', '#A8DED1', '#F2B8C6', '#FF6B4A', '#FFFFFF', '#0D9373']
+
+function randPct() { return Math.random() * 100 }
+
+function BubbleBackground() {
+  const idRef = useRef(null)
+  if (!idRef.current) idRef.current = `bb-${Math.random().toString(36).slice(2, 8)}`
+  const id = idRef.current
+
   const [bubbles] = useState(() =>
-    Array.from({ length: 12 }).map(() => ({
-      size: 30 + Math.random() * 50,
-      left: Math.random() * 100,
-      opacity: 0.06 + Math.random() * 0.06,
-      duration: 8 + Math.random() * 7,
-      delay: Math.random() * 6,
-      drift: -20 + Math.random() * 40,
-    }))
+    Array.from({ length: 15 }).map((_, i) => {
+      // 4 random waypoints (x%, y%) for a unique trajectory
+      const wp = Array.from({ length: 4 }).map(() => [randPct(), randPct()])
+      return {
+        name: `${id}-${i}`,
+        size: 20 + Math.random() * 80,
+        color: BUBBLE_PALETTE[Math.floor(Math.random() * BUBBLE_PALETTE.length)],
+        opacity: 0.04 + Math.random() * 0.06,
+        duration: 12 + Math.random() * 13,
+        delay: Math.random() * 15,
+        startX: randPct(),
+        startY: randPct(),
+        wp,
+      }
+    })
   )
-  const color = light ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,1)'
+
+  // Inject unique keyframes for each bubble on mount
+  useEffect(() => {
+    const styleEl = document.createElement('style')
+    styleEl.setAttribute('data-bubbles', id)
+    const rules = bubbles.map((b) => {
+      const [w0, w1, w2, w3] = b.wp
+      return `@keyframes ${b.name} {
+  0%   { transform: translate(0,0) scale(1) }
+  25%  { transform: translate(${(w0[0] - b.startX).toFixed(1)}vw, ${(w0[1] - b.startY).toFixed(1)}vh) scale(1.12) }
+  50%  { transform: translate(${(w1[0] - b.startX).toFixed(1)}vw, ${(w1[1] - b.startY).toFixed(1)}vh) scale(1) }
+  75%  { transform: translate(${(w2[0] - b.startX).toFixed(1)}vw, ${(w2[1] - b.startY).toFixed(1)}vh) scale(1.15) }
+  100% { transform: translate(${(w3[0] - b.startX).toFixed(1)}vw, ${(w3[1] - b.startY).toFixed(1)}vh) scale(1) }
+}`
+    })
+    styleEl.textContent = rules.join('\n')
+    document.head.appendChild(styleEl)
+    return () => { document.head.removeChild(styleEl) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div style={styles.bubbleLayer}>
-      {bubbles.map((b, i) => (
+      {bubbles.map((b) => (
         <div
-          key={i}
-          className="bg-bubble"
+          key={b.name}
           style={{
+            position: 'absolute',
+            left: `${b.startX}%`,
+            top: `${b.startY}%`,
             width: b.size,
             height: b.size,
-            left: `${b.left}%`,
-            opacity: b.opacity,
-            background: color,
             borderRadius: '50%',
-            animationDuration: `${b.duration}s`,
-            animationDelay: `${b.delay}s`,
-            '--drift': `${b.drift}px`,
+            background: b.color,
+            opacity: b.opacity,
+            pointerEvents: 'none',
+            animation: `${b.name} ${b.duration}s ${b.delay}s ease-in-out infinite alternate`,
+            willChange: 'transform',
           }}
         />
       ))}
@@ -326,7 +362,7 @@ function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
 
   return (
     <section style={{ ...styles.section, background: '#F2B8C6', justifyContent: 'flex-start', paddingTop: 48 }}>
-      <BubbleBackground light />
+      <BubbleBackground />
       <div style={{ ...styles.bubble, alignSelf: 'center', zIndex: 1 }}>
         <Typewriter text="Et ton petit monstre, il s'appelle ?" />
         <div style={styles.bubbleTail} />
@@ -414,7 +450,7 @@ function Screen6Final({ prenomParent, prenomEnfant, onFinish }) {
 
   return (
     <section style={{ ...styles.section, background: '#FFE17B', position: 'relative', overflow: 'hidden' }}>
-      <BubbleBackground light />
+      <BubbleBackground />
       <div style={styles.confettiLayer}>
         {confetti.map((c, i) => (
           <span key={i} className="confetti" style={{ left: `${c.left}%`, fontSize: c.size, animationDelay: `${c.delay}s`, animationDuration: `${c.duration}s` }}>{c.emoji}</span>
@@ -563,16 +599,4 @@ const css = `
 @keyframes fadeInSlow { from { opacity: 0 } to { opacity: 1 } }
 .fade-in-slow { animation: fadeInSlow 0.6s ease-out both }
 
-/* ===== Background bubbles ===== */
-@keyframes bgBubble {
-  0%   { transform: translateY(100vh) translateX(0); opacity: 0 }
-  5%   { opacity: 1 }
-  90%  { opacity: 1 }
-  100% { transform: translateY(-10vh) translateX(var(--drift,0px)); opacity: 0 }
-}
-.bg-bubble {
-  position: absolute;
-  bottom: 0;
-  animation: bgBubble linear infinite;
-}
 `
