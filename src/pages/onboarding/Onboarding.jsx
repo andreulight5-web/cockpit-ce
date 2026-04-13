@@ -498,10 +498,10 @@ function Typewriter({ text, delay = 0 }) {
    Styles
    ============================================================== */
 const styles = {
-  root: { position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden' },
+  root: { position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden', background: '#0F172A' },
   progressTrack: { position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: 'rgba(255,255,255,0.12)', zIndex: 50 },
   progressFill: { height: '100%', transition: 'width 0.4s ease, background 0.4s ease' },
-  screen: { width: '100%', height: '100%' },
+  screen: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   section: { width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', padding: '48px 24px 96px', boxSizing: 'border-box', position: 'relative', overflow: 'hidden' },
   imageWrap: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' },
   bubbleWrap: { width: '100%', display: 'flex', justifyContent: 'center' },

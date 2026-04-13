@@ -45,7 +45,7 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--navy);
-  background: #E2E8F0;
+  background: #0F172A;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -55,7 +55,7 @@ body {
   max-width: 430px;
   margin: 0 auto;
   min-height: 100vh;
-  background: white;
+  background: #0F172A;
   position: relative;
   overflow-x: hidden;
 }
@@ -99,6 +99,7 @@ img { max-width: 100%; display: block; }
 .page {
   min-height: 100dvh;
   padding-bottom: 80px;
+  background: white;
 }
 
 .page-content {
