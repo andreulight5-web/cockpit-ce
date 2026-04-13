@@ -6,6 +6,7 @@ import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
+import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 import logoCE from '../../assets/logo-ce.png'
 
 const STORAGE_KEY = 'cockpit_onboarding'
@@ -26,6 +27,17 @@ const modules = [
     sub: 'Protocoles et situations · 10 lecons',
     progress: 2,
     total: 10,
+    bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
+    border: 'none',
+  },
+  {
+    to: '/quiz',
+    img: monstreRigole,
+    tag: 'MODULE 2',
+    title: 'Quiz & XP',
+    sub: 'Le Monstre t\'accompagne',
+    progress: 3,
+    total: 6,
     bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
     border: 'none',
   },
