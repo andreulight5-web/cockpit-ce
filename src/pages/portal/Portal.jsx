@@ -1,297 +1,237 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Character from '../../components/ui/Character'
+import { Link, useNavigate } from 'react-router-dom'
+
+import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
+import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
+import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
+import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
+import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
+import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
+
+const STORAGE_KEY = 'cockpit_onboarding'
 
 const personnages = [
-  { name: 'maman', label: 'Maman', mood: 'neutre' },
-  { name: 'papa', label: 'Papa', mood: 'neutre' },
-  { name: 'cortex', label: 'Cortex', mood: 'neutre' },
-  { name: 'monstre', label: 'Monstre', mood: 'neutre' },
+  { label: 'Maman', img: mamanFiere },
+  { label: 'Papa', img: papaEncourageant },
+  { label: 'Cortex', img: cortexBienveillant },
+  { label: 'Monstre', img: monstreCalin },
 ]
 
-const cards = [
+const modules = [
   {
     to: '/cours',
-    character: 'cortex',
-    mood: 'passionne',
-    iconBg: 'rgba(255,255,255,0.25)',
+    img: cortexBienveillant,
+    tag: 'MODULE 1',
     title: 'Cours Barkley',
-    sub: 'Avec Professeur Cortex',
-    desc: 'Comprends le TDAH et apprends à adapter ton quotidien.',
+    sub: 'Méthode scientifique · Pr. Cortex',
     progress: 4,
     total: 13,
-    progressLabel: '4/13 leçons',
-    bg: '#0D9373',
-    color: '#FFFFFF',
-    progressTrack: 'rgba(255,255,255,0.2)',
-    progressFill: '#FFFFFF',
+    bg: 'linear-gradient(135deg, #0D9373 0%, #085041 100%)',
+    border: 'none',
   },
   {
     to: '/quiz',
-    character: 'monstre',
-    mood: 'malicieux',
-    iconBg: 'rgba(75,21,40,0.15)',
+    img: monstreRigole,
+    tag: 'MODULE 2',
     title: 'Quiz & XP',
-    sub: 'Avec Le Monstre',
-    desc: 'Teste tes connaissances et gagne des points d\'expérience !',
+    sub: 'Le Monstre t\'accompagne',
     progress: 3,
     total: 6,
-    progressLabel: '3/6 quiz',
-    bg: '#F2B8C6',
-    color: '#4B1528',
-    progressTrack: 'rgba(75,21,40,0.12)',
-    progressFill: '#4B1528',
+    bg: 'linear-gradient(135deg, #D4537E 0%, #4B1528 100%)',
+    border: 'none',
   },
   {
     to: '/ressources',
-    icon: '📚',
-    iconBg: 'rgba(255,255,255,0.15)',
+    img: cortexPerplexe,
+    tag: 'MODULE 3',
     title: 'Ressources',
-    sub: 'Sources validées',
-    desc: 'Outils pratiques, fiches urgence et références scientifiques.',
+    sub: 'Outils · Scripts · Sources HAS',
     progress: 2,
     total: 8,
-    progressLabel: '2/8 fiches lues',
-    bg: '#0F172A',
-    color: '#FFFFFF',
-    progressTrack: 'rgba(255,255,255,0.15)',
-    progressFill: '#A8DED1',
+    bg: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)',
+    border: '1px solid rgba(255,255,255,0.08)',
   },
 ]
 
 export default function Portal() {
+  const navigate = useNavigate()
   const [prenomParent] = useState(() => {
     try {
-      const raw = localStorage.getItem('cockpit_onboarding')
+      const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const data = JSON.parse(raw)
         if (data?.prenomParent) return data.prenomParent
       }
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
     return ''
   })
 
   return (
-    <div className="page">
-      {/* Hero */}
-      <div style={styles.hero}>
-        {/* Top row: logo + avatar */}
-        <div style={styles.topRow} className="fade-up">
-          <div style={styles.logo}>⚡ CE</div>
-          <div style={styles.avatarRow}>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ color: 'var(--white)', fontWeight: 600, fontSize: '0.9375rem' }}>
-                Salut, Maman !
-              </p>
-              <p style={{ color: 'var(--mint)', fontSize: '0.75rem' }}>
-                Prête pour aujourd'hui ?
-              </p>
-            </div>
-            <div style={styles.avatarCircle}>
-              <Character name="maman" mood="neutre" size={32} />
-            </div>
+    <div style={s.page}>
+      {/* HEADER */}
+      <div style={s.header}>
+        <div style={s.headerRow}>
+          <span style={s.logo}>⚡ CE</span>
+          <div style={s.avatar}>
+            <img src={mamanFiere} alt="Avatar" style={s.avatarImg} draggable={false} />
           </div>
         </div>
 
-        {/* Title */}
-        <div className="fade-up fade-up-d1">
-          <p style={{ color: 'var(--gray-400)', fontSize: '0.875rem', marginBottom: 4 }}>
-            Bonjour {prenomParent || 'parent'} 👋
-          </p>
-          <h1 style={{
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 800,
-            fontSize: '1.625rem',
-            color: 'var(--white)',
-            lineHeight: 1.15,
-            margin: 0,
-          }}>
-            Ton Cockpit ⚡<br />
-            <span style={{ color: '#FFE17B' }}>Crises</span>
+        <div className="fade-up" style={{ marginTop: 20 }}>
+          <p style={s.greeting}>Bonjour {prenomParent || 'parent'} 👋</p>
+          <h1 style={s.title}>
+            Ton Cockpit <span style={{ color: '#FFE17B' }}>Crises ⚡</span>
           </h1>
         </div>
-
-        {/* Personnages chips */}
-        <div style={styles.chipRow} className="fade-up fade-up-d2">
-          {personnages.map((p) => (
-            <div key={p.label} style={styles.chip}>
-              <div style={styles.chipEmoji}>
-                <Character name={p.name} mood={p.mood} size={22} />
-              </div>
-              <span style={{ color: 'var(--white)', fontSize: '0.6875rem', fontWeight: 500 }}>
-                {p.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Progress + streak row */}
-        <div style={{ width: '100%' }} className="fade-up fade-up-d3">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ color: 'var(--mint)', fontSize: '0.75rem', fontWeight: 600 }}>
-              Semaine 2/4
-            </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={styles.streakPill}>
-                🔥 4 jours
-              </div>
-              <span style={{ color: 'var(--mint)', fontSize: '0.75rem', fontWeight: 600 }}>
-                35%
-              </span>
-            </div>
-          </div>
-          <div className="progress-bar" style={{ background: 'rgba(255,255,255,0.12)', height: 6 }}>
-            <div className="progress-bar-fill" style={{ width: '35%', background: 'var(--mint)' }} />
-          </div>
-        </div>
       </div>
 
-      {/* Cards */}
-      <div className="page-content">
-        {cards.map((c, i) => (
-          <Link
-            key={c.to}
-            to={c.to}
-            className={`fade-up fade-up-d${Math.min(i + 1, 4)}`}
-            style={{
-              display: 'block',
-              background: c.bg,
-              color: c.color,
-              borderRadius: 16,
-              padding: 18,
-              marginBottom: 10,
-              textDecoration: 'none',
-            }}
-          >
-            {/* Top row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-              <div style={{
-                width: 46, height: 46,
-                borderRadius: '50%',
-                background: c.iconBg,
-                border: '2px solid rgba(255,255,255,0.3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.375rem',
-                flexShrink: 0,
-                overflow: 'hidden',
-              }}>
-                {c.character ? (
-                  <Character name={c.character} mood={c.mood} size={36} />
-                ) : (
-                  c.icon
-                )}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <h3 style={{ color: c.color, fontSize: '1rem', margin: 0 }}>{c.title}</h3>
-                <p style={{ fontSize: '0.75rem', opacity: 0.7, margin: 0 }}>{c.sub}</p>
-              </div>
-              <span style={{ fontSize: '1.25rem', opacity: 0.5, flexShrink: 0, fontWeight: 300, lineHeight: 1 }}>›</span>
-            </div>
+      {/* STREAK PILL */}
+      <div className="fade-up fade-up-d1" style={{ padding: '0 20px' }}>
+        <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · 35%</div>
+      </div>
 
-            {/* Description */}
-            <p style={{ fontSize: '0.8125rem', opacity: 0.85, lineHeight: 1.4, marginBottom: 12 }}>
-              {c.desc}
-            </p>
-
-            {/* Progress */}
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                <span style={{ fontSize: '0.6875rem', fontWeight: 600, opacity: 0.7 }}>
-                  {c.progressLabel}
-                </span>
-                <span style={{ fontSize: '0.6875rem', fontWeight: 600, opacity: 0.7 }}>
-                  {Math.round((c.progress / c.total) * 100)}%
-                </span>
-              </div>
-              <div style={{
-                height: 5,
-                background: c.progressTrack,
-                borderRadius: 999,
-                overflow: 'hidden',
-              }}>
-                <div style={{
-                  height: '100%',
-                  width: `${(c.progress / c.total) * 100}%`,
-                  background: c.progressFill,
-                  borderRadius: 999,
-                  transition: 'width 0.5s ease',
-                }} />
-              </div>
+      {/* PERSONNAGES STRIP */}
+      <div className="fade-up fade-up-d1" style={s.stripRow}>
+        {personnages.map((p) => (
+          <div key={p.label} style={s.stripItem}>
+            <div style={s.stripCircle}>
+              <img src={p.img} alt={p.label} style={s.stripImg} draggable={false} />
             </div>
-          </Link>
+            <span style={s.stripLabel}>{p.label}</span>
+          </div>
         ))}
       </div>
+
+      {/* SEPARATOR */}
+      <div style={s.separator} />
+
+      {/* MODULES */}
+      <div style={s.modules}>
+        {modules.map((m, i) => {
+          const pct = Math.round((m.progress / m.total) * 100)
+          return (
+            <Link
+              key={m.to}
+              to={m.to}
+              className={`fade-up fade-up-d${i + 1}`}
+              style={{ ...s.card, background: m.bg, border: m.border, textDecoration: 'none', color: '#FFFFFF' }}
+            >
+              <div style={s.cardTop}>
+                <div style={s.cardCircle}>
+                  <img src={m.img} alt="" style={s.cardCircleImg} draggable={false} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span style={s.cardTag}>{m.tag}</span>
+                  <h3 style={s.cardTitle}>{m.title}</h3>
+                </div>
+                <span style={s.cardArrow}>›</span>
+              </div>
+              <p style={s.cardSub}>{m.sub}</p>
+              <div style={s.progressWrap}>
+                <div style={s.progressLabels}>
+                  <span>{m.progress}/{m.total} {m.to === '/cours' ? 'leçons' : m.to === '/quiz' ? 'quiz' : 'outils'}</span>
+                  <span>{pct}%</span>
+                </div>
+                <div style={s.progressTrack}>
+                  <div style={{ ...s.progressFill, width: `${pct}%` }} />
+                </div>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+
+      {/* FAB CRISE */}
+      <button
+        onClick={() => navigate('/crise')}
+        style={s.fab}
+        aria-label="Mode crise"
+      >
+        ⚡
+      </button>
     </div>
   )
 }
 
-const styles = {
-  hero: {
-    background: 'var(--navy)',
-    padding: '48px 16px 24px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 20,
-    borderRadius: '0 0 16px 16px',
+const s = {
+  page: {
+    minHeight: '100dvh',
+    background: '#0F172A',
+    paddingBottom: 100,
   },
-  topRow: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  logo: {
-    fontFamily: 'var(--font-heading)',
-    fontWeight: 800,
-    fontSize: '1.25rem',
-    color: 'var(--orange)',
-  },
-  avatarRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-  },
-  avatarCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: '50%',
-    background: 'rgba(168,222,209,0.2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  chipRow: {
-    display: 'flex',
-    gap: 6,
-    width: '100%',
-    justifyContent: 'center',
-  },
-  chip: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    background: 'rgba(255,255,255,0.08)',
-    borderRadius: 999,
-    padding: '6px 12px 6px 6px',
-  },
-  chipEmoji: {
-    width: 28,
-    height: 28,
-    borderRadius: '50%',
-    background: 'rgba(255,255,255,0.12)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
+  /* Header */
+  header: { padding: '20px 20px 0' },
+  headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  logo: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: '#FF6B4A' },
+  avatar: { width: 36, height: 36, borderRadius: '50%', border: '2px solid #A8DED1', overflow: 'hidden', flexShrink: 0 },
+  avatarImg: { width: '100%', height: '100%', objectFit: 'cover' },
+
+  greeting: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#A8DED1', margin: '0 0 4px' },
+  title: { fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 32, color: '#FFFFFF', margin: 0, lineHeight: 1.15 },
+
+  /* Streak */
   streakPill: {
-    background: 'rgba(13,147,115,0.3)',
-    color: 'var(--mint)',
-    fontSize: '0.6875rem',
-    fontWeight: 600,
-    padding: '3px 10px',
-    borderRadius: 999,
+    display: 'inline-block',
+    marginTop: 12,
+    background: 'rgba(255,255,255,0.08)',
+    borderRadius: 20,
+    padding: '6px 14px',
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12,
+    color: '#A8DED1',
+  },
+
+  /* Personnages strip */
+  stripRow: { display: 'flex', gap: 10, padding: '20px 20px 0', justifyContent: 'flex-start' },
+  stripItem: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 },
+  stripCircle: { width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', flexShrink: 0 },
+  stripImg: { width: '100%', height: '100%', objectFit: 'cover' },
+  stripLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, color: '#64748B' },
+
+  /* Separator */
+  separator: { margin: '24px 20px 0', height: 1, background: 'rgba(255,255,255,0.08)' },
+
+  /* Modules */
+  modules: { padding: '20px 16px 0' },
+  card: {
+    display: 'block',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 12,
+    transition: 'transform 0.15s',
+  },
+  cardTop: { display: 'flex', alignItems: 'center', gap: 12 },
+  cardCircle: { width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(255,255,255,0.15)' },
+  cardCircleImg: { width: '100%', height: '100%', objectFit: 'cover' },
+  cardTag: { fontFamily: 'Inter, sans-serif', fontSize: 8, letterSpacing: 1.5, color: 'rgba(168,222,209,0.6)', textTransform: 'uppercase', display: 'block' },
+  cardTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 18, fontWeight: 700, color: '#FFFFFF', margin: 0 },
+  cardArrow: { fontSize: 22, opacity: 0.4, flexShrink: 0, fontWeight: 300, lineHeight: 1 },
+  cardSub: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.6)', margin: '6px 0 0' },
+
+  progressWrap: { marginTop: 14 },
+  progressLabels: { display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 4 },
+  progressTrack: { height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 999, overflow: 'hidden' },
+  progressFill: { height: '100%', background: '#FFFFFF', borderRadius: 999, transition: 'width 0.5s ease' },
+
+  /* FAB Crise */
+  fab: {
+    position: 'fixed',
+    bottom: 90,
+    right: 16,
+    width: 56,
+    height: 56,
+    borderRadius: '50%',
+    background: '#FF6B4A',
+    border: 'none',
+    fontSize: 24,
+    color: '#FFFFFF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 4px 20px rgba(255,107,74,0.5)',
+    cursor: 'pointer',
+    zIndex: 40,
+    transition: 'transform 0.15s',
   },
 }
