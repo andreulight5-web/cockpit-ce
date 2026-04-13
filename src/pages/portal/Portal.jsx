@@ -7,6 +7,7 @@ import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveilla
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
+import logoCE from '../../assets/logo-ce.png'
 
 const STORAGE_KEY = 'cockpit_onboarding'
 
@@ -71,10 +72,8 @@ export default function Portal() {
       {/* HEADER */}
       <div style={s.header}>
         <div style={s.headerRow}>
-          <span style={s.logo}>⚡ CE</span>
-          <div style={s.avatar}>
-            <img src={mamanFiere} alt="Avatar" style={s.avatarImg} draggable={false} />
-          </div>
+          <span style={s.headerTitle}>Cockpit Crises</span>
+          <img src={logoCE} alt="Cerveaux Électriques" style={s.logoImg} draggable={false} />
         </div>
 
         <div className="fade-up" style={{ marginTop: 20 }}>
@@ -83,23 +82,6 @@ export default function Portal() {
             Ton Cockpit <span style={{ color: '#FFE17B' }}>Crises ⚡</span>
           </h1>
         </div>
-      </div>
-
-      {/* STREAK PILL */}
-      <div className="fade-up fade-up-d1" style={{ padding: '0 20px' }}>
-        <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · 35%</div>
-      </div>
-
-      {/* PERSONNAGES STRIP */}
-      <div className="fade-up fade-up-d1" style={s.stripRow}>
-        {personnages.map((p) => (
-          <div key={p.label} style={s.stripItem}>
-            <div style={s.stripCircle}>
-              <img src={p.img} alt={p.label} style={s.stripImg} draggable={false} />
-            </div>
-            <span style={s.stripLabel}>{p.label}</span>
-          </div>
-        ))}
       </div>
 
       {/* SEPARATOR */}
@@ -141,6 +123,21 @@ export default function Portal() {
         })}
       </div>
 
+      {/* PERSONNAGES STRIP + STREAK */}
+      <div className="fade-up fade-up-d4" style={s.stripRow}>
+        {personnages.map((p) => (
+          <div key={p.label} style={s.stripItem}>
+            <div style={s.stripCircle}>
+              <img src={p.img} alt={p.label} style={s.stripImg} draggable={false} />
+            </div>
+            <span style={s.stripLabel}>{p.label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="fade-up fade-up-d4" style={{ padding: '8px 20px 0' }}>
+        <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · 35%</div>
+      </div>
+
       {/* FAB CRISE */}
       <button
         onClick={() => navigate('/crise')}
@@ -162,10 +159,9 @@ const s = {
 
   /* Header */
   header: { padding: '20px 20px 0' },
-  headerRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  logo: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: '#FF6B4A' },
-  avatar: { width: 36, height: 36, borderRadius: '50%', border: '2px solid #A8DED1', overflow: 'hidden', flexShrink: 0 },
-  avatarImg: { width: '100%', height: '100%', objectFit: 'cover' },
+  headerRow: { display: 'flex', alignItems: 'center' },
+  headerTitle: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: '#A8DED1' },
+  logoImg: { height: 38, width: 'auto', borderRadius: '50%', marginLeft: 'auto', flexShrink: 0 },
 
   greeting: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#A8DED1', margin: '0 0 4px' },
   title: { fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 32, color: '#FFFFFF', margin: 0, lineHeight: 1.15 },
