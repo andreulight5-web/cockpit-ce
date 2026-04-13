@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import Portal from './pages/portal/Portal'
 import Cours from './pages/cours/Cours'
+import Lecon from './pages/cours/Lecon'
 import Quiz from './pages/quiz/Quiz'
 import Ressources from './pages/ressources/Ressources'
 import Crise from './pages/crise/Crise'
@@ -33,6 +34,7 @@ function AppLayout() {
       <Routes>
         <Route path="/" element={<Portal />} />
         <Route path="/cours" element={<Cours />} />
+        <Route path="/cours/lecon/:id" element={<Lecon />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/ressources" element={<Ressources />} />
         <Route path="/crise" element={<Crise />} />
