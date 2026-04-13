@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { playSound } from '../../lib/audio'
+import { playSound, playRandomPop } from '../../lib/audio'
 
 // === Asset imports — ASCII names only (Linux NFC/NFD safe) ===
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
@@ -46,7 +46,7 @@ export default function Onboarding() {
 
   const goTo = (target) => {
     if (phase === 'out') return
-    playSound('pop')
+    playRandomPop()
     setPhase('out')
     setTimeout(() => { setStep(target); setPhase('in') }, TRANSITION_MS)
   }
@@ -169,7 +169,7 @@ function Screen1Intro({ onNext }) {
   useEffect(() => {
     if (idx >= phrases.length - 1) return
     const duration = phrases[idx].text.length * 60 + 1500
-    const t = setTimeout(() => { playSound('pop', { volume: 0.4 }); setIdx((i) => i + 1) }, duration)
+    const t = setTimeout(() => { playRandomPop({ volume: 0.2 }); setIdx((i) => i + 1) }, duration)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx])
@@ -215,7 +215,7 @@ function Screen1Intro({ onNext }) {
    ============================================================== */
 function Screen2Histoire({ onNext }) {
   const [scene, setScene] = useState(0)
-  const advance = () => { if (scene < 2) { playSound('pop', { volume: 0.4 }); setScene((s) => s + 1) } }
+  const advance = () => { if (scene < 2) { playRandomPop(); setScene((s) => s + 1) } }
 
   const renderScene = () => {
     if (scene === 0) return <SceneCard key="A" characters={[{ src: monstreTriste, alt: 'Monstre triste' }]} bubble="Moi aussi j'ai du mal... je sais pas me contrôler." />
