@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
@@ -55,6 +55,7 @@ const modules = [
 ]
 
 export default function Portal() {
+  const navigate = useNavigate()
   const [prenomParent] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -80,6 +81,18 @@ export default function Portal() {
           <h1 style={s.title}>
             Ton Cockpit <span style={{ color: '#FFE17B' }}>Crises ⚡</span>
           </h1>
+        </div>
+      </div>
+
+      {/* CRISE URGENTE */}
+      <div className="fade-up" style={{ padding: '0 16px', marginTop: 16 }}>
+        <div onClick={() => navigate('/crise')} style={s.criseBtn}>
+          <div style={{ fontSize: 36 }}>⚡</div>
+          <div>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff' }}>Mon enfant fait une crise</div>
+            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.75)', marginTop: 2 }}>Protocole immédiat — 4 étapes guidées</div>
+          </div>
+          <div style={{ marginLeft: 'auto', fontSize: 20, color: 'rgba(255,255,255,0.6)' }}>›</div>
         </div>
       </div>
 
@@ -146,6 +159,19 @@ const s = {
     minHeight: '100dvh',
     background: '#0F172A',
     paddingBottom: 100,
+  },
+
+  /* Crise */
+  criseBtn: {
+    background: 'linear-gradient(135deg, #FF6B4A 0%, #CC4422 100%)',
+    borderRadius: 20,
+    padding: '18px 20px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 14,
+    boxShadow: '0 4px 24px rgba(255,107,74,0.35)',
+    transition: 'transform 0.15s',
   },
 
   /* Header */

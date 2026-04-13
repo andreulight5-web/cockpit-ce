@@ -4,9 +4,9 @@ import { LECONS } from '../../data/lecons'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
 const MODULES = [
-  { key: 'A', label: 'Comprendre le TDAH', color: '#0D9373' },
-  { key: 'B', label: 'Les 5 Piliers Barkley', color: '#FF6B4A' },
-  { key: 'C', label: 'Situations du quotidien', color: '#D4537E' },
+  { key: '1', label: 'Gérer les crises', color: '#FF6B4A', badge: 'URGENT' },
+  { key: '2', label: 'Comprendre le TDAH', color: '#0D9373' },
+  { key: '3', label: 'Les 5 Piliers Barkley', color: '#A8DED1' },
 ]
 
 const statusStyle = {
@@ -57,7 +57,7 @@ export default function Cours() {
             <div key={mod.key} style={{ marginBottom: 28 }}>
               {/* Module header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                <span style={{ ...s.modBadge, background: mod.color }}>{mod.key}</span>
+                <span style={{ ...s.modBadge, background: mod.color, color: mod.color === '#A8DED1' ? '#0F172A' : '#fff' }}>{mod.badge || mod.key}</span>
                 <div style={{ flex: 1 }}>
                   <h2 style={s.modTitle}>{mod.label}</h2>
                   <span style={s.modCount}>{doneCount}/{items.length} leçons</span>
