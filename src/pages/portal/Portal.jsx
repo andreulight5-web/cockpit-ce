@@ -6,7 +6,6 @@ import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
-import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 import logoCE from '../../assets/logo-ce.png'
 
 const STORAGE_KEY = 'cockpit_onboarding'
@@ -22,31 +21,31 @@ const modules = [
   {
     to: '/cours',
     img: cortexBienveillant,
-    tag: 'MODULE 1',
-    title: 'Cours Barkley',
-    sub: 'Méthode scientifique · Pr. Cortex',
-    progress: 4,
-    total: 13,
-    bg: 'linear-gradient(135deg, #2A9490 0%, #1A5F5C 100%)',
-    border: 'none',
-  },
-  {
-    to: '/quiz',
-    img: monstreRigole,
-    tag: 'MODULE 2',
-    title: 'Quiz & XP',
-    sub: 'Le Monstre t\'accompagne',
-    progress: 3,
-    total: 6,
+    tag: 'COURS',
+    title: 'Gérer les crises',
+    sub: 'Protocoles et situations · 10 lecons',
+    progress: 2,
+    total: 10,
     bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
     border: 'none',
   },
   {
+    to: '/annexes',
+    img: cortexBienveillant,
+    tag: 'ANNEXES',
+    title: 'Méthode Barkley',
+    sub: 'Comprendre le pourquoi · Pr. Cortex',
+    progress: 0,
+    total: 8,
+    bg: 'linear-gradient(135deg, #1E293B 0%, #16152A 100%)',
+    border: '1px solid rgba(245,224,109,0.2)',
+  },
+  {
     to: '/ressources',
     img: cortexPerplexe,
-    tag: 'MODULE 3',
+    tag: 'OUTILS',
     title: 'Ressources',
-    sub: 'Outils · Scripts · Sources HAS',
+    sub: 'Scripts · Sources HAS',
     progress: 2,
     total: 8,
     bg: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
