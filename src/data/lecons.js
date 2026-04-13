@@ -1,15 +1,15 @@
 export const LECONS = [
-  // ═══ MODULE 1 — Gérer les crises (#FF6B4A) ═══
+  // ═══ MODULE 1 — Gérer les crises (#C0506A) ═══
   {
-    id: 1, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
+    id: 1, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#C0506A',
     titre: 'Les 4 phases d\'une crise', sousTitre: 'Comprendre pour anticiper',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
     apercu: ['Reconnaître les 4 phases d\'une crise', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🌊', titre: 'Une crise, c\'est 4 phases', texte: 'Comprendre les phases change tout.', couleur: '#FF6B4A', points: ['Repérer l\'escalade avant l\'explosion', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'] },
+      { id: 1, type: 'intro', emoji: '🌊', titre: 'Une crise, c\'est 4 phases', texte: 'Comprendre les phases change tout.', couleur: '#C0506A', points: ['Repérer l\'escalade avant l\'explosion', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'] },
       { id: 2, type: 'fact2col', titre: 'Les 2 premières phases', colonnes: [
         { label: 'PHASE 1', icone: '📈', titre: 'Escalade', texte: 'Respiration rapide, agitation, ton qui monte. 2-5 min.', action: 'Interviens maintenant !', couleur: '#F5E06D' },
-        { label: 'PHASE 2', icone: '🌪️', titre: 'Explosion', texte: 'Cris, pleurs, objets jetés. Cortex hors-ligne. 5-20 min.', action: 'Silence et sécurité.', couleur: '#FF6B4A' },
+        { label: 'PHASE 2', icone: '🌪️', titre: 'Explosion', texte: 'Cris, pleurs, objets jetés. Cortex hors-ligne. 5-20 min.', action: 'Silence et sécurité.', couleur: '#C0506A' },
       ] },
       { id: 3, type: 'cortex', citation: '"Pendant l\'explosion, l\'amygdale a pris le contrôle total. Tenter un raisonnement est non seulement inutile, c\'est contre-productif."', source: 'Barkley, 2013', importance: 'Ca veut dire que toute explication pendant la crise est perdue. Ton seul job : sécuriser et attendre.' },
       { id: 4, type: 'fact2col', titre: 'Les 2 dernières phases', colonnes: [
@@ -24,12 +24,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: '17h. Retour école. Il refuse de poser son sac. Tu demandes 2 fois. Sa voix monte. Il tape la table.', cerveau_enfant: 'PHASE 1. Son cerveau est à court de carburant après 6h de sur-effort à l\'école.', cerveau_parent: 'Tu es fatiguée aussi. Son ton te fait monter. Vous vous synchronisez vers le haut.', demain: ['Identifie les signaux d\'escalade (voix, gestes)', 'Interviens en PHASE 1 : baisse la voix, un seul mot calme', 'Prépare un en-cas pour le retour (glucose = carburant cerveau)'] },
   },
   {
-    id: 2, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
+    id: 2, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#C0506A',
     titre: 'STOP — 30 secondes', sousTitre: 'La fenêtre qui change tout',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
     apercu: ['Le miroir neuronal parent-enfant', 'Créer ton signal d\'arrêt personnel', 'S\'entraîner hors crise pour être prêt'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '✋', titre: '30 secondes. C\'est tout.', texte: 'La durée d\'une crise dépend de ta réaction dans les 30 premières secondes.', couleur: '#FF6B4A', points: ['Le miroir neuronal : pourquoi ton calme est son ancre', 'Un signal d\'arrêt personnel', 'Pratiquer hors crise pour être prêt en crise'] },
+      { id: 1, type: 'intro', emoji: '✋', titre: '30 secondes. C\'est tout.', texte: 'La durée d\'une crise dépend de ta réaction dans les 30 premières secondes.', couleur: '#C0506A', points: ['Le miroir neuronal : pourquoi ton calme est son ancre', 'Un signal d\'arrêt personnel', 'Pratiquer hors crise pour être prêt en crise'] },
       { id: 2, type: 'fact', label: 'La science', titre: 'Le miroir neuronal', texte: 'Ton cerveau imite automatiquement les émotions de ton enfant. Si tu montes, il monte. Si tu descends, il peut descendre.', detail: 'C\'est neurologique, pas une question de volonté.', icone: '🪞', exemple: '"Quand je crie, il crie plus fort. Quand je chuchote, il baisse d\'un cran en 30 secondes."' },
       { id: 3, type: 'cortex', citation: '"La co-régulation parentale est le mécanisme principal de régulation émotionnelle chez l\'enfant TDAH. Le parent régule, l\'enfant suit."', source: 'Siegel & Bryson, 2012', importance: 'Ton calme n\'est pas un luxe — c\'est l\'outil thérapeutique le plus puissant que tu possèdes.' },
       { id: 4, type: 'contraste', titre: 'Les 30 premières secondes', gauche: { label: '❌ Réaction automatique', texte: '"Arrête ca TOUT DE SUITE. Je suis fatiguée de tes caprices !"' }, droite: { label: '✅ Réponse choisie', texte: '[Silence. Respiration. Voix basse.] "Je vois que c\'est dur. Je suis là."' }, difference: 'La première réaction amplifie. La seconde désamorce. La différence = 5 min de crise vs 45.' },
@@ -41,12 +41,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: 'Il explose parce que sa soeur a touché son Lego. Tu rentres du bureau épuisée.', cerveau_enfant: 'Pour lui, c\'est une urgence absolue. Traité neurologiquement comme un danger.', cerveau_parent: 'Ton amygdale recoit son signal de détresse et veut répondre encore plus fort.', demain: ['Ce soir : visualise la scène et ta réponse idéale', 'Demain matin : 3 respirations profondes', 'Quand ca arrive : main sur le coeur, 30 secondes'] },
   },
   {
-    id: 3, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
+    id: 3, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#C0506A',
     titre: 'Valider sans céder', sousTitre: 'Empathie ≠ permissivité',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
     apercu: ['L\'équation connexion puis correction', 'Scripts exacts de validation', 'La peur de la permissivité démystifiée'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '💛', titre: 'Connexion avant correction', texte: 'Valider l\'émotion ne valide pas le comportement.', couleur: '#FF6B4A', points: ['L\'équation connexion→correction', 'Scripts exacts à utiliser', 'La peur de la permissivité démystifiée'] },
+      { id: 1, type: 'intro', emoji: '💛', titre: 'Connexion avant correction', texte: 'Valider l\'émotion ne valide pas le comportement.', couleur: '#C0506A', points: ['L\'équation connexion→correction', 'Scripts exacts à utiliser', 'La peur de la permissivité démystifiée'] },
       { id: 2, type: 'fact', label: 'L\'équation', titre: 'Connexion PUIS correction', texte: 'Tant que l\'émotion n\'est pas validée, le cortex préfrontal reste hors-ligne. Aucune lecon ne passe.', detail: 'La connexion réactive le cortex. La correction vient après.', icone: '🔗', exemple: '"Je vois que tu es en colère" (connexion) → 15 min de calme → "Ce que tu as fait n\'est pas OK" (correction).' },
       { id: 3, type: 'cortex', citation: '"L\'empathie active le système d\'apaisement parasympathique. Sans elle, le cerveau reste en mode combat."', source: 'Siegel, 2012', importance: 'Valider N\'EST PAS céder. C\'est activer le switch neurologique qui permet à ton enfant de t\'entendre.' },
       { id: 4, type: 'contraste', titre: 'Quand il dit "Je te déteste !"', gauche: { label: '❌ Correction d\'abord', texte: '"On ne parle pas comme ca ! File dans ta chambre !"' }, droite: { label: '✅ Connexion d\'abord', texte: '"Tu es très en colère contre moi. Je comprends. Quand tu seras calme, on parlera."' }, difference: 'La première réponse alimente la crise. La seconde la désamorce et enseigne que les émotions sont normales.' },
@@ -58,12 +58,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: 'Il crie "je te déteste" parce que tu as éteint la tablette.', cerveau_enfant: 'Frustration maximale. Il dit la chose la plus forte qu\'il connaît. Pas pensé — ressenti.', cerveau_parent: 'Ces mots font MAL. Ton instinct veut punir. Mais punir un cerveau en surchauffe rallonge la crise.', demain: ['"Je vois que tu es très en colère contre moi."', 'Attends 20 minutes de calme', '"Les mots font mal. Comment on fait autrement la prochaine fois ?"'] },
   },
   {
-    id: 4, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
+    id: 4, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#C0506A',
     titre: 'Le coin calme', sousTitre: 'Ressource, pas punition',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
     apercu: ['Différence coin calme vs punition', 'Le créer AVEC ton enfant', 'Comment il apprend à l\'utiliser seul'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🏡', titre: 'Un refuge, pas une prison', texte: 'Le coin calme est un outil d\'autorégulation.', couleur: '#FF6B4A', points: ['La différence fondamentale avec la punition', 'Comment le créer AVEC l\'enfant', 'Comment il apprend à l\'utiliser seul'] },
+      { id: 1, type: 'intro', emoji: '🏡', titre: 'Un refuge, pas une prison', texte: 'Le coin calme est un outil d\'autorégulation.', couleur: '#C0506A', points: ['La différence fondamentale avec la punition', 'Comment le créer AVEC l\'enfant', 'Comment il apprend à l\'utiliser seul'] },
       { id: 2, type: 'fact', label: 'La différence', titre: 'Coin calme vs punition', texte: 'La punition isole et fait honte. Le coin calme offre un espace sensoriel sécurisant pour que le cerveau se régule.', detail: 'L\'enfant y va par CHOIX, pas par contrainte.', icone: '🧸', exemple: '"Va dans ta chambre !" = punition. "Tu veux aller dans ton coin doux ?" = coin calme. Même mouvement, intention opposée.' },
       { id: 3, type: 'cortex', citation: '"Un espace sensoriel apaisant aide le système nerveux à revenir à l\'homéostasie. C\'est un outil de régulation, pas une conséquence."', source: 'HAS, 2024', importance: 'Le coin calme apprend à ton enfant qu\'il PEUT gérer ses émotions — au lieu de lui apprendre qu\'il est puni pour les avoir.' },
       { id: 4, type: 'contraste', titre: 'Deux approches', gauche: { label: '❌ Punition', texte: '"File dans ta chambre !" (honte, isolement forcé, porte fermée)' }, droite: { label: '✅ Coin calme', texte: '"Tu veux aller dans ton coin doux ?" (choix, sécurité, objets apaisants)' }, difference: 'La punition enseigne la honte. Le coin calme enseigne l\'autorégulation — la compétence la plus importante pour un cerveau TDAH.' },
@@ -75,12 +75,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: 'Crise à table. Il jette sa fourchette. Tu dis "va dans ta chambre !". Il hurle encore plus.', cerveau_enfant: 'L\'isolement forcé ajoute de la honte à la tempête. Double peine.', cerveau_parent: 'Tu veux du calme immédiat. L\'isolement semble logique. Mais ca aggrave.', demain: ['"Tu veux aller dans ton coin doux ?"', 'S\'il refuse : reste présent en silence', 'Ce weekend : créez le coin calme ensemble'] },
   },
   {
-    id: 5, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
+    id: 5, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#C0506A',
     titre: 'Après la crise', sousTitre: 'Réparer la relation',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
     apercu: ['Pourquoi la réparation est essentielle', 'Le débriefing doux post-crise', 'Réévaluer les punitions de crise'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🌈', titre: 'La crise est finie', texte: 'Maintenant, on répare.', couleur: '#FF6B4A', points: ['Pourquoi la réparation est essentielle', 'Le débriefing doux (quand et comment)', 'Ne PAS revenir sur les punitions de crise'] },
+      { id: 1, type: 'intro', emoji: '🌈', titre: 'La crise est finie', texte: 'Maintenant, on répare.', couleur: '#C0506A', points: ['Pourquoi la réparation est essentielle', 'Le débriefing doux (quand et comment)', 'Ne PAS revenir sur les punitions de crise'] },
       { id: 2, type: 'fact', label: 'La réparation', titre: 'Pourquoi c\'est essentiel', texte: 'Chaque crise endommage le lien parent-enfant. La réparation le renforce. Sans elle, les dommages s\'accumulent.', detail: 'Réparer ≠ excuser le comportement. C\'est restaurer la connexion.', icone: '🩹', exemple: '"Après la grosse crise de mardi, on s\'est assis et j\'ai dit : \'C\'était dur pour nous deux. Je suis désolée d\'avoir crié.\' Il s\'est effondré dans mes bras."' },
       { id: 3, type: 'cortex', citation: '"Les ruptures relationnelles ne sont pas le problème. C\'est l\'absence de réparation qui crée des dégâts à long terme."', source: 'Tronick, 2007', importance: 'Chaque réparation enseigne à ton enfant que les relations résistent aux conflits. C\'est fondamental pour son développement.' },
       { id: 4, type: 'contraste', titre: 'Après la crise', gauche: { label: '❌ Ce qu\'on fait souvent', texte: 'Faire un procès détaillé. Punir "pour marquer le coup". Ou ignorer comme si de rien n\'était.' }, droite: { label: '✅ Ce qui fonctionne', texte: 'Câlin si accepté. "Comment tu te sens ?" Puis "Comment on répare ?"' }, difference: 'Le procès enseigne la culpabilité. L\'ignorance enseigne que les émotions ne comptent pas. La réparation enseigne la résilience.' },

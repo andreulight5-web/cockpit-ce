@@ -83,7 +83,7 @@ export default function Onboarding() {
 /* ==============================================================
    BubbleBackground — colorful random floating bubbles
    ============================================================== */
-const BUBBLE_PALETTE = ['#F5E06D', '#A8DED1', '#2A1824', '#FF6B4A', '#FFFFFF', '#2A9490']
+const BUBBLE_PALETTE = ['#F5E06D', '#2A9490', '#C0506A', '#2A9490', '#FFFFFF', '#2A9490']
 
 function randPct() { return Math.random() * 100 }
 
@@ -415,7 +415,7 @@ function Screen5Parent({ prenomParent, setPrenomParent, onNext }) {
         <div style={styles.bubbleTail} />
       </div>
       <img src={mamanMain} alt="Maman qui tend la main" className="sway" style={{ height: 280, objectFit: 'contain', alignSelf: 'center', zIndex: 1 }} draggable={false} />
-      <p style={{ color: '#A8DED1', fontFamily: 'Inter, sans-serif', fontSize: 14, textAlign: 'center', margin: '20px 0 24px', zIndex: 1 }}>
+      <p style={{ color: '#2A9490', fontFamily: 'Inter, sans-serif', fontSize: 14, textAlign: 'center', margin: '20px 0 24px', zIndex: 1 }}>
         Pour qu'on s'adresse à toi comme il faut
       </p>
       <div style={{ position: 'relative', width: '80%', margin: '0 auto', zIndex: 1 }}>
@@ -569,8 +569,8 @@ const css = `
 .tw-char { display: inline-block; opacity: 0; animation: twChar 0.22s ease-out forwards }
 
 /* Glow inputs */
-.glow-input-pink:focus { box-shadow: 0 6px 20px -6px rgba(168,222,209,0.7); border-color: #2A9490 !important }
-.glow-input-navy:focus { box-shadow: 0 6px 20px -6px rgba(168,222,209,0.6); border-color: #A8DED1 !important }
+.glow-input-pink:focus { box-shadow: 0 6px 20px -6px rgba(42,148,144,0.7); border-color: #2A9490 !important }
+.glow-input-navy:focus { box-shadow: 0 6px 20px -6px rgba(42,148,144,0.6); border-color: #2A9490 !important }
 
 /* Bounce value */
 @keyframes bounceValue { 0%,100% { transform: scale(1) } 50% { transform: scale(1.18) } }

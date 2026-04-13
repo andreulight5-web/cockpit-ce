@@ -52,10 +52,10 @@ export default function Lecon() {
 
       {showAfter && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 80px' }}>
-          <button onClick={goPrev} style={{ ...S.backBtn, color: '#A8DED1', marginBottom: 20 }}>← Revoir les cartes</button>
+          <button onClick={goPrev} style={{ ...S.backBtn, color: '#2A9490', marginBottom: 20 }}>← Revoir les cartes</button>
           <Scenario scenario={lecon.scenario} color={color} openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 28 }}>
-            {nextLecon && <button onClick={() => { navigate(`/cours/${nextLecon.id}`); setCardIdx(0); setShowAfter(false) }} style={{ ...S.btn, background: color, color: color === '#A8DED1' ? '#1C1B2E' : '#fff' }}>Lecon suivante →</button>}
+            {nextLecon && <button onClick={() => { navigate(`/cours/${nextLecon.id}`); setCardIdx(0); setShowAfter(false) }} style={{ ...S.btn, background: color, color: color === '#2A9490' ? '#1C1B2E' : '#fff' }}>Lecon suivante →</button>}
             <button onClick={() => navigate('/cours')} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>Retour au programme</button>
           </div>
         </div>
@@ -110,13 +110,13 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
         <div style={{ padding: 20, flex: 1 }}>
           <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: '#E2E8F0', lineHeight: 1.65, marginBottom: 14 }}>{c.texte}</p>
           {c.detail && <><div style={S.thinSep} /><p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, margin: '14px 0 6px' }}>En pratique :</p><p style={{ fontSize: 14, color, fontStyle: 'italic', lineHeight: 1.5 }}>{c.detail}</p></>}
-          {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a` }}><p style={{ fontSize: 13, color: '#A8DED1', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
+          {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a` }}><p style={{ fontSize: 13, color: '#2A9490', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
         </div>
       </div>
     )
     case 'fact2col': return (
       <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '28px 16px' }}>
-        {c.titre && <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#A8DED1', textTransform: 'uppercase', letterSpacing: 1.5, textAlign: 'center', marginBottom: 16 }}>{c.titre}</h3>}
+        {c.titre && <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#2A9490', textTransform: 'uppercase', letterSpacing: 1.5, textAlign: 'center', marginBottom: 16 }}>{c.titre}</h3>}
         <div style={{ display: 'flex', gap: 12, flex: 1, alignItems: 'stretch' }}>
           {c.colonnes.map((col, i) => (
             <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 16, padding: 16, borderTop: `3px solid ${col.couleur || color}`, display: 'flex', flexDirection: 'column' }}>
@@ -139,17 +139,17 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 17, color: '#fff', fontStyle: 'italic', lineHeight: 1.7, margin: '4px 0 12px' }}>{c.citation}</p>
           <span style={{ fontSize: 11, color: '#64748B' }}>{c.source}</span>
         </div>
-        {c.importance && <p style={{ fontSize: 14, color: '#A8DED1', lineHeight: 1.5, marginTop: 16, textAlign: 'center' }}><strong>Pourquoi c'est important :</strong> {c.importance}</p>}
+        {c.importance && <p style={{ fontSize: 14, color: '#2A9490', lineHeight: 1.5, marginTop: 16, textAlign: 'center' }}><strong>Pourquoi c'est important :</strong> {c.importance}</p>}
       </div>
     )
     case 'contraste': return (
       <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '32px 20px', justifyContent: 'center' }}>
-        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 18, color: '#A8DED1', textAlign: 'center', marginBottom: 20 }}>{c.titre}</h3>
+        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 18, color: '#2A9490', textAlign: 'center', marginBottom: 20 }}>{c.titre}</h3>
         <div style={{ ...S.contCard, borderColor: '#C0506A', background: 'rgba(212,83,126,0.10)' }}>
           <span style={{ fontSize: 10, color: '#C0506A', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.gauche.label}</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: '8px 0 0' }}>{c.gauche.texte}</p>
         </div>
-        <div style={{ ...S.contCard, borderColor: '#2A9490', background: 'rgba(13,147,115,0.10)', marginTop: 10 }}>
+        <div style={{ ...S.contCard, borderColor: '#2A9490', background: 'rgba(42,148,144,0.10)', marginTop: 10 }}>
           <span style={{ fontSize: 10, color: '#2A9490', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.droite.label}</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: '8px 0 0' }}>{c.droite.texte}</p>
         </div>
@@ -169,24 +169,24 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
     case 'action': return (
       <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '32px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: color === '#2A9490' ? '#1C1B2E' : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <span style={{ fontSize: 22, fontWeight: 800, lineHeight: 1 }}>{c.numero}</span>
             <span style={{ fontSize: 7, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginTop: 2 }}>ACTION</span>
           </div>
           <div><span style={{ ...S.tagPill, background: `${color}33`, color }}>{c.tag}</span><h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#fff', margin: '6px 0 0' }}>{c.titre}</h3></div>
         </div>
         <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#E2E8F0', lineHeight: 1.7, marginBottom: 14 }}>{c.texte}</p>
-        {c.resultat && <><div style={S.thinSep} /><div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 14, marginTop: 12 }}><p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 4 }}>Resultat attendu</p><p style={{ fontSize: 14, color: '#A8DED1', margin: 0, lineHeight: 1.5 }}>{c.resultat}</p></div></>}
+        {c.resultat && <><div style={S.thinSep} /><div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 14, marginTop: 12 }}><p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 4 }}>Resultat attendu</p><p style={{ fontSize: 14, color: '#2A9490', margin: 0, lineHeight: 1.5 }}>{c.resultat}</p></div></>}
         {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 10 }}><p style={{ fontSize: 13, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
       </div>
     )
     case 'memo': return (
       <div style={{ ...S.cardFull, background: color, padding: '40px 20px 24px', justifyContent: 'center', alignItems: 'center' }}>
-        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', marginBottom: 20, textAlign: 'center' }}>✓ A retenir</h3>
+        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: color === '#2A9490' ? '#1C1B2E' : '#fff', marginBottom: 20, textAlign: 'center' }}>✓ A retenir</h3>
         {c.items.map((item, i) => (
           <div key={i} style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 14, padding: 16, width: '100%', marginBottom: 10, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-            <span style={{ color: color === '#A8DED1' ? '#1C1B2E' : '#fff', fontWeight: 700, flexShrink: 0 }}>✓</span>
-            <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', lineHeight: 1.4 }}>{item}</span>
+            <span style={{ color: color === '#2A9490' ? '#1C1B2E' : '#fff', fontWeight: 700, flexShrink: 0 }}>✓</span>
+            <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: color === '#2A9490' ? '#1C1B2E' : '#fff', lineHeight: 1.4 }}>{item}</span>
           </div>
         ))}
       </div>

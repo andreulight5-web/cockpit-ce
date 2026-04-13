@@ -179,7 +179,7 @@ function Step4After({ navigate }) {
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {postSteps.map((txt, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-            <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(13,147,115,0.2)', color: '#2A9490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
+            <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(42,148,144,0.2)', color: '#2A9490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
             <p style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5, margin: 0 }}>{txt}</p>
           </div>
         ))}
@@ -202,10 +202,10 @@ function ScriptCard({ type, text }) {
       border: `1px solid ${good ? '#2A9490' : '#C0506A'}`,
       borderRadius: 12, padding: '12px 16px', width: '100%',
     }}>
-      <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: good ? '#2A9490' : '#2A1824' }}>
+      <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: good ? '#2A9490' : '#E8A0B0' }}>
         {good ? '✅ Dis plutôt' : '❌ Évite'}
       </span>
-      <p style={{ fontSize: 15, fontWeight: 600, color: good ? '#2A9490' : '#2A1824', marginTop: 6, textDecoration: good ? 'none' : 'line-through', fontFamily: 'Inter, sans-serif', lineHeight: 1.4 }}>
+      <p style={{ fontSize: 15, fontWeight: 600, color: good ? '#2A9490' : '#E8A0B0', marginTop: 6, textDecoration: good ? 'none' : 'line-through', fontFamily: 'Inter, sans-serif', lineHeight: 1.4 }}>
         "{text}"
       </p>
     </div>
@@ -227,6 +227,6 @@ const S = {
   timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#F5E06D' },
   timerHint: { position: 'absolute', bottom: -18, fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' },
   checkCard: { display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, border: '1.5px solid', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' },
-  scriptCard: { display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(168,222,209,0.08)', border: '1px solid rgba(168,222,209,0.15)', borderRadius: 12, padding: '12px 16px' },
-  nextBtn: { width: '100%', maxWidth: 320, padding: '16px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', background: '#2A9490', border: 'none', cursor: 'pointer', marginTop: 'auto' },
+  scriptCard: { display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(42,148,144,0.08)', border: '1px solid rgba(42,148,144,0.15)', borderRadius: 12, padding: '12px 16px' },
+  nextBtn: { width: '100%', maxWidth: 320, padding: '16px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#1C1B2E', background: '#F5E06D', border: 'none', cursor: 'pointer', marginTop: 'auto' },
 }

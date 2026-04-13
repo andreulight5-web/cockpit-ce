@@ -6,7 +6,7 @@ import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveilla
 const MODULES = [
   { key: '1', label: 'Gérer les crises', color: '#C0506A', badge: 'URGENT' },
   { key: '2', label: 'Comprendre le TDAH', color: '#2A9490' },
-  { key: '3', label: 'Les 5 Piliers Barkley', color: '#A8DED1' },
+  { key: '3', label: 'Les 5 Piliers Barkley', color: '#2A9490' },
 ]
 
 const statusStyle = {
@@ -57,7 +57,7 @@ export default function Cours() {
             <div key={mod.key} style={{ marginBottom: 28 }}>
               {/* Module header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                <span style={{ ...s.modBadge, background: mod.color, color: mod.color === '#A8DED1' ? '#1C1B2E' : '#fff' }}>{mod.badge || mod.key}</span>
+                <span style={{ ...s.modBadge, background: mod.color, color: mod.color === '#2A9490' ? '#1C1B2E' : '#fff' }}>{mod.badge || mod.key}</span>
                 <div style={{ flex: 1 }}>
                   <h2 style={s.modTitle}>{mod.label}</h2>
                   <span style={s.modCount}>{doneCount}/{items.length} leçons</span>
@@ -100,7 +100,7 @@ export default function Cours() {
 const s = {
   page: { minHeight: '100dvh', background: '#1C1B2E' },
   header: { padding: '48px 20px 20px' },
-  back: { background: 'none', border: 'none', color: '#A8DED1', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 12, fontFamily: 'Inter, sans-serif' },
+  back: { background: 'none', border: 'none', color: '#2A9490', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 12, fontFamily: 'Inter, sans-serif' },
   title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
   sub: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#F5E06D', marginTop: 4 },
   body: { padding: '20px 20px 40px' },

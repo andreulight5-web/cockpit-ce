@@ -24,7 +24,9 @@
       "Bash(sed -i '' \"s/#0F172A/#1C1B2E/g; s/#0D9373/#2A9490/g; s/#FFE17B/#F5E06D/g; s/#F2B8C6/#2A1824/g; s/#D4537E/#C0506A/g\" src/pages/crise/Crise.jsx)",
       "Bash(sed -i '' \"s/#0F172A/#1C1B2E/g; s/#0D9373/#2A9490/g; s/#FFE17B/#F5E06D/g; s/#F2B8C6/#2A1824/g; s/rgba\\(75, 21, 40, 0.25\\)/rgba\\(192,80,106,0.3\\)/g; s/#4B1528/#C0506A/g\" src/pages/onboarding/Onboarding.jsx)",
       "Bash(sed -i '' \"s/#0D9373/#2A9490/g; s/#D4537E/#C0506A/g\" src/pages/cours/Lecon.jsx)",
-      "Bash(sed -i '' \"s/#FFE17B/#F5E06D/g\" src/pages/auth/Login.jsx)"
+      "Bash(sed -i '' \"s/#FFE17B/#F5E06D/g\" src/pages/auth/Login.jsx)",
+      "Bash(sed -i '' \"s/#A8DED1/#2A9490/g; s/rgba\\(13,147,115,/rgba\\(42,148,144,/g\" src/pages/cours/Lecon.jsx)",
+      "Bash(sed -i '' \"s/#A8DED1/#2A9490/g\" src/pages/cours/Cours.jsx)"
     ]
   }
 }
