@@ -44,7 +44,7 @@ export default function Lecon() {
       {!showAfter && (
         <div {...swipe} style={S.cardArea}>
           <div key={cardIdx} className="fade-up" style={S.cardContainer}>
-            <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} lecon={lecon} />
+            <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} lecon={lecon} onShowScenario={() => setShowAfter(true)} />
           </div>
           <div style={S.navRow}>
             <button onClick={goPrev} style={{ ...S.navBtn, opacity: cardIdx > 0 ? 1 : 0.25 }}>←</button>
@@ -69,7 +69,8 @@ export default function Lecon() {
 }
 
 /* ═══════ Card Renderer ═══════ */
-function RenderCard({ carte: c, color, cortex, lecon }) {
+function RenderCard({ carte: c, color, cortex, lecon, onShowScenario }) {
+  const nav = useNavigate()
   switch (c.type) {
     case 'intro': {
       const apercu = lecon.apercu || c.points || []
@@ -183,17 +184,28 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
         {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 10 }}><p style={{ fontSize: 14, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
       </div>
     )
-    case 'memo': return (
-      <div style={{ ...S.cardFull, background: color, padding: '72px 20px 80px', justifyContent: 'center', alignItems: 'center' }}>
-        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: color === '#2A9490' ? '#1C1B2E' : '#fff', marginBottom: 20, textAlign: 'center' }}>✓ A retenir</h3>
-        {c.items.map((item, i) => (
-          <div key={i} style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 14, padding: 16, width: '100%', marginBottom: 10, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-            <span style={{ color: color === '#2A9490' ? '#1C1B2E' : '#fff', fontWeight: 700, flexShrink: 0 }}>✓</span>
-            <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: color === '#2A9490' ? '#1C1B2E' : '#fff', lineHeight: 1.4 }}>{item}</span>
+    case 'memo': {
+      const nextL = LECONS.find((l) => l.id === lecon.id + 1)
+      return (
+        <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '72px 20px 80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: `${color}33`, border: `2px solid ${color}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color }}>✓</div>
+            <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: '#fff', marginTop: 12 }}>A retenir</h3>
           </div>
-        ))}
-      </div>
-    )
+          {c.items.map((item, i) => (
+            <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderLeft: `3px solid ${color}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ color, fontSize: 14, fontWeight: 700, flexShrink: 0 }}>✓</span>
+              <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#E2E8F0', lineHeight: 1.5 }}>{item}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 'auto', paddingTop: 24, width: '100%' }}>
+            {nextL && <button onClick={() => nav(`/cours/${nextL.id}`)} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Lecon suivante →</button>}
+            {!nextL && <button onClick={() => nav('/cours')} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Retour au programme</button>}
+            {lecon.scenario && onShowScenario && <button onClick={onShowScenario} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', width: '100%', borderRadius: 50, padding: '12px 28px', marginTop: 8 }}>Scenario du jour</button>}
+          </div>
+        </div>
+      )
+    }
     default: return null
   }
 }
