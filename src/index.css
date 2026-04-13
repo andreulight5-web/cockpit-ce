@@ -98,7 +98,6 @@ img { max-width: 100%; display: block; }
 /* Layout */
 .page {
   min-height: 100dvh;
-  padding-bottom: 80px;
   background: white;
 }
 

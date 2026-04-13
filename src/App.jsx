@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import BottomNav from './components/layout/BottomNav'
 import Portal from './pages/portal/Portal'
 import Cours from './pages/cours/Cours'
 import Quiz from './pages/quiz/Quiz'
@@ -15,9 +14,6 @@ import './App.css'
 function AppLayout() {
   const location = useLocation()
   const navigate = useNavigate()
-  const hiddenNavRoutes = ['/crise', '/login', '/onboarding']
-  const showNav = !hiddenNavRoutes.includes(location.pathname)
-
   // First-launch redirect → /onboarding
   useEffect(() => {
     if (location.pathname === '/onboarding') return
@@ -45,7 +41,6 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
-      {showNav && <BottomNav />}
     </>
   )
 }
