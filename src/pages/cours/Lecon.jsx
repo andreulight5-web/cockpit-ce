@@ -74,10 +74,10 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
     case 'intro': {
       const apercu = lecon.apercu || c.points || []
       return (
-        <div style={{ ...S.cardFull, background: '#1C1B2E', justifyContent: 'space-between', padding: 0 }}>
+        <div style={{ ...S.cardFull, background: '#1C1B2E', justifyContent: 'space-between', paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}>
           {/* Color band + badge */}
           <div>
-            <div style={{ padding: '48px 24px 0' }}>
+            <div style={{ padding: '0 24px' }}>
               <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600 }}>{lecon.moduleLabel}</span>
             </div>
           </div>
@@ -248,7 +248,7 @@ const S = {
   cardCount: { fontFamily: 'Inter,sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.4)' },
   cardArea: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', userSelect: 'none' },
   cardContainer: { flex: 1, display: 'flex', overflow: 'hidden' },
-  cardFull: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'auto' },
+  cardFull: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'auto', paddingTop: 70 },
   navRow: { display: 'flex', alignItems: 'center', padding: '12px 20px 24px', gap: 16 },
   navBtn: { background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', width: 44, height: 44, borderRadius: '50%', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   dots: { flex: 1, display: 'flex', justifyContent: 'center', gap: 6, flexWrap: 'wrap' },
