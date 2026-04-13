@@ -1,45 +1,45 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { LECONS } from '../../data/lecons'
+import { useSwipe } from '../../hooks/useSwipe'
 
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 
-const cortexByModule = { A: cortexBienveillant, B: cortexPassionne, C: cortexPerplexe }
-
+const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne, perplexe: cortexPerplexe }
 const XP_KEY = 'cockpit_progress'
 
 export default function Lecon() {
   const { id } = useParams()
   const navigate = useNavigate()
   const lecon = LECONS.find((l) => l.id === Number(id))
-
-  const scrollRef = useRef(null)
-  const [scrollPct, setScrollPct] = useState(0)
+  const [cardIdx, setCardIdx] = useState(0)
+  const [showAfter, setShowAfter] = useState(false)
 
   // Quiz state
-  const [quizStarted, setQuizStarted] = useState(false)
   const [qIdx, setQIdx] = useState(0)
   const [selected, setSelected] = useState(null)
   const [score, setScore] = useState(0)
-  const [finished, setFinished] = useState(false)
+  const [quizDone, setQuizDone] = useState(false)
 
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const handle = () => {
-      const pct = el.scrollTop / (el.scrollHeight - el.clientHeight)
-      setScrollPct(Math.min(1, Math.max(0, pct)))
-    }
-    el.addEventListener('scroll', handle, { passive: true })
-    return () => el.removeEventListener('scroll', handle)
-  }, [])
+  const totalCards = lecon ? lecon.cartes.length : 0
+
+  const goNext = () => {
+    if (cardIdx < totalCards - 1) setCardIdx((i) => i + 1)
+    else setShowAfter(true)
+  }
+  const goPrev = () => {
+    if (showAfter) { setShowAfter(false); return }
+    if (cardIdx > 0) setCardIdx((i) => i - 1)
+  }
+
+  const swipe = useSwipe({ onLeft: goNext, onRight: goPrev })
 
   if (!lecon) return <div style={{ background: '#0F172A', color: '#fff', minHeight: '100dvh', padding: 40 }}>Leçon introuvable</div>
 
   const color = lecon.moduleColor
-  const cortex = cortexByModule[lecon.module]
+  const cortex = cortexMap[lecon.cortexImage] || cortexBienveillant
 
   const handleChoice = (i) => {
     if (selected !== null) return
@@ -47,13 +47,10 @@ export default function Lecon() {
     if (i === lecon.quiz[qIdx].correct) setScore((s) => s + 1)
   }
 
-  const nextQuestion = () => {
-    if (qIdx < lecon.quiz.length - 1) {
-      setQIdx((q) => q + 1)
-      setSelected(null)
-    } else {
-      setFinished(true)
-      // Persist XP
+  const nextQ = () => {
+    if (qIdx < lecon.quiz.length - 1) { setQIdx((q) => q + 1); setSelected(null) }
+    else {
+      setQuizDone(true)
       try {
         const raw = localStorage.getItem(XP_KEY)
         const data = raw ? JSON.parse(raw) : { xp: 0, done: [] }
@@ -68,165 +65,225 @@ export default function Lecon() {
 
   const nextLecon = LECONS.find((l) => l.id === lecon.id + 1)
 
+  // ─── RENDER ───
   return (
-    <div style={{ background: '#0F172A', height: '100dvh', display: 'flex', flexDirection: 'column' }}>
-      {/* Scroll progress */}
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 3, zIndex: 50, background: 'rgba(255,255,255,0.08)' }}>
-        <div style={{ height: '100%', width: `${scrollPct * 100}%`, background: color, transition: 'width 0.1s' }} />
+    <div style={{ background: '#0F172A', minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
+      {/* Header bar */}
+      <div style={{ ...S.header, background: color }}>
+        <button onClick={() => navigate('/cours')} style={S.backBtn}>‹</button>
+        <span style={S.headerLabel}>Leçon {lecon.id}/13</span>
+        {!showAfter && <span style={S.cardCount}>{cardIdx + 1}/{totalCards}</span>}
+        {showAfter && <span style={S.cardCount}>Fin</span>}
       </div>
 
-      {/* Header */}
-      <div style={{ background: color, padding: '48px 20px 20px', flexShrink: 0, display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-        <div style={{ flex: 1 }}>
-          <button onClick={() => navigate('/cours')} style={s.back}>‹ Retour</button>
-          <span style={s.badge}>{lecon.moduleLabel}</span>
-          <h1 style={s.hTitle}>{lecon.titre}</h1>
-          <span style={s.hDuree}>{lecon.duree}</span>
+      {/* Card area */}
+      {!showAfter && (
+        <div {...swipe} style={S.cardArea}>
+          <div key={cardIdx} className="fade-up" style={S.cardContainer}>
+            <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} />
+          </div>
+          {/* Navigation */}
+          <div style={S.navRow}>
+            <button onClick={goPrev} style={{ ...S.navBtn, opacity: cardIdx > 0 ? 1 : 0.25 }}>←</button>
+            <div style={S.dots}>
+              {lecon.cartes.map((_, i) => (
+                <span key={i} style={{ ...S.dot, background: i === cardIdx ? '#fff' : 'rgba(255,255,255,0.25)' }} />
+              ))}
+            </div>
+            <button onClick={goNext} style={S.navBtn}>→</button>
+          </div>
         </div>
-        <img src={cortex} alt="Cortex" style={{ width: 60, height: 60, objectFit: 'contain', flexShrink: 0, marginTop: 24 }} draggable={false} />
-      </div>
+      )}
 
-      {/* Scrollable body */}
-      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px 20px 60px' }}>
-        {/* Sections */}
-        {lecon.sections.map((sec, i) => (
-          <div key={i} style={{ marginBottom: 28 }}>
-            {sec.type === 'text' && (
-              <>
-                {sec.titre && <h4 style={s.secLabel}>{sec.titre}</h4>}
-                <p style={s.secText}>{sec.contenu}</p>
-              </>
-            )}
-            {sec.type === 'cortex' && (
-              <div style={s.cortexCard}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                  <img src={cortexPassionne} alt="Cortex" style={{ width: 36, height: 36, objectFit: 'contain', flexShrink: 0 }} draggable={false} />
-                  <p style={s.cortexText}>{sec.contenu}</p>
-                </div>
-              </div>
-            )}
-            {sec.type === 'verbatim' && (
-              <div style={s.verbatimCard}>
-                <span style={{ fontSize: 24, lineHeight: 1 }}>"</span>
-                <p style={s.verbatimText}>{sec.contenu}</p>
-              </div>
-            )}
-            {sec.type === 'actions' && (
-              <>
-                {sec.titre && <h4 style={s.secLabel}>{sec.titre}</h4>}
-                <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                  {sec.items.map((item, j) => (
-                    <li key={j} style={s.actionItem}>
-                      <span style={{ ...s.actionNum, background: color }}>{j + 1}</span>
-                      <p style={s.secText}>{item}</p>
-                    </li>
-                  ))}
-                </ol>
-              </>
-            )}
-            {sec.type === 'memo' && (
-              <div style={s.memoCard}>
-                <h4 style={{ ...s.secLabel, marginBottom: 10 }}>Mémo rapide</h4>
-                {sec.items.map((item, j) => (
-                  <div key={j} style={s.memoItem}>
-                    <span style={{ color: '#0D9373' }}>✓</span>
-                    <span style={{ color: '#E2E8F0', fontSize: 13 }}>{item}</span>
+      {/* After cards: scenario + quiz */}
+      {showAfter && (
+        <div style={{ flex: 1, overflowY: 'auto', padding: '24px 20px 80px' }}>
+          {/* Back to cards */}
+          <button onClick={goPrev} style={{ ...S.backBtn, color: '#A8DED1', marginBottom: 20 }}>← Revoir les cartes</button>
+
+          {/* Scenario */}
+          <Scenario scenario={lecon.scenario} color={color} />
+
+          {/* Quiz */}
+          <div style={{ marginTop: 32 }}>
+            <h3 style={S.sectionTitle}>Quiz rapide ⚡</h3>
+            {!quizDone ? (
+              <div>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 6 }}>Question {qIdx + 1}/3</p>
+                <h4 style={S.quizQ}>{lecon.quiz[qIdx].question}</h4>
+                {lecon.quiz[qIdx].choix.map((c, i) => {
+                  const answered = selected !== null
+                  const isCorrect = i === lecon.quiz[qIdx].correct
+                  const isSel = i === selected
+                  let bg = 'rgba(255,255,255,0.08)', border = 'rgba(255,255,255,0.15)'
+                  if (answered && isCorrect) { bg = 'rgba(13,147,115,0.2)'; border = '#0D9373' }
+                  else if (answered && isSel) { bg = 'rgba(212,83,126,0.2)'; border = '#D4537E' }
+                  return <button key={i} onClick={() => handleChoice(i)} style={{ ...S.choiceBtn, background: bg, borderColor: border }}>{answered && isCorrect && '✓ '}{answered && isSel && !isCorrect && '✗ '}{c}</button>
+                })}
+                {selected !== null && (
+                  <div style={S.explBox}>
+                    <p style={S.expl}>{lecon.quiz[qIdx].explication}</p>
+                    <button onClick={nextQ} style={{ ...S.btn, background: color, marginTop: 14 }}>{qIdx < 2 ? 'Suivante' : 'Résultat'}</button>
                   </div>
-                ))}
+                )}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', marginTop: 16 }}>
+                <p style={{ color: '#E2E8F0', fontSize: 48, fontWeight: 800 }}>{score}/3</p>
+                <p className="fade-up" style={{ color: '#FFE17B', fontSize: 20, fontWeight: 700, margin: '8px 0 24px' }}>+{lecon.xp} XP ⚡</p>
+                {nextLecon && <button onClick={() => { navigate(`/cours/${nextLecon.id}`); setCardIdx(0); setShowAfter(false); setQIdx(0); setSelected(null); setScore(0); setQuizDone(false) }} style={{ ...S.btn, background: color }}>Leçon suivante →</button>}
+                <button onClick={() => navigate('/cours')} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', marginTop: 10 }}>Retour au programme</button>
               </div>
             )}
           </div>
-        ))}
-
-        {/* Quiz section */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 28, marginTop: 12 }}>
-          {!quizStarted && !finished && (
-            <div style={{ textAlign: 'center' }}>
-              <h2 style={s.quizTitle}>Quiz rapide</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginBottom: 20 }}>3 questions · +{lecon.xp} XP</p>
-              <button onClick={() => setQuizStarted(true)} style={{ ...s.btn, background: color }}>Commencer le quiz</button>
-            </div>
-          )}
-
-          {quizStarted && !finished && (
-            <div>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 6 }}>Question {qIdx + 1}/3</p>
-              <h3 style={s.quizQ}>{lecon.quiz[qIdx].question}</h3>
-              {lecon.quiz[qIdx].choices.map((c, i) => {
-                const answered = selected !== null
-                const isCorrect = i === lecon.quiz[qIdx].correct
-                const isSelected = i === selected
-                let bg = 'rgba(255,255,255,0.08)'
-                let border = 'rgba(255,255,255,0.15)'
-                if (answered && isCorrect) { bg = 'rgba(13,147,115,0.2)'; border = '#0D9373' }
-                else if (answered && isSelected && !isCorrect) { bg = 'rgba(212,83,126,0.2)'; border = '#D4537E' }
-                return (
-                  <button key={i} onClick={() => handleChoice(i)} style={{ ...s.choiceBtn, background: bg, borderColor: border }}>
-                    {answered && isCorrect && '✓ '}{answered && isSelected && !isCorrect && '✗ '}{c}
-                  </button>
-                )
-              })}
-              {selected !== null && (
-                <div style={s.explWrap}>
-                  <p style={s.expl}>{lecon.quiz[qIdx].explication}</p>
-                  <button onClick={nextQuestion} style={{ ...s.btn, background: color, marginTop: 14 }}>
-                    {qIdx < lecon.quiz.length - 1 ? 'Question suivante' : 'Voir résultat'}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {finished && (
-            <div style={{ textAlign: 'center' }}>
-              <h2 style={s.quizTitle}>{score === 3 ? 'Parfait !' : score >= 2 ? 'Bien joué !' : 'Continue !'}</h2>
-              <p style={{ color: '#E2E8F0', fontSize: 48, fontWeight: 800, margin: '12px 0' }}>{score}/3</p>
-              <p style={{ color: '#FFE17B', fontSize: 18, fontWeight: 700, marginBottom: 24 }}>+{lecon.xp} XP ⚡</p>
-              {nextLecon ? (
-                <button onClick={() => navigate(`/cours/lecon/${nextLecon.id}`)} style={{ ...s.btn, background: color }}>
-                  Leçon suivante →
-                </button>
-              ) : (
-                <button onClick={() => navigate('/cours')} style={{ ...s.btn, background: color }}>
-                  Retour aux leçons
-                </button>
-              )}
-              <button onClick={() => navigate('/cours')} style={{ ...s.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', marginTop: 10 }}>
-                Retour au programme
-              </button>
-            </div>
-          )}
         </div>
+      )}
+    </div>
+  )
+}
+
+/* ═════════════════════════ Card renderer ═════════════════════════ */
+
+function RenderCard({ carte, color, cortex }) {
+  const c = carte
+  switch (c.type) {
+    case 'intro':
+      return (
+        <div style={{ ...S.cardFull, background: c.couleur, justifyContent: 'center', textAlign: 'center', padding: '40px 28px' }}>
+          <span style={{ fontSize: 80, marginBottom: 20 }}>{c.emoji}</span>
+          <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#fff', margin: '0 0 12px' }}>{c.titre}</h2>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>{c.texte}</p>
+        </div>
+      )
+    case 'fact':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 24px', justifyContent: 'center' }}>
+          <span style={{ fontSize: 11, color: '#A8DED1', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600 }}>{c.label}</span>
+          <span style={{ fontSize: 48, margin: '16px 0' }}>{c.icone}</span>
+          <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 22, color: '#fff', margin: '0 0 12px' }}>{c.titre}</h2>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, color: '#E2E8F0', lineHeight: 1.65 }}>{c.texte}</p>
+          {c.detail && <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: color, fontStyle: 'italic', marginTop: 16 }}>{c.detail}</p>}
+        </div>
+      )
+    case 'cortex':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 24px', justifyContent: 'center', textAlign: 'center' }}>
+          <img src={cortex} alt="Cortex" style={{ width: 80, height: 80, objectFit: 'contain', margin: '0 auto 16px' }} draggable={false} />
+          <span style={{ fontSize: 11, color: '#FF6B4A', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>Pr. Cortex dit...</span>
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, color: '#fff', fontStyle: 'italic', lineHeight: 1.6, margin: '16px 0' }}>{c.citation}</p>
+          <span style={{ fontSize: 11, color: '#64748B' }}>{c.source}</span>
+        </div>
+      )
+    case 'contraste':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 20px', justifyContent: 'center' }}>
+          <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 18, color: '#A8DED1', textAlign: 'center', marginBottom: 20 }}>{c.titre}</h3>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {[c.gauche, c.droite].map((side, i) => (
+              <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: 14 }}>
+                <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: 12, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{side.label}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#E2E8F0', lineHeight: 1.5 }}>{side.texte}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    case 'verbatim':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 28px', justifyContent: 'center', textAlign: 'center' }}>
+          <span style={{ fontSize: 60, color: color, opacity: 0.4, lineHeight: 1 }}>"</span>
+          <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: 17, color: '#fff', fontStyle: 'italic', lineHeight: 1.6, margin: '8px 0 20px' }}>{c.texte}</p>
+          <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#A8DED1' }}>{c.auteur}</span>
+        </div>
+      )
+    case 'action':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 24px', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+            <span style={{ width: 36, height: 36, borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>{c.numero}</span>
+            <span style={{ background: `${color}33`, color, fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 99, textTransform: 'uppercase', letterSpacing: 1 }}>{c.tag}</span>
+          </div>
+          <div style={{ borderLeft: `3px solid ${color}`, paddingLeft: 16 }}>
+            <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 18, color: '#fff', marginBottom: 10 }}>{c.titre}</h3>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#E2E8F0', lineHeight: 1.65 }}>{c.texte}</p>
+          </div>
+        </div>
+      )
+    case 'memo':
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 24px', justifyContent: 'center' }}>
+          <h3 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 18, color: '#fff', marginBottom: 20, textAlign: 'center' }}>{c.titre}</h3>
+          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: 18 }}>
+            {c.items.map((item, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: i < c.items.length - 1 ? 14 : 0 }}>
+                <span style={{ color, fontWeight: 700, flexShrink: 0 }}>✓</span>
+                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 15, color: '#E2E8F0', lineHeight: 1.5 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    default:
+      return null
+  }
+}
+
+/* ═════════════════════════ Scenario ═════════════════════════ */
+
+function Scenario({ scenario, color }) {
+  return (
+    <div>
+      <h3 style={S.sectionTitle}>📅 {scenario.titre}</h3>
+      <div style={S.scenarioCard}>
+        <div style={{ marginBottom: 16 }}>
+          <p style={{ fontSize: 11, color: '#A8DED1', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 6 }}>La situation</p>
+          <p style={{ fontSize: 14, color: '#E2E8F0', fontStyle: 'italic', lineHeight: 1.6 }}>{scenario.situation}</p>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <p style={{ fontSize: 11, color, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 6 }}>Son cerveau</p>
+          <p style={{ fontSize: 14, color, lineHeight: 1.6 }}>{scenario.cerveau_enfant}</p>
+        </div>
+        <div>
+          <p style={{ fontSize: 11, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 6 }}>Ton cerveau</p>
+          <p style={{ fontSize: 14, color: '#94A3B8', lineHeight: 1.6 }}>{scenario.cerveau_parent}</p>
+        </div>
+      </div>
+      <div style={{ marginTop: 16 }}>
+        <p style={{ fontSize: 13, color: '#A8DED1', fontWeight: 600, marginBottom: 10 }}>Demain, essaie ça :</p>
+        {scenario.demain.map((d, i) => (
+          <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 10 }}>
+            <span style={{ width: 22, height: 22, borderRadius: '50%', background: `${color}26`, color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
+            <p style={{ fontSize: 13, color: '#E2E8F0', lineHeight: 1.5, margin: 0 }}>{d}</p>
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-const s = {
-  back: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 10, fontFamily: 'Inter, sans-serif' },
-  badge: { display: 'inline-block', background: 'rgba(255,255,255,0.2)', borderRadius: 8, padding: '3px 10px', fontSize: 10, fontWeight: 600, color: '#fff', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 },
-  hTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 6px', lineHeight: 1.25 },
-  hDuree: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.6)' },
+/* ═════════════════════════ Styles ═════════════════════════ */
 
-  secLabel: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#A8DED1', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, fontWeight: 600 },
-  secText: { fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#E2E8F0', lineHeight: 1.65, margin: 0 },
+const S = {
+  header: { position: 'sticky', top: 0, zIndex: 20, height: 60, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 12 },
+  backBtn: { background: 'none', border: 'none', color: '#fff', fontSize: 22, cursor: 'pointer', padding: '4px 8px', fontWeight: 300 },
+  headerLabel: { flex: 1, textAlign: 'center', fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)' },
+  cardCount: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.5)', minWidth: 36, textAlign: 'right' },
 
-  cortexCard: { background: 'rgba(255,107,74,0.12)', borderLeft: '3px solid #FF6B4A', borderRadius: 12, padding: 16 },
-  cortexText: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#FFB89A', fontStyle: 'italic', lineHeight: 1.6, margin: 0 },
+  cardArea: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', userSelect: 'none' },
+  cardContainer: { flex: 1, display: 'flex', overflow: 'hidden' },
+  cardFull: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' },
 
-  verbatimCard: { background: 'rgba(168,222,209,0.10)', borderLeft: '3px solid #A8DED1', borderRadius: 12, padding: 16, display: 'flex', gap: 6, alignItems: 'flex-start', color: '#A8DED1' },
-  verbatimText: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#A8DED1', fontStyle: 'italic', lineHeight: 1.6, margin: 0 },
+  navRow: { display: 'flex', alignItems: 'center', padding: '12px 20px 24px', gap: 16 },
+  navBtn: { background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', width: 44, height: 44, borderRadius: '50%', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  dots: { flex: 1, display: 'flex', justifyContent: 'center', gap: 6, flexWrap: 'wrap' },
+  dot: { width: 6, height: 6, borderRadius: '50%', transition: 'background 0.2s' },
 
-  actionItem: { display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 14 },
-  actionNum: { width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700, flexShrink: 0 },
+  sectionTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 12 },
+  scenarioCard: { background: 'rgba(255,255,255,0.05)', borderRadius: 14, padding: 18 },
 
-  memoCard: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: 16 },
-  memoItem: { display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 8 },
-
-  quizTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 20, fontWeight: 700, color: '#fff', margin: '0 0 8px' },
   quizQ: { fontFamily: 'Poppins, sans-serif', fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 16, lineHeight: 1.4 },
-  choiceBtn: { display: 'block', width: '100%', textAlign: 'left', padding: '14px 16px', borderRadius: 12, border: '1.5px solid', fontSize: 14, color: '#E2E8F0', fontFamily: 'Inter, sans-serif', marginBottom: 8, cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' },
-  explWrap: { background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 16, marginTop: 12 },
+  choiceBtn: { display: 'block', width: '100%', textAlign: 'left', padding: '14px 16px', borderRadius: 12, border: '1.5px solid', fontSize: 14, color: '#E2E8F0', fontFamily: 'Inter, sans-serif', marginBottom: 8, cursor: 'pointer', background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)' },
+  explBox: { background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 16, marginTop: 12 },
   expl: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#A8DED1', lineHeight: 1.5, margin: 0 },
-  btn: { display: 'inline-block', padding: '14px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', border: 'none', cursor: 'pointer', transition: 'transform 0.15s' },
+  btn: { display: 'inline-block', padding: '14px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', border: 'none', cursor: 'pointer' },
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LECONS } from '../../data/lecons'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
@@ -16,6 +17,22 @@ const statusStyle = {
 
 export default function Cours() {
   const navigate = useNavigate()
+  // Read progress from localStorage
+  const [progress] = useState(() => {
+    try {
+      const raw = localStorage.getItem('cockpit_progress')
+      return raw ? JSON.parse(raw) : { xp: 0, done: [] }
+    } catch { return { xp: 0, done: [] } }
+  })
+
+  // Derive status per lesson from progress
+  const getStatus = (id) => {
+    if (progress.done.includes(id)) return 'done'
+    // First undone lesson is current, rest locked
+    const firstUndone = LECONS.find((l) => !progress.done.includes(l.id))
+    if (firstUndone && firstUndone.id === id) return 'current'
+    return 'locked'
+  }
 
   return (
     <div style={s.page}>
@@ -35,7 +52,7 @@ export default function Cours() {
       <div style={s.body}>
         {MODULES.map((mod) => {
           const items = LECONS.filter((l) => l.module === mod.key)
-          const doneCount = items.filter((l) => l.status === 'done').length
+          const doneCount = items.filter((l) => getStatus(l.id) === 'done').length
           return (
             <div key={mod.key} style={{ marginBottom: 28 }}>
               {/* Module header */}
@@ -49,23 +66,24 @@ export default function Cours() {
 
               {/* Lesson items */}
               {items.map((l, i) => {
-                const st = statusStyle[l.status]
-                const clickable = l.status !== 'locked'
+                const status = getStatus(l.id)
+                const st = statusStyle[status]
+                const clickable = status !== 'locked'
                 return (
                   <button
                     key={l.id}
-                    onClick={clickable ? () => navigate(`/cours/lecon/${l.id}`) : undefined}
+                    onClick={clickable ? () => navigate(`/cours/${l.id}`) : undefined}
                     className={`fade-up fade-up-d${Math.min(i + 1, 4)}`}
                     style={{
                       ...s.lessonRow,
-                      opacity: l.status === 'locked' ? 0.4 : 1,
+                      opacity: status === 'locked' ? 0.4 : 1,
                       cursor: clickable ? 'pointer' : 'default',
                     }}
                   >
-                    <span style={{ ...s.numCircle, background: st.bg, color: st.color }}>{l.id}</span>
+                    <span style={{ ...s.numCircle, background: st.bg, color: st.color }}>{status === 'done' ? '✓' : l.id}</span>
                     <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
                       <p style={s.lessonTitle}>{l.titre}</p>
-                      <span style={s.lessonMeta}>{l.duree}{l.status === 'done' ? ' · Terminé' : l.status === 'current' ? ' · En cours' : ''}</span>
+                      <span style={s.lessonMeta}>{l.duree}{status === 'done' ? ' · Terminé' : status === 'current' ? ' · En cours' : ''}</span>
                     </div>
                     {clickable && <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>›</span>}
                   </button>
