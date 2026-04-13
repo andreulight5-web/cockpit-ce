@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
@@ -55,7 +55,6 @@ const modules = [
 ]
 
 export default function Portal() {
-  const navigate = useNavigate()
   const [prenomParent] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -138,14 +137,6 @@ export default function Portal() {
         <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · 35%</div>
       </div>
 
-      {/* FAB CRISE */}
-      <button
-        onClick={() => navigate('/crise')}
-        style={s.fab}
-        aria-label="Mode crise"
-      >
-        ⚡
-      </button>
     </div>
   )
 }
@@ -210,24 +201,4 @@ const s = {
   progressTrack: { height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 999, overflow: 'hidden' },
   progressFill: { height: '100%', background: '#FFFFFF', borderRadius: 999, transition: 'width 0.5s ease' },
 
-  /* FAB Crise */
-  fab: {
-    position: 'fixed',
-    bottom: 90,
-    right: 16,
-    width: 56,
-    height: 56,
-    borderRadius: '50%',
-    background: '#FF6B4A',
-    border: 'none',
-    fontSize: 24,
-    color: '#FFFFFF',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 4px 20px rgba(255,107,74,0.5)',
-    cursor: 'pointer',
-    zIndex: 40,
-    transition: 'transform 0.15s',
-  },
 }
