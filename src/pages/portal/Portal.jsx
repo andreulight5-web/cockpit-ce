@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
+import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
@@ -43,7 +44,7 @@ const modules = [
   },
   {
     to: '/annexes',
-    img: cortexBienveillant,
+    img: cortexPassionne,
     tag: 'ANNEXES',
     title: 'Méthode Barkley',
     sub: 'Comprendre le pourquoi · Pr. Cortex',
