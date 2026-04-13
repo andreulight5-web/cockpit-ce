@@ -8,7 +8,19 @@
       "Bash(npx vite:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git mv:*)",
+      "Bash(mv \"src/assets/characters/monstre~/Le Monstre — Qui chuchote \\(complice\\).webp\" \"src/assets/characters/monstre~/monstre-chuchote.webp\")",
+      "Bash(mv \"src/assets/characters/monstre~/Le Monstre — Qui rigole franchement.webp\" \"src/assets/characters/monstre~/monstre-rigole.webp\")",
+      "Bash(mv \"src/assets/characters/monstre~/Monstre caché \\(on voit juste ses yeux:tête qui dépasse\\).webp\" \"src/assets/characters/monstre~/monstre-cache.webp\")",
+      "Bash(mv \"src/assets/characters/monstre~/Monstre découvert \\(il saute de derrière\\).webp\" \"src/assets/characters/monstre~/monstre-decouvert.webp\")",
+      "Bash(mv \"src/assets/characters/maman/La Maman — Qui tend la main.webp\" \"src/assets/characters/maman/maman-main-tendue.webp\")"
     ]
   }
 }
