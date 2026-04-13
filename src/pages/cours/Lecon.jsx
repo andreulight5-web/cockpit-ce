@@ -30,11 +30,15 @@ export default function Lecon() {
 
   return (
     <div style={{ background: '#1C1B2E', minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ ...S.header, background: color }}>
-        <button onClick={() => navigate('/cours')} style={S.backBtn}>‹</button>
-        <span style={S.headerLabel}>Lecon {lecon.id}/13</span>
-        {!showAfter && <span style={S.cardCount}>{cardIdx + 1}/{totalCards}</span>}
-        {showAfter && <span style={S.cardCount}>Fin</span>}
+      <div style={S.header}>
+        <button onClick={() => navigate('/cours')} style={S.backCircle}>‹</button>
+        <div style={{ flex: 1 }} />
+        {!showAfter && (
+          <div style={S.headerRight}>
+            <span style={S.cardCount}>{cardIdx + 1}/{totalCards}</span>
+            <div style={S.headerDots}>{lecon.cartes.map((_, i) => <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: i <= cardIdx ? '#fff' : 'rgba(255,255,255,0.2)' }} />)}</div>
+          </div>
+        )}
       </div>
 
       {!showAfter && (
@@ -73,8 +77,7 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
         <div style={{ ...S.cardFull, background: '#1C1B2E', justifyContent: 'space-between', padding: 0 }}>
           {/* Color band + badge */}
           <div>
-            <div style={{ height: 4, background: color }} />
-            <div style={{ padding: '16px 24px 0' }}>
+            <div style={{ padding: '48px 24px 0' }}>
               <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600 }}>{lecon.moduleLabel}</span>
             </div>
           </div>
@@ -237,10 +240,12 @@ function Scenario({ scenario, color, openAccordion, setOpenAccordion }) {
 
 /* ═══════ Styles ═══════ */
 const S = {
-  header: { position: 'sticky', top: 0, zIndex: 20, height: 60, display: 'flex', alignItems: 'center', padding: '0 16px', gap: 12 },
+  header: { position: 'fixed', top: 0, left: 0, right: 0, maxWidth: 430, margin: '0 auto', zIndex: 10, display: 'flex', alignItems: 'center', padding: '12px 16px', background: 'linear-gradient(to bottom, rgba(28,27,46,0.95) 0%, rgba(28,27,46,0) 100%)' },
+  backCircle: { width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter,sans-serif', flexShrink: 0 },
   backBtn: { background: 'none', border: 'none', color: '#fff', fontSize: 22, cursor: 'pointer', padding: '4px 8px', fontWeight: 300 },
-  headerLabel: { flex: 1, textAlign: 'center', fontFamily: 'Inter,sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)' },
-  cardCount: { fontFamily: 'Inter,sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.5)', minWidth: 36, textAlign: 'right' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 8 },
+  headerDots: { display: 'flex', gap: 3 },
+  cardCount: { fontFamily: 'Inter,sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.4)' },
   cardArea: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', userSelect: 'none' },
   cardContainer: { flex: 1, display: 'flex', overflow: 'hidden' },
   cardFull: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'auto' },
