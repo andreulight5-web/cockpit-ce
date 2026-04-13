@@ -26,7 +26,9 @@
       "Bash(sed -i '' \"s/#0D9373/#2A9490/g; s/#D4537E/#C0506A/g\" src/pages/cours/Lecon.jsx)",
       "Bash(sed -i '' \"s/#FFE17B/#F5E06D/g\" src/pages/auth/Login.jsx)",
       "Bash(sed -i '' \"s/#A8DED1/#2A9490/g; s/rgba\\(13,147,115,/rgba\\(42,148,144,/g\" src/pages/cours/Lecon.jsx)",
-      "Bash(sed -i '' \"s/#A8DED1/#2A9490/g\" src/pages/cours/Cours.jsx)"
+      "Bash(sed -i '' \"s/#A8DED1/#2A9490/g\" src/pages/cours/Cours.jsx)",
+      "Bash(npx wrangler:*)",
+      "Bash(git push:*)"
     ]
   }
 }

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { AppContext } from '../../lib/AppContext'
 
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
@@ -9,8 +10,6 @@ import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 import logoCE from '../../assets/logo-ce.png'
-
-const STORAGE_KEY = 'cockpit_onboarding'
 
 const personnages = [
   { label: 'Maman', img: mamanFiere },
@@ -67,16 +66,8 @@ const modules = [
 ]
 
 export default function Portal() {
-  const [prenomParent] = useState(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const data = JSON.parse(raw)
-        if (data?.prenomParent) return data.prenomParent
-      }
-    } catch { /* ignore */ }
-    return ''
-  })
+  const { appData } = useContext(AppContext)
+  const prenomParent = appData?.onboarding?.prenomParent || ''
 
   return (
     <div style={s.page}>

@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { playSound, playRandomPop } from '../../lib/audio'
+import { AppContext } from '../../lib/AppContext'
 
 // === Asset imports — ASCII names only (Linux NFC/NFD safe) ===
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
@@ -35,14 +36,13 @@ export default function Onboarding() {
   const [age, setAge] = useState(8)
   const [prenomParent, setPrenomParent] = useState('')
 
+  const { appData, saveData } = useContext(AppContext)
+
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw && JSON.parse(raw)?.onboardingDone) {
-        navigate('/login?mode=signup', { replace: true })
-      }
-    } catch { /* ignore */ }
-  }, [navigate])
+    if (appData?.onboarding?.onboardingDone) {
+      navigate('/', { replace: true })
+    }
+  }, [appData, navigate])
 
   const goTo = (target) => {
     if (phase === 'out') return
@@ -52,10 +52,11 @@ export default function Onboarding() {
   }
   const next = () => goTo(step + 1)
 
-  const finish = () => {
-    const payload = { type, prenomEnfant: prenomEnfant.trim(), age, prenomParent: prenomParent.trim(), onboardingDone: true }
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)) } catch { /* ignore */ }
-    navigate('/login?mode=signup', { replace: true })
+  const finish = async () => {
+    await saveData({
+      onboarding: { type, prenomEnfant: prenomEnfant.trim(), age, prenomParent: prenomParent.trim(), onboardingDone: true },
+    })
+    navigate('/', { replace: true })
   }
 
   const screenClass = phase === 'out' ? 'screen-out' : 'screen-in'

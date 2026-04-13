@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LECONS } from '../../data/lecons'
+import { AppContext } from '../../lib/AppContext'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
 const MODULES = [
@@ -16,13 +17,11 @@ const statusStyle = {
 
 export default function Cours() {
   const navigate = useNavigate()
-  const [progress] = useState(() => {
-    try { const raw = localStorage.getItem('cockpit_progress'); return raw ? JSON.parse(raw) : { xp: 0, done: [] } }
-    catch { return { xp: 0, done: [] } }
-  })
+  const { appData } = useContext(AppContext)
+  const done = appData?.lecons_done || []
   const getStatus = (id) => {
-    if (progress.done.includes(id)) return 'done'
-    const first = LECONS.find((l) => !progress.done.includes(l.id))
+    if (done.includes(id)) return 'done'
+    const first = LECONS.find((l) => !done.includes(l.id))
     if (first && first.id === id) return 'current'
     return 'locked'
   }

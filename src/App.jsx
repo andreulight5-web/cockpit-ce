@@ -1,5 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { AppContext } from './lib/AppContext'
+import { restore, save, migrateOldKeys } from './lib/sync'
 import Portal from './pages/portal/Portal'
 import Cours from './pages/cours/Cours'
 import Lecon from './pages/cours/Lecon'
@@ -16,22 +18,36 @@ import './App.css'
 function AppLayout() {
   const location = useLocation()
   const navigate = useNavigate()
-  // First-launch redirect → /onboarding
+  const [appData, setAppData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
-    if (location.pathname === '/onboarding') return
-    let done = false
-    try {
-      const raw = localStorage.getItem('cockpit_onboarding')
-      if (raw) done = !!JSON.parse(raw)?.onboardingDone
-    } catch {
-      // ignore
-    }
-    if (!done) navigate('/onboarding', { replace: true })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Migrate old keys first (sync)
+    migrateOldKeys()
+    // Restore from local + Supabase
+    restore().then((data) => {
+      setAppData(data)
+      setLoading(false)
+    }).catch(() => setLoading(false))
   }, [])
 
+  // Onboarding redirect
+  useEffect(() => {
+    if (loading || !appData) return
+    if (location.pathname === '/onboarding') return
+    if (!appData.onboarding?.onboardingDone) {
+      navigate('/onboarding', { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, appData])
+
+  const saveData = (updates) =>
+    save(updates).then((newData) => { setAppData(newData); return newData })
+
+  if (loading) return <div style={{ background: '#1C1B2E', minHeight: '100vh' }} />
+
   return (
-    <>
+    <AppContext.Provider value={{ appData, saveData }}>
       <Routes>
         <Route path="/" element={<Portal />} />
         <Route path="/cours" element={<Cours />} />
@@ -46,7 +62,7 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
-    </>
+    </AppContext.Provider>
   )
 }
 

@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { AppContext } from '../../lib/AppContext'
 
 export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const { signIn, signUp } = useAuth()
+  const { appData } = useContext(AppContext)
 
   const initialMode =
     new URLSearchParams(location.search).get('mode') === 'signup'
@@ -31,13 +33,7 @@ export default function Login() {
     } else {
       // Pass onboarding metadata so it lands in user_metadata
       // (used by Supabase email templates via {{ .Data.prenomParent }})
-      let metadata = null
-      try {
-        const raw = localStorage.getItem('cockpit_onboarding')
-        if (raw) metadata = JSON.parse(raw)
-      } catch {
-        // ignore
-      }
+      const metadata = appData?.onboarding || null
       result = await signUp(email, password, metadata)
     }
     const { data, error: err } = result

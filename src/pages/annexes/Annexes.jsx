@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ANNEXES } from '../../data/lecons'
+import { AppContext } from '../../lib/AppContext'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
 const MODULES = [
@@ -16,13 +17,11 @@ const statusStyle = {
 
 export default function Annexes() {
   const navigate = useNavigate()
-  const [progress] = useState(() => {
-    try { const raw = localStorage.getItem('cockpit_progress_annexes'); return raw ? JSON.parse(raw) : { xp: 0, done: [] } }
-    catch { return { xp: 0, done: [] } }
-  })
+  const { appData } = useContext(AppContext)
+  const done = appData?.annexes_done || []
   const getStatus = (id) => {
-    if (progress.done.includes(id)) return 'done'
-    const first = ANNEXES.find((l) => !progress.done.includes(l.id))
+    if (done.includes(id)) return 'done'
+    const first = ANNEXES.find((l) => !done.includes(l.id))
     if (first && first.id === id) return 'current'
     return 'locked'
   }
