@@ -4,6 +4,7 @@ export const LECONS = [
     id: 1, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
     titre: 'Les 4 phases d\'une crise', sousTitre: 'Comprendre pour anticiper',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['Reconnaître les 4 phases d\'une crise', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🌊', titre: 'Une crise, c\'est 4 phases', texte: 'Comprendre les phases change tout.', couleur: '#FF6B4A', points: ['Repérer l\'escalade avant l\'explosion', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'] },
       { id: 2, type: 'fact2col', titre: 'Les 2 premières phases', colonnes: [
@@ -26,6 +27,7 @@ export const LECONS = [
     id: 2, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
     titre: 'STOP — 30 secondes', sousTitre: 'La fenêtre qui change tout',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['Le miroir neuronal parent-enfant', 'Créer ton signal d\'arrêt personnel', 'S\'entraîner hors crise pour être prêt'],
     cartes: [
       { id: 1, type: 'intro', emoji: '✋', titre: '30 secondes. C\'est tout.', texte: 'La durée d\'une crise dépend de ta réaction dans les 30 premières secondes.', couleur: '#FF6B4A', points: ['Le miroir neuronal : pourquoi ton calme est son ancre', 'Un signal d\'arrêt personnel', 'Pratiquer hors crise pour être prêt en crise'] },
       { id: 2, type: 'fact', label: 'La science', titre: 'Le miroir neuronal', texte: 'Ton cerveau imite automatiquement les émotions de ton enfant. Si tu montes, il monte. Si tu descends, il peut descendre.', detail: 'C\'est neurologique, pas une question de volonté.', icone: '🪞', exemple: '"Quand je crie, il crie plus fort. Quand je chuchote, il baisse d\'un cran en 30 secondes."' },
@@ -42,6 +44,7 @@ export const LECONS = [
     id: 3, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
     titre: 'Valider sans céder', sousTitre: 'Empathie ≠ permissivité',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['L\'équation connexion puis correction', 'Scripts exacts de validation', 'La peur de la permissivité démystifiée'],
     cartes: [
       { id: 1, type: 'intro', emoji: '💛', titre: 'Connexion avant correction', texte: 'Valider l\'émotion ne valide pas le comportement.', couleur: '#FF6B4A', points: ['L\'équation connexion→correction', 'Scripts exacts à utiliser', 'La peur de la permissivité démystifiée'] },
       { id: 2, type: 'fact', label: 'L\'équation', titre: 'Connexion PUIS correction', texte: 'Tant que l\'émotion n\'est pas validée, le cortex préfrontal reste hors-ligne. Aucune lecon ne passe.', detail: 'La connexion réactive le cortex. La correction vient après.', icone: '🔗', exemple: '"Je vois que tu es en colère" (connexion) → 15 min de calme → "Ce que tu as fait n\'est pas OK" (correction).' },
@@ -58,6 +61,7 @@ export const LECONS = [
     id: 4, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
     titre: 'Le coin calme', sousTitre: 'Ressource, pas punition',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['Différence coin calme vs punition', 'Le créer AVEC ton enfant', 'Comment il apprend à l\'utiliser seul'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🏡', titre: 'Un refuge, pas une prison', texte: 'Le coin calme est un outil d\'autorégulation.', couleur: '#FF6B4A', points: ['La différence fondamentale avec la punition', 'Comment le créer AVEC l\'enfant', 'Comment il apprend à l\'utiliser seul'] },
       { id: 2, type: 'fact', label: 'La différence', titre: 'Coin calme vs punition', texte: 'La punition isole et fait honte. Le coin calme offre un espace sensoriel sécurisant pour que le cerveau se régule.', detail: 'L\'enfant y va par CHOIX, pas par contrainte.', icone: '🧸', exemple: '"Va dans ta chambre !" = punition. "Tu veux aller dans ton coin doux ?" = coin calme. Même mouvement, intention opposée.' },
@@ -74,6 +78,7 @@ export const LECONS = [
     id: 5, module: '1', moduleLabel: 'Gérer les crises', moduleColor: '#FF6B4A',
     titre: 'Après la crise', sousTitre: 'Réparer la relation',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['Pourquoi la réparation est essentielle', 'Le débriefing doux post-crise', 'Réévaluer les punitions de crise'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🌈', titre: 'La crise est finie', texte: 'Maintenant, on répare.', couleur: '#FF6B4A', points: ['Pourquoi la réparation est essentielle', 'Le débriefing doux (quand et comment)', 'Ne PAS revenir sur les punitions de crise'] },
       { id: 2, type: 'fact', label: 'La réparation', titre: 'Pourquoi c\'est essentiel', texte: 'Chaque crise endommage le lien parent-enfant. La réparation le renforce. Sans elle, les dommages s\'accumulent.', detail: 'Réparer ≠ excuser le comportement. C\'est restaurer la connexion.', icone: '🩹', exemple: '"Après la grosse crise de mardi, on s\'est assis et j\'ai dit : \'C\'était dur pour nous deux. Je suis désolée d\'avoir crié.\' Il s\'est effondré dans mes bras."' },
@@ -92,6 +97,7 @@ export const LECONS = [
     id: 6, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
     titre: 'Le cerveau TDAH', sousTitre: 'Comment il fonctionne',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['Le cortex préfrontal et son retard de 2-3 ans', 'Pourquoi "il pourrait" est faux', '"Ne peut pas" change tout'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🧠', titre: 'Son cerveau n\'est pas cassé', texte: 'Il est juste différent.', couleur: '#0D9373', points: ['Le cortex préfrontal et son retard', 'Pourquoi "il pourrait" est faux', '"Ne peut pas" vs "ne veut pas"'] },
       { id: 2, type: 'fact', label: 'Le savoir', titre: 'Le cortex préfrontal', texte: 'Chef d\'orchestre du cerveau — attention, contrôle des impulsions, planification. En retard de 2 à 3 ans chez ton enfant.', detail: 'Maturation complète à 21 ans vs 18 pour les neurotypiques.', icone: '⏳', exemple: '"A 8 ans, le cerveau de Lucas fonctionne comme celui d\'un enfant de 5-6 ans pour l\'organisation et le contrôle. Pas par paresse — par biologie."' },
@@ -108,6 +114,7 @@ export const LECONS = [
     id: 7, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
     titre: 'Les fonctions exécutives', sousTitre: 'Le chef d\'orchestre en grève',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['Les 5 fonctions exécutives', 'Pourquoi jeux vidéo OUI mais devoirs NON', 'Devenir son cerveau externe'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🎼', titre: 'Le chef d\'orchestre est en grève', texte: 'Mais le musicien, lui, est là.', couleur: '#0D9373', points: ['Les 5 fonctions exécutives', 'Pourquoi jeux vidéo OUI mais devoirs NON', 'Comment devenir son cerveau externe'] },
       { id: 2, type: 'fact', label: 'Définition', titre: 'Les 5 fonctions', texte: 'Démarrer une tâche · Maintenir l\'attention · Gérer le temps · Inhiber les distractions · Réguler les émotions.', detail: 'Déficitaires chez l\'enfant TDAH, pas absentes.', icone: '⚙️', exemple: '"Range ta chambre" = 20 sous-tâches pour toi. Pour son cerveau, c\'est comme dire \'construis une maison\' sans plan."' },
@@ -124,6 +131,7 @@ export const LECONS = [
     id: 8, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
     titre: 'Émotions x3', sousTitre: 'Le tsunami intérieur',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['Intensité émotionnelle x3', 'Amygdale vs cortex préfrontal', 'Les gestes qui désamorcent'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🌊', titre: 'Il ne fait pas de cinéma', texte: 'Il vit un tsunami.', couleur: '#0D9373', points: ['Intensité émotionnelle x3', 'Amygdale vs cortex préfrontal', 'Les gestes qui désamorcent'] },
       { id: 2, type: 'fact', label: 'Intensité', titre: 'Émotions x3', texte: 'L\'intensité émotionnelle est 3x supérieure. L\'amygdale s\'emballe, le cortex freine trop tard.', detail: 'Un stylo qui tombe peut déclencher une tempête.', icone: '🔥', exemple: '"Pour toi, c\'est un stylo qui tombe. Pour lui, c\'est un tremblement de terre intérieur. La réaction est proportionnelle à ce qu\'il RESSENT, pas à ce qui s\'est passé."' },
@@ -142,6 +150,7 @@ export const LECONS = [
     id: 9, module: '3', moduleLabel: 'Les 5 Piliers Barkley', moduleColor: '#A8DED1',
     titre: 'Cerveau externe', sousTitre: 'Pilier n°1',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['Performance vs connaissance', 'Guider sans surprotéger', 'Le plan de réduction sur 4 semaines'],
     cartes: [
       { id: 1, type: 'intro', emoji: '🧩', titre: 'Il sait quoi faire', texte: 'Il ne peut juste pas le faire seul.', couleur: '#A8DED1', points: ['Performance vs connaissance', 'Comment guider sans surprotéger', 'Le plan de réduction sur 4 semaines'] },
       { id: 2, type: 'fact', label: 'Pilier 1', titre: 'Le cerveau externe', texte: 'Le parent devient temporairement le cortex préfrontal de l\'enfant — son système d\'organisation externe.', detail: 'Adaptation neurologique, pas surprotection.', icone: '🎯', exemple: '"Tu ne dirais pas à quelqu\'un en fauteuil roulant de monter les escaliers seul. Tu installes une rampe. Le cerveau externe, c\'est la rampe."' },
@@ -158,6 +167,7 @@ export const LECONS = [
     id: 10, module: '3', moduleLabel: 'Les 5 Piliers Barkley', moduleColor: '#A8DED1',
     titre: 'L\'immédiateté', sousTitre: 'Le futur n\'existe pas',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['Pourquoi les promesses futures ne marchent pas', 'Le système de jetons en pratique', 'Conséquences immédiates et brèves'],
     cartes: [
       { id: 1, type: 'intro', emoji: '⏰', titre: 'Pour lui, demain n\'existe pas', texte: 'Seul le maintenant compte.', couleur: '#A8DED1', points: ['Pourquoi les promesses futures ne marchent pas', 'Le système de jetons', 'Conséquences immédiates et brèves'] },
       { id: 2, type: 'fact', label: 'Pilier 2', titre: 'Le présent immédiat', texte: 'Les conséquences futures sont neurologiquement invisibles. Le cortex préfrontal ne projette pas dans le futur.', detail: 'Tout dans les 5 minutes.', icone: '⚡', exemple: '"Sage cette semaine = tablette samedi" est invisible pour son cerveau. "Range tes chaussures = 1 jeton MAINTENANT" est traité."' },
@@ -174,6 +184,7 @@ export const LECONS = [
     id: 11, module: '3', moduleLabel: 'Les 5 Piliers Barkley', moduleColor: '#A8DED1',
     titre: 'Renforcement positif', sousTitre: 'Le ratio 5:1',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['20 000 messages négatifs avant 10 ans', 'Spécifique bat générique', 'Célébrer les micro-victoires'],
     cartes: [
       { id: 1, type: 'intro', emoji: '☀️', titre: '5 positifs pour 1 négatif', texte: 'Le ratio qui reconstruit tout.', couleur: '#A8DED1', points: ['20 000 messages négatifs avant 10 ans', 'Spécifique > générique', 'Célébrer les micro-victoires'] },
       { id: 2, type: 'fact', label: 'Pilier 3', titre: '20 000 messages négatifs', texte: 'Un enfant TDAH recoit 20 000 messages négatifs de plus avant 10 ans. Le renforcement positif active sa dopamine déficitaire.', detail: 'Ratio Barkley : minimum 5 retours positifs pour 1 correction.', icone: '💬', exemple: '"J\'ai compté sur une journée : 32 remarques négatives, 4 positives. Ca m\'a ouvert les yeux."' },
@@ -190,6 +201,7 @@ export const LECONS = [
     id: 12, module: '3', moduleLabel: 'Les 5 Piliers Barkley', moduleColor: '#A8DED1',
     titre: 'Les routines visuelles', sousTitre: 'Rendre l\'invisible visible',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
+    apercu: ['-40% de comportements oppositionnels', 'Le Time Timer comme outil clé', 'Préparer chaque transition'],
     cartes: [
       { id: 1, type: 'intro', emoji: '📋', titre: 'Son cerveau ne voit pas le temps', texte: 'Rends-le visible.', couleur: '#A8DED1', points: ['-40% de comportements oppositionnels', 'Le Time Timer comme outil clé', 'Les transitions préparées'] },
       { id: 2, type: 'fact', label: 'Pilier 4', titre: 'Prévisibilité', texte: 'Le cerveau TDAH est allergique à l\'imprévu. Les routines visuelles réduisent les comportements oppositionnels de 40%.', detail: 'Le Time Timer rend le temps concret et visible.', icone: '⏱️', exemple: '"Avant le planning visuel : 45 min de bataille le matin. Après : 15 min, il fait tout seul en cochant sa liste."' },
@@ -206,6 +218,7 @@ export const LECONS = [
     id: 13, module: '3', moduleLabel: 'Les 5 Piliers Barkley', moduleColor: '#A8DED1',
     titre: 'Comportement ≠ Personne', sousTitre: 'Protéger l\'estime de soi',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
+    apercu: ['Estime de soi -30%', '"Tu ES" détruit vs "Ce que tu AS FAIT" enseigne', '1 qualité spécifique chaque soir'],
     cartes: [
       { id: 1, type: 'intro', emoji: '💛', titre: 'Il n\'est pas son comportement', texte: 'Ne confonds jamais les deux.', couleur: '#A8DED1', points: ['Estime de soi -30%', '"Tu ES" détruit, "Ce que tu AS FAIT" enseigne', '1 qualité spécifique chaque soir'] },
       { id: 2, type: 'fact', label: 'Pilier 5', titre: 'Estime -30%', texte: 'L\'estime de soi TDAH est 30% plus basse. Chaque "tu es nul" ou "tu es pénible" se grave.', detail: '"Tu ES" attaque l\'identité. "Ce que tu AS FAIT" décrit un acte modifiable.', icone: '🛡️', exemple: '"Tu es méchant" → il pense : \'je SUIS méchant, je serai toujours méchant.\' "Ce que tu as fait a blessé ta soeur" → il pense : \'j\'ai fait quelque chose de mal, je peux faire mieux.\'"' },

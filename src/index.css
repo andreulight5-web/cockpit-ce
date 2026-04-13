@@ -89,6 +89,12 @@ img { max-width: 100%; display: block; }
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+.sway { animation: sway 3s ease-in-out infinite; }
+
 .fade-up { animation: fadeUp 0.4s ease-out both; }
 .fade-up-d1 { animation-delay: 0.08s; }
 .fade-up-d2 { animation-delay: 0.16s; }

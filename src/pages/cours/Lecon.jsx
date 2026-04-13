@@ -67,23 +67,40 @@ export default function Lecon() {
 /* ═══════ Card Renderer ═══════ */
 function RenderCard({ carte: c, color, cortex, lecon }) {
   switch (c.type) {
-    case 'intro': return (
-      <div style={{ ...S.cardFull, background: c.couleur, padding: '40px 24px 24px', justifyContent: 'space-between' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={S.modPill}>{lecon.moduleLabel}</div>
-          <span style={{ fontSize: 80, display: 'block', margin: '20px 0' }}>{c.emoji}</span>
-          <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 28, fontWeight: 800, color: '#fff', margin: '0 0 8px' }}>{c.titre}</h2>
-          <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{c.texte}</p>
-        </div>
-        {c.points && (
-          <div style={S.introCard}>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 8 }}>Dans cette lecon :</p>
-            {c.points.map((p, i) => <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}><span style={{ color: '#fff' }}>•</span><span style={{ fontSize: 13, color: '#fff', lineHeight: 1.4 }}>{p}</span></div>)}
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textAlign: 'right', marginTop: 8 }}>⏱ {lecon.duree} · {lecon.cartes.length} cartes</p>
+    case 'intro': {
+      const apercu = lecon.apercu || c.points || []
+      return (
+        <div style={{ ...S.cardFull, background: '#0F172A', justifyContent: 'space-between', padding: 0 }}>
+          {/* Color band + badge */}
+          <div>
+            <div style={{ height: 4, background: color }} />
+            <div style={{ padding: '16px 24px 0' }}>
+              <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600 }}>{lecon.moduleLabel}</span>
+            </div>
           </div>
-        )}
-      </div>
-    )
+          {/* Center: Cortex image + text */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
+            <img src={cortex} alt="Cortex" className="sway" style={{ height: 200, objectFit: 'contain' }} draggable={false} />
+            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 28, fontWeight: 800, color: '#fff', textAlign: 'center', margin: '24px 0 0', padding: '0 8px' }}>{c.titre}</h2>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: 'rgba(255,255,255,0.65)', textAlign: 'center', lineHeight: 1.5, margin: '8px 0 0', padding: '0 16px' }}>{c.texte}</p>
+          </div>
+          {/* Bottom card */}
+          <div style={{ background: 'rgba(255,255,255,0.06)', borderTop: '1px solid rgba(255,255,255,0.10)', padding: '16px 24px 32px' }}>
+            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600, marginBottom: 12 }}>DANS CETTE LECON</p>
+            {apercu.map((p, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 8, alignItems: 'flex-start' }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: `${color}99`, marginTop: 5, flexShrink: 0 }} />
+                <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#E2E8F0', lineHeight: 1.4 }}>{p}</span>
+              </div>
+            ))}
+            <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', marginTop: 14 }} />
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.40)', textAlign: 'center', marginTop: 10 }}>
+              ⏱ {lecon.duree} · {lecon.cartes.length} cartes  →  Tape pour commencer
+            </p>
+          </div>
+        </div>
+      )
+    }
     case 'fact': return (
       <div style={{ ...S.cardFull, background: '#0F172A' }}>
         <div style={{ background: color, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
