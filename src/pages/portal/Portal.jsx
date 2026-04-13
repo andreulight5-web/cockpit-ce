@@ -27,7 +27,7 @@ const modules = [
     sub: 'Méthode scientifique · Pr. Cortex',
     progress: 4,
     total: 13,
-    bg: 'linear-gradient(135deg, #0D9373 0%, #085041 100%)',
+    bg: 'linear-gradient(135deg, #2A9490 0%, #1A5F5C 100%)',
     border: 'none',
   },
   {
@@ -38,7 +38,7 @@ const modules = [
     sub: 'Le Monstre t\'accompagne',
     progress: 3,
     total: 6,
-    bg: 'linear-gradient(135deg, #D4537E 0%, #4B1528 100%)',
+    bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
     border: 'none',
   },
   {
@@ -49,7 +49,7 @@ const modules = [
     sub: 'Outils · Scripts · Sources HAS',
     progress: 2,
     total: 8,
-    bg: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)',
+    bg: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
     border: '1px solid rgba(255,255,255,0.08)',
   },
 ]
@@ -79,7 +79,7 @@ export default function Portal() {
         <div className="fade-up" style={{ marginTop: 20 }}>
           <p style={s.greeting}>Bonjour {prenomParent || 'parent'} 👋</p>
           <h1 style={s.title}>
-            Ton Cockpit <span style={{ color: '#FFE17B' }}>Crises ⚡</span>
+            Ton Cockpit <span style={{ color: '#F5E06D' }}>Crises ⚡</span>
           </h1>
         </div>
       </div>
@@ -157,42 +157,43 @@ export default function Portal() {
 const s = {
   page: {
     minHeight: '100dvh',
-    background: '#0F172A',
+    background: '#1C1B2E',
     paddingBottom: 100,
   },
 
   /* Crise */
   criseBtn: {
-    background: 'linear-gradient(135deg, #FF6B4A 0%, #CC4422 100%)',
+    background: 'linear-gradient(135deg, #C0506A 0%, #8B2A42 100%)',
     borderRadius: 20,
     padding: '18px 20px',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     gap: 14,
-    boxShadow: '0 4px 24px rgba(255,107,74,0.35)',
+    boxShadow: '0 4px 24px rgba(192,80,106,0.35)',
     transition: 'transform 0.15s',
   },
 
   /* Header */
   header: { padding: '20px 20px 0' },
   headerRow: { display: 'flex', alignItems: 'center' },
-  headerTitle: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: '#A8DED1' },
+  headerTitle: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: 'rgba(255,255,255,0.5)' },
   logoImg: { height: 38, width: 'auto', borderRadius: '50%', marginLeft: 'auto', flexShrink: 0 },
 
-  greeting: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#A8DED1', margin: '0 0 4px' },
+  greeting: { fontFamily: "'Caveat', cursive", fontSize: 22, color: '#F5E06D', margin: '0 0 4px' },
   title: { fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 32, color: '#FFFFFF', margin: 0, lineHeight: 1.15 },
 
   /* Streak */
   streakPill: {
     display: 'inline-block',
     marginTop: 12,
-    background: 'rgba(255,255,255,0.08)',
+    background: 'rgba(42,148,144,0.2)',
+    border: '1px solid rgba(42,148,144,0.4)',
     borderRadius: 20,
     padding: '6px 14px',
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
-    color: '#A8DED1',
+    color: '#2A9490',
   },
 
   /* Personnages strip */

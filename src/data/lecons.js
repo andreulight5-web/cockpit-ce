@@ -8,13 +8,13 @@ export const LECONS = [
     cartes: [
       { id: 1, type: 'intro', emoji: '🌊', titre: 'Une crise, c\'est 4 phases', texte: 'Comprendre les phases change tout.', couleur: '#FF6B4A', points: ['Repérer l\'escalade avant l\'explosion', 'Savoir quand intervenir et quand se taire', 'Réparer après la tempête'] },
       { id: 2, type: 'fact2col', titre: 'Les 2 premières phases', colonnes: [
-        { label: 'PHASE 1', icone: '📈', titre: 'Escalade', texte: 'Respiration rapide, agitation, ton qui monte. 2-5 min.', action: 'Interviens maintenant !', couleur: '#FFE17B' },
+        { label: 'PHASE 1', icone: '📈', titre: 'Escalade', texte: 'Respiration rapide, agitation, ton qui monte. 2-5 min.', action: 'Interviens maintenant !', couleur: '#F5E06D' },
         { label: 'PHASE 2', icone: '🌪️', titre: 'Explosion', texte: 'Cris, pleurs, objets jetés. Cortex hors-ligne. 5-20 min.', action: 'Silence et sécurité.', couleur: '#FF6B4A' },
       ] },
       { id: 3, type: 'cortex', citation: '"Pendant l\'explosion, l\'amygdale a pris le contrôle total. Tenter un raisonnement est non seulement inutile, c\'est contre-productif."', source: 'Barkley, 2013', importance: 'Ca veut dire que toute explication pendant la crise est perdue. Ton seul job : sécuriser et attendre.' },
       { id: 4, type: 'fact2col', titre: 'Les 2 dernières phases', colonnes: [
         { label: 'PHASE 3', icone: '🌅', titre: 'Récupération', texte: 'Retour au calme. Il est épuisé. Ne parle pas encore. 20-45 min.', action: 'Juste ta présence.', couleur: '#A8DED1' },
-        { label: 'PHASE 4', icone: '☀️', titre: 'Normalisation', texte: 'Il revient à lui. On peut parler doucement, sans reproches. 45+ min.', action: 'Moment de réparation.', couleur: '#0D9373' },
+        { label: 'PHASE 4', icone: '☀️', titre: 'Normalisation', texte: 'Il revient à lui. On peut parler doucement, sans reproches. 45+ min.', action: 'Moment de réparation.', couleur: '#2A9490' },
       ] },
       { id: 5, type: 'contraste', titre: 'Pendant la phase 2 (explosion)', gauche: { label: '❌ Ce qu\'on dit souvent', texte: '"Arrête maintenant ! Tu vas voir quand on rentre !"' }, droite: { label: '✅ Ce qui aide vraiment', texte: '[Silence. Présence. Voix ultra-basse.] "Je suis là."' }, difference: 'Parler pendant l\'explosion rallonge la crise. Le silence la raccourcit.' },
       { id: 6, type: 'verbatim', texte: '"Le jour où j\'ai compris qu\'il y avait des phases, j\'ai arrêté de me battre pendant l\'explosion. J\'attendais la phase 3. Et tout a changé."', auteur: 'Isabelle, maman d\'Alexis, 9 ans', takeaway: 'Identifier la phase dans laquelle ton enfant se trouve te donne un plan d\'action clair au lieu de paniquer.' },
@@ -92,14 +92,14 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: 'Grosse crise ce matin. Tu as crié, il a pleuré. Le soir, il fait comme si de rien n\'était.', cerveau_enfant: 'Il a besoin de savoir que tu l\'aimes encore. Le silence le laisse dans le doute.', cerveau_parent: 'Tu as honte d\'avoir crié. Le silence t\'évite de faire face.', demain: ['"Ce matin a été dur pour nous deux. Je suis désolée d\'avoir crié."', '"Toi aussi tu as eu du mal. C\'est normal."', '"Demain matin on fait autrement. Ensemble."'] },
   },
 
-  // ═══ MODULE 2 — Comprendre le TDAH (#0D9373) ═══
+  // ═══ MODULE 2 — Comprendre le TDAH (#2A9490) ═══
   {
-    id: 6, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
+    id: 6, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#2A9490',
     titre: 'Le cerveau TDAH', sousTitre: 'Comment il fonctionne',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
     apercu: ['Le cortex préfrontal et son retard de 2-3 ans', 'Pourquoi "il pourrait" est faux', '"Ne peut pas" change tout'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🧠', titre: 'Son cerveau n\'est pas cassé', texte: 'Il est juste différent.', couleur: '#0D9373', points: ['Le cortex préfrontal et son retard', 'Pourquoi "il pourrait" est faux', '"Ne peut pas" vs "ne veut pas"'] },
+      { id: 1, type: 'intro', emoji: '🧠', titre: 'Son cerveau n\'est pas cassé', texte: 'Il est juste différent.', couleur: '#2A9490', points: ['Le cortex préfrontal et son retard', 'Pourquoi "il pourrait" est faux', '"Ne peut pas" vs "ne veut pas"'] },
       { id: 2, type: 'fact', label: 'Le savoir', titre: 'Le cortex préfrontal', texte: 'Chef d\'orchestre du cerveau — attention, contrôle des impulsions, planification. En retard de 2 à 3 ans chez ton enfant.', detail: 'Maturation complète à 21 ans vs 18 pour les neurotypiques.', icone: '⏳', exemple: '"A 8 ans, le cerveau de Lucas fonctionne comme celui d\'un enfant de 5-6 ans pour l\'organisation et le contrôle. Pas par paresse — par biologie."' },
       { id: 3, type: 'cortex', citation: '"Les études IRM montrent que le cortex préfrontal des enfants TDAH atteint sa maturité à 21 ans, contre 18 ans pour les autres."', source: 'Shaw et al., 2007', importance: 'Savoir ca change ta réaction de "il fait exprès" à "il ne peut pas encore". Ca change tout.' },
       { id: 4, type: 'contraste', titre: 'Ce qu\'on croit vs la réalité', gauche: { label: '❌ Ce qu\'on croit', texte: '"Il pourrait faire des efforts s\'il voulait."' }, droite: { label: '✓ La réalité', texte: '"Son cerveau n\'est pas encore équipé pour ca."' }, difference: 'La première phrase crée de la culpabilité (pour lui ET pour toi). La seconde ouvre la porte à l\'adaptation.' },
@@ -111,12 +111,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: 'Il n\'arrive pas à commencer ses devoirs. Tu as expliqué 3 fois.', cerveau_enfant: 'Son cortex ne peut pas séquencer "ouvrir le cahier, lire la consigne, prendre le stylo". Trop d\'étapes invisibles.', cerveau_parent: 'Tu penses qu\'il sait et refuse. C\'est l\'inverse.', demain: ['"On fait le 1er exercice ensemble"', 'Timer 10 min visible', 'Récompense immédiate après'] },
   },
   {
-    id: 7, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
+    id: 7, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#2A9490',
     titre: 'Les fonctions exécutives', sousTitre: 'Le chef d\'orchestre en grève',
     duree: '4 min', xp: 50, cortexImage: 'passionne',
     apercu: ['Les 5 fonctions exécutives', 'Pourquoi jeux vidéo OUI mais devoirs NON', 'Devenir son cerveau externe'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🎼', titre: 'Le chef d\'orchestre est en grève', texte: 'Mais le musicien, lui, est là.', couleur: '#0D9373', points: ['Les 5 fonctions exécutives', 'Pourquoi jeux vidéo OUI mais devoirs NON', 'Comment devenir son cerveau externe'] },
+      { id: 1, type: 'intro', emoji: '🎼', titre: 'Le chef d\'orchestre est en grève', texte: 'Mais le musicien, lui, est là.', couleur: '#2A9490', points: ['Les 5 fonctions exécutives', 'Pourquoi jeux vidéo OUI mais devoirs NON', 'Comment devenir son cerveau externe'] },
       { id: 2, type: 'fact', label: 'Définition', titre: 'Les 5 fonctions', texte: 'Démarrer une tâche · Maintenir l\'attention · Gérer le temps · Inhiber les distractions · Réguler les émotions.', detail: 'Déficitaires chez l\'enfant TDAH, pas absentes.', icone: '⚙️', exemple: '"Range ta chambre" = 20 sous-tâches pour toi. Pour son cerveau, c\'est comme dire \'construis une maison\' sans plan."' },
       { id: 3, type: 'cortex', citation: '"Le TDAH est un trouble des fonctions exécutives, pas de l\'attention. C\'est la dysrégulation, pas l\'absence."', source: 'Barkley, 2015', importance: 'Il peut se concentrer sur ce qui l\'intéresse — la preuve que son cerveau FONCTIONNE. Il a juste besoin d\'aide pour le reste.' },
       { id: 4, type: 'contraste', titre: 'Jeux vidéo vs devoirs', gauche: { label: '🎮 Jeux vidéo', texte: 'Feedback immédiat. Dopamine toutes les 2 secondes. Nouveau niveau constant.' }, droite: { label: '📚 Devoirs', texte: 'Aucun feedback immédiat. Résultat dans 2 jours. Monotone.' }, difference: 'Les jeux offrent exactement ce que le cerveau TDAH cherche : stimulation intense et feedback immédiat. Les devoirs sont son opposé neurologique.' },
@@ -128,12 +128,12 @@ export const LECONS = [
     scenario: { titre: 'Scénario du jour', situation: '3 exercices de maths. Il regarde par la fenêtre. 45 min après, rien.', cerveau_enfant: 'Son chef d\'orchestre ne sait pas par où commencer.', cerveau_parent: 'Tu interprètes du refus. C\'est de l\'incapacité à démarrer.', demain: ['Lance le 1er exercice avec lui', 'Timer 10 min', 'Pause 3 min, puis relance'] },
   },
   {
-    id: 8, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#0D9373',
+    id: 8, module: '2', moduleLabel: 'Comprendre le TDAH', moduleColor: '#2A9490',
     titre: 'Émotions x3', sousTitre: 'Le tsunami intérieur',
     duree: '4 min', xp: 50, cortexImage: 'bienveillant',
     apercu: ['Intensité émotionnelle x3', 'Amygdale vs cortex préfrontal', 'Les gestes qui désamorcent'],
     cartes: [
-      { id: 1, type: 'intro', emoji: '🌊', titre: 'Il ne fait pas de cinéma', texte: 'Il vit un tsunami.', couleur: '#0D9373', points: ['Intensité émotionnelle x3', 'Amygdale vs cortex préfrontal', 'Les gestes qui désamorcent'] },
+      { id: 1, type: 'intro', emoji: '🌊', titre: 'Il ne fait pas de cinéma', texte: 'Il vit un tsunami.', couleur: '#2A9490', points: ['Intensité émotionnelle x3', 'Amygdale vs cortex préfrontal', 'Les gestes qui désamorcent'] },
       { id: 2, type: 'fact', label: 'Intensité', titre: 'Émotions x3', texte: 'L\'intensité émotionnelle est 3x supérieure. L\'amygdale s\'emballe, le cortex freine trop tard.', detail: 'Un stylo qui tombe peut déclencher une tempête.', icone: '🔥', exemple: '"Pour toi, c\'est un stylo qui tombe. Pour lui, c\'est un tremblement de terre intérieur. La réaction est proportionnelle à ce qu\'il RESSENT, pas à ce qui s\'est passé."' },
       { id: 3, type: 'cortex', citation: '"Le TDAH inclut une réactivité émotionnelle significativement plus élevée. C\'est un trouble de la régulation, pas du comportement."', source: 'Barkley, 2015', importance: 'Son explosion n\'est pas du théâtre. C\'est son cerveau qui vit une tempête réelle. Le savoir change ta réaction.' },
       { id: 4, type: 'contraste', titre: 'Pendant la crise', gauche: { label: '❌', texte: '"Calme-toi ! C\'est rien !" (invalidation + hausse de voix)' }, droite: { label: '✓', texte: '"Je vois que tu es très en colère. Je suis là." (validation + voix basse)' }, difference: '"C\'est rien" dit à son cerveau que son ressenti est faux. "Je vois ta colère" dit que son ressenti est entendu. Le premier amplifie, le second apaise.' },

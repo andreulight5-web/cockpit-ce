@@ -22,14 +22,14 @@ export default function Lecon() {
   const goPrev = () => { if (showAfter) { setShowAfter(false); return } if (cardIdx > 0) setCardIdx((i) => i - 1) }
   const swipe = useSwipe({ onLeft: goNext, onRight: goPrev })
 
-  if (!lecon) return <div style={{ background: '#0F172A', color: '#fff', minHeight: '100dvh', padding: 40 }}>Lecon introuvable</div>
+  if (!lecon) return <div style={{ background: '#1C1B2E', color: '#fff', minHeight: '100dvh', padding: 40 }}>Lecon introuvable</div>
 
   const color = lecon.moduleColor
   const cortex = cortexMap[lecon.cortexImage] || cortexBienveillant
   const nextLecon = LECONS.find((l) => l.id === lecon.id + 1)
 
   return (
-    <div style={{ background: '#0F172A', minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#1C1B2E', minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
       <div style={{ ...S.header, background: color }}>
         <button onClick={() => navigate('/cours')} style={S.backBtn}>‹</button>
         <span style={S.headerLabel}>Lecon {lecon.id}/13</span>
@@ -55,7 +55,7 @@ export default function Lecon() {
           <button onClick={goPrev} style={{ ...S.backBtn, color: '#A8DED1', marginBottom: 20 }}>← Revoir les cartes</button>
           <Scenario scenario={lecon.scenario} color={color} openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 28 }}>
-            {nextLecon && <button onClick={() => { navigate(`/cours/${nextLecon.id}`); setCardIdx(0); setShowAfter(false) }} style={{ ...S.btn, background: color, color: color === '#A8DED1' ? '#0F172A' : '#fff' }}>Lecon suivante →</button>}
+            {nextLecon && <button onClick={() => { navigate(`/cours/${nextLecon.id}`); setCardIdx(0); setShowAfter(false) }} style={{ ...S.btn, background: color, color: color === '#A8DED1' ? '#1C1B2E' : '#fff' }}>Lecon suivante →</button>}
             <button onClick={() => navigate('/cours')} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>Retour au programme</button>
           </div>
         </div>
@@ -70,7 +70,7 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
     case 'intro': {
       const apercu = lecon.apercu || c.points || []
       return (
-        <div style={{ ...S.cardFull, background: '#0F172A', justifyContent: 'space-between', padding: 0 }}>
+        <div style={{ ...S.cardFull, background: '#1C1B2E', justifyContent: 'space-between', padding: 0 }}>
           {/* Color band + badge */}
           <div>
             <div style={{ height: 4, background: color }} />
@@ -102,7 +102,7 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
       )
     }
     case 'fact': return (
-      <div style={{ ...S.cardFull, background: '#0F172A' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E' }}>
         <div style={{ background: color, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div><span style={{ fontSize: 9, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 2, fontWeight: 600 }}>{c.label}</span><h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#fff', margin: '4px 0 0', fontWeight: 700 }}>{c.titre}</h3></div>
           <span style={{ fontSize: 36 }}>{c.icone}</span>
@@ -115,7 +115,7 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
       </div>
     )
     case 'fact2col': return (
-      <div style={{ ...S.cardFull, background: '#0F172A', padding: '28px 16px' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '28px 16px' }}>
         {c.titre && <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#A8DED1', textTransform: 'uppercase', letterSpacing: 1.5, textAlign: 'center', marginBottom: 16 }}>{c.titre}</h3>}
         <div style={{ display: 'flex', gap: 12, flex: 1, alignItems: 'stretch' }}>
           {c.colonnes.map((col, i) => (
@@ -131,11 +131,11 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
       </div>
     )
     case 'cortex': return (
-      <div style={{ ...S.cardFull, background: '#0F172A', padding: '32px 20px', alignItems: 'center' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '32px 20px', alignItems: 'center' }}>
         <img src={cortex} alt="Cortex" style={{ width: 80, height: 80, objectFit: 'contain' }} draggable={false} />
-        <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 13, color: '#FF6B4A', fontWeight: 700, marginTop: 8 }}>Pr. Cortex</span>
-        <div style={{ background: 'rgba(255,107,74,0.10)', border: '1px solid rgba(255,107,74,0.2)', borderRadius: 20, padding: 24, marginTop: 16, width: '100%', textAlign: 'center' }}>
-          <span style={{ fontSize: 48, color: '#FF6B4A', opacity: 0.4, lineHeight: 1 }}>"</span>
+        <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 13, color: '#F5E06D', fontWeight: 700, marginTop: 8 }}>Pr. Cortex</span>
+        <div style={{ background: 'rgba(245,224,109,0.08)', border: '1px solid rgba(245,224,109,0.15)', borderRadius: 20, padding: 24, marginTop: 16, width: '100%', textAlign: 'center' }}>
+          <span style={{ fontSize: 48, color: '#F5E06D', opacity: 0.4, lineHeight: 1 }}>"</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 17, color: '#fff', fontStyle: 'italic', lineHeight: 1.7, margin: '4px 0 12px' }}>{c.citation}</p>
           <span style={{ fontSize: 11, color: '#64748B' }}>{c.source}</span>
         </div>
@@ -143,33 +143,33 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
       </div>
     )
     case 'contraste': return (
-      <div style={{ ...S.cardFull, background: '#0F172A', padding: '32px 20px', justifyContent: 'center' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '32px 20px', justifyContent: 'center' }}>
         <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 18, color: '#A8DED1', textAlign: 'center', marginBottom: 20 }}>{c.titre}</h3>
-        <div style={{ ...S.contCard, borderColor: '#D4537E', background: 'rgba(212,83,126,0.10)' }}>
-          <span style={{ fontSize: 10, color: '#D4537E', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.gauche.label}</span>
+        <div style={{ ...S.contCard, borderColor: '#C0506A', background: 'rgba(212,83,126,0.10)' }}>
+          <span style={{ fontSize: 10, color: '#C0506A', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.gauche.label}</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: '8px 0 0' }}>{c.gauche.texte}</p>
         </div>
-        <div style={{ ...S.contCard, borderColor: '#0D9373', background: 'rgba(13,147,115,0.10)', marginTop: 10 }}>
-          <span style={{ fontSize: 10, color: '#0D9373', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.droite.label}</span>
+        <div style={{ ...S.contCard, borderColor: '#2A9490', background: 'rgba(13,147,115,0.10)', marginTop: 10 }}>
+          <span style={{ fontSize: 10, color: '#2A9490', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>{c.droite.label}</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: '8px 0 0' }}>{c.droite.texte}</p>
         </div>
         {c.difference && <p style={{ fontSize: 14, color: '#94A3B8', lineHeight: 1.5, marginTop: 16, textAlign: 'center' }}>{c.difference}</p>}
       </div>
     )
     case 'verbatim': return (
-      <div style={{ ...S.cardFull, background: '#0F172A', padding: '40px 20px', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '40px 20px', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
         <div style={{ width: 60, height: 60, borderRadius: '50%', background: `${color}4d`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#fff', fontWeight: 700 }}>{c.auteur?.[0] || 'P'}</div>
         <span style={{ fontSize: 60, color, opacity: 0.3, lineHeight: 1, marginTop: 8 }}>"</span>
         <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 18, color: '#fff', fontStyle: 'italic', lineHeight: 1.8, margin: '4px 20px 16px', maxWidth: 340 }}>{c.texte}</p>
-        <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#A8DED1' }}>{c.auteur}</span>
+        <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#2A9490' }}>{c.auteur}</span>
         <div style={S.parentBadge}>Parent Cerveaux Electriques</div>
         {c.takeaway && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 16, width: '100%', textAlign: 'left' }}><p style={{ fontSize: 13, color, margin: 0, lineHeight: 1.5 }}><strong>Ce que ca change :</strong> {c.takeaway}</p></div>}
       </div>
     )
     case 'action': return (
-      <div style={{ ...S.cardFull, background: '#0F172A', padding: '32px 20px' }}>
+      <div style={{ ...S.cardFull, background: '#1C1B2E', padding: '32px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: color === '#A8DED1' ? '#0F172A' : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <span style={{ fontSize: 22, fontWeight: 800, lineHeight: 1 }}>{c.numero}</span>
             <span style={{ fontSize: 7, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginTop: 2 }}>ACTION</span>
           </div>
@@ -182,11 +182,11 @@ function RenderCard({ carte: c, color, cortex, lecon }) {
     )
     case 'memo': return (
       <div style={{ ...S.cardFull, background: color, padding: '40px 20px 24px', justifyContent: 'center', alignItems: 'center' }}>
-        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: color === '#A8DED1' ? '#0F172A' : '#fff', marginBottom: 20, textAlign: 'center' }}>✓ A retenir</h3>
+        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', marginBottom: 20, textAlign: 'center' }}>✓ A retenir</h3>
         {c.items.map((item, i) => (
           <div key={i} style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 14, padding: 16, width: '100%', marginBottom: 10, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-            <span style={{ color: color === '#A8DED1' ? '#0F172A' : '#fff', fontWeight: 700, flexShrink: 0 }}>✓</span>
-            <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: color === '#A8DED1' ? '#0F172A' : '#fff', lineHeight: 1.4 }}>{item}</span>
+            <span style={{ color: color === '#A8DED1' ? '#1C1B2E' : '#fff', fontWeight: 700, flexShrink: 0 }}>✓</span>
+            <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: color === '#A8DED1' ? '#1C1B2E' : '#fff', lineHeight: 1.4 }}>{item}</span>
           </div>
         ))}
       </div>
@@ -204,8 +204,8 @@ function Scenario({ scenario, color, openAccordion, setOpenAccordion }) {
   ]
   return (
     <div>
-      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: '14px 18px', marginBottom: 12 }}>
-        <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 16, fontWeight: 700, color: '#fff', margin: 0 }}>📅 Scenario du jour</h3>
+      <div style={{ background: 'rgba(245,224,109,0.06)', borderRadius: 16, padding: '14px 18px', marginBottom: 12 }}>
+        <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: 18, fontWeight: 700, color: '#F5E06D', margin: 0 }}>📅 Scenario du jour</h3>
       </div>
       {sections.map((sec) => {
         const open = openAccordion === sec.key

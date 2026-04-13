@@ -20,7 +20,7 @@ const STORAGE_KEY = 'cockpit_onboarding'
 const TRANSITION_MS = 400
 const TOTAL_STEPS = 6
 
-const BG = ['#0F172A', '#0F172A', '#0D9373', '#F2B8C6', '#0F172A', '#FFE17B']
+const BG = ['#1C1B2E', '#1C1B2E', '#2A9490', '#2A1824', '#1C1B2E', '#F5E06D']
 
 /* ==============================================================
    MAIN
@@ -66,7 +66,7 @@ export default function Onboarding() {
     <div style={styles.root}>
       <style>{css}</style>
       <div style={styles.progressTrack}>
-        <div style={{ ...styles.progressFill, width: `${progress}%`, background: nextBg === '#0F172A' ? '#FFE17B' : nextBg }} />
+        <div style={{ ...styles.progressFill, width: `${progress}%`, background: nextBg === '#1C1B2E' ? '#F5E06D' : nextBg }} />
       </div>
       <div key={step} className={screenClass} style={styles.screen}>
         {step === 0 && <Screen1Intro onNext={next} />}
@@ -83,7 +83,7 @@ export default function Onboarding() {
 /* ==============================================================
    BubbleBackground — colorful random floating bubbles
    ============================================================== */
-const BUBBLE_PALETTE = ['#FFE17B', '#A8DED1', '#F2B8C6', '#FF6B4A', '#FFFFFF', '#0D9373']
+const BUBBLE_PALETTE = ['#F5E06D', '#A8DED1', '#2A1824', '#FF6B4A', '#FFFFFF', '#2A9490']
 
 function randPct() { return Math.random() * 100 }
 
@@ -179,7 +179,7 @@ function Screen1Intro({ onNext }) {
   const handleMonstreTap = () => { playSound('tap'); setHopKey((k) => k + 1) }
 
   return (
-    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'flex-end', paddingBottom: 100 }}>
+    <section style={{ ...styles.section, background: '#1C1B2E', justifyContent: 'flex-end', paddingBottom: 100 }}>
       <BubbleBackground />
       <div style={{ ...styles.bubbleWrap, zIndex: 1 }}>
         <div key={idx} className="bubble-pop" style={styles.bubble}>
@@ -200,7 +200,7 @@ function Screen1Intro({ onNext }) {
       </div>
       <div style={{ height: 32, zIndex: 1 }} />
       {showButton ? (
-        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF', zIndex: 1 }}>
+        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#2A9490', color: '#FFFFFF', zIndex: 1 }}>
           Je t'écoute →
         </button>
       ) : (
@@ -224,14 +224,14 @@ function Screen2Histoire({ onNext }) {
   }
 
   return (
-    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'center', cursor: 'pointer' }} onClick={scene < 2 ? advance : undefined}>
+    <section style={{ ...styles.section, background: '#1C1B2E', justifyContent: 'center', cursor: 'pointer' }} onClick={scene < 2 ? advance : undefined}>
       <BubbleBackground />
       <div style={{ zIndex: 1 }}>{renderScene()}</div>
       <div style={{ position: 'absolute', bottom: 100, left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 1 }}>
         {scene < 2 ? (
           <p style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'Inter, sans-serif', fontSize: 12, fontStyle: 'italic' }}>Tape pour continuer</p>
         ) : (
-          <button onClick={(e) => { e.stopPropagation(); onNext() }} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF', maxWidth: 280 }}>
+          <button onClick={(e) => { e.stopPropagation(); onNext() }} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#2A9490', color: '#FFFFFF', maxWidth: 280 }}>
             On commence ?
           </button>
         )}
@@ -281,7 +281,7 @@ function LightConfetti() {
 function Screen3Choose({ type, setType, onNext }) {
   const handleSelect = (kind) => { playSound('tap'); setType(kind) }
   return (
-    <section style={{ ...styles.section, background: '#0D9373' }}>
+    <section style={{ ...styles.section, background: '#2A9490' }}>
       <BubbleBackground />
       <div style={{ textAlign: 'center', zIndex: 1, marginBottom: 8 }}>
         <h2 className="enter-from-top" style={{ color: '#FFFFFF', fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, margin: '0 0 6px' }}>
@@ -326,7 +326,7 @@ function RoleCard({ img, label, selected, onSelect, enterClass }) {
         maxWidth: 180,
         padding: 16,
         borderRadius: 20,
-        border: selected ? '3px solid #FFE17B' : '2px solid rgba(255,255,255,0.3)',
+        border: selected ? '3px solid #F5E06D' : '2px solid rgba(255,255,255,0.3)',
         background: selected ? 'rgba(255,225,123,0.12)' : 'rgba(255,255,255,0.15)',
         display: 'flex',
         flexDirection: 'column',
@@ -361,7 +361,7 @@ function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
   const canAdvance = prenomEnfant.trim().length > 0
 
   return (
-    <section style={{ ...styles.section, background: '#F2B8C6', justifyContent: 'flex-start', paddingTop: 48 }}>
+    <section style={{ ...styles.section, background: '#2A1824', justifyContent: 'flex-start', paddingTop: 48 }}>
       <BubbleBackground />
       <div style={{ ...styles.bubble, alignSelf: 'center', zIndex: 1 }}>
         <Typewriter text="Et ton petit monstre, il s'appelle ?" />
@@ -386,7 +386,7 @@ function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
           style={{ height: 200, objectFit: 'contain' }}
           draggable={false}
         />
-        <div className={bouncing ? 'bounce-value' : ''} style={{ color: '#4B1528', fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, display: 'inline-block' }}>
+        <div className={bouncing ? 'bounce-value' : ''} style={{ color: '#C0506A', fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, display: 'inline-block' }}>
           {age} <span style={{ fontSize: 14, fontWeight: 500 }}>ans</span>
         </div>
         <input type="range" min={4} max={15} value={age} onChange={(e) => handleAgeChange(Number(e.target.value))} className="age-slider" style={{ width: '70%' }} />
@@ -394,7 +394,7 @@ function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
 
       <div style={{ flex: 1 }} />
       {canAdvance && (
-        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF', zIndex: 1 }}>
+        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#2A9490', color: '#FFFFFF', zIndex: 1 }}>
           Suivant →
         </button>
       )}
@@ -408,7 +408,7 @@ function Screen4Enfant({ prenomEnfant, setPrenomEnfant, age, setAge, onNext }) {
 function Screen5Parent({ prenomParent, setPrenomParent, onNext }) {
   const canAdvance = prenomParent.trim().length > 0
   return (
-    <section style={{ ...styles.section, background: '#0F172A', justifyContent: 'flex-start', paddingTop: 56 }}>
+    <section style={{ ...styles.section, background: '#1C1B2E', justifyContent: 'flex-start', paddingTop: 56 }}>
       <BubbleBackground />
       <div style={{ ...styles.bubble, marginBottom: 16, alignSelf: 'center', zIndex: 1 }}>
         <Typewriter text="Et toi, comment tu t'appelles ?" />
@@ -424,7 +424,7 @@ function Screen5Parent({ prenomParent, setPrenomParent, onNext }) {
       </div>
       <div style={{ flex: 1 }} />
       {canAdvance && (
-        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#0D9373', color: '#FFFFFF', zIndex: 1 }}>
+        <button onClick={onNext} className="fade-in btn-pulse" style={{ ...styles.btnBase, background: '#2A9490', color: '#FFFFFF', zIndex: 1 }}>
           C'est parti →
         </button>
       )}
@@ -449,7 +449,7 @@ function Screen6Final({ prenomParent, prenomEnfant, onFinish }) {
   useEffect(() => { playSound('success', { volume: 0.6 }) }, [])
 
   return (
-    <section style={{ ...styles.section, background: '#FFE17B', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ ...styles.section, background: '#F5E06D', position: 'relative', overflow: 'hidden' }}>
       <BubbleBackground />
       <div style={styles.confettiLayer}>
         {confetti.map((c, i) => (
@@ -498,17 +498,17 @@ function Typewriter({ text, delay = 0 }) {
    Styles
    ============================================================== */
 const styles = {
-  root: { position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden', background: '#0F172A' },
+  root: { position: 'relative', width: '100%', height: '100dvh', overflow: 'hidden', background: '#1C1B2E' },
   progressTrack: { position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: 'rgba(255,255,255,0.12)', zIndex: 50 },
   progressFill: { height: '100%', transition: 'width 0.4s ease, background 0.4s ease' },
   screen: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   section: { width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', padding: '48px 24px 96px', boxSizing: 'border-box', position: 'relative', overflow: 'hidden' },
   imageWrap: { flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' },
   bubbleWrap: { width: '100%', display: 'flex', justifyContent: 'center' },
-  bubble: { background: 'rgba(255,255,255,0.92)', color: '#0F172A', borderRadius: 20, padding: '14px 20px', width: 'auto', minWidth: 180, maxWidth: '82%', fontFamily: 'Poppins, sans-serif', fontSize: '15px', fontWeight: 600, boxShadow: '0 8px 24px rgba(0,0,0,0.25)', position: 'relative', textAlign: 'center', lineHeight: 1.5, wordBreak: 'normal', overflowWrap: 'normal', whiteSpace: 'normal', hyphens: 'none', lineBreak: 'auto' },
+  bubble: { background: 'rgba(255,255,255,0.92)', color: '#1C1B2E', borderRadius: 20, padding: '14px 20px', width: 'auto', minWidth: 180, maxWidth: '82%', fontFamily: 'Poppins, sans-serif', fontSize: '15px', fontWeight: 600, boxShadow: '0 8px 24px rgba(0,0,0,0.25)', position: 'relative', textAlign: 'center', lineHeight: 1.5, wordBreak: 'normal', overflowWrap: 'normal', whiteSpace: 'normal', hyphens: 'none', lineBreak: 'auto' },
   bubbleTail: { position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderTop: '10px solid rgba(255,255,255,0.92)' },
   btnBase: { border: 'none', borderRadius: 999, padding: '16px 32px', fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 16, cursor: 'pointer', width: '100%', maxWidth: 320, transition: 'transform 0.15s, opacity 0.15s' },
-  nameInputDark: { width: '80%', margin: '24px auto 0', background: 'transparent', border: 'none', borderBottom: '2px solid #4B1528', padding: '12px 4px', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 600, color: '#4B1528', textAlign: 'center', outline: 'none', display: 'block', transition: 'box-shadow 0.25s, border-color 0.25s' },
+  nameInputDark: { width: '80%', margin: '24px auto 0', background: 'transparent', border: 'none', borderBottom: '2px solid #C0506A', padding: '12px 4px', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 600, color: '#C0506A', textAlign: 'center', outline: 'none', display: 'block', transition: 'box-shadow 0.25s, border-color 0.25s' },
   nameInputLight: { width: '100%', background: 'transparent', border: 'none', borderBottom: '2px solid #FFFFFF', padding: '12px 4px', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 600, color: '#FFFFFF', textAlign: 'center', outline: 'none', display: 'block', transition: 'box-shadow 0.25s, border-color 0.25s' },
   confettiLayer: { position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3 },
   bubbleLayer: { position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' },
@@ -569,7 +569,7 @@ const css = `
 .tw-char { display: inline-block; opacity: 0; animation: twChar 0.22s ease-out forwards }
 
 /* Glow inputs */
-.glow-input-pink:focus { box-shadow: 0 6px 20px -6px rgba(168,222,209,0.7); border-color: #0D9373 !important }
+.glow-input-pink:focus { box-shadow: 0 6px 20px -6px rgba(168,222,209,0.7); border-color: #2A9490 !important }
 .glow-input-navy:focus { box-shadow: 0 6px 20px -6px rgba(168,222,209,0.6); border-color: #A8DED1 !important }
 
 /* Bounce value */
@@ -578,8 +578,8 @@ const css = `
 
 /* Age slider */
 .age-slider { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 999px; background: rgba(75,21,40,0.25); outline: none }
-.age-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #4B1528; border: 3px solid #fff; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.25) }
-.age-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #4B1528; border: 3px solid #fff; cursor: pointer }
+.age-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #C0506A; border: 3px solid #fff; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.25) }
+.age-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: #C0506A; border: 3px solid #fff; cursor: pointer }
 
 /* Blinking cursor */
 @keyframes blink { 0%,50% { opacity: 1 } 51%,100% { opacity: 0 } }
@@ -587,7 +587,7 @@ const css = `
 
 /* Shimmer button */
 @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
-.shimmer-btn { background: linear-gradient(100deg, #0F172A 0%, #0F172A 38%, #1E3050 50%, #0F172A 62%, #0F172A 100%); background-size: 200% 100%; animation: shimmer 2.5s linear infinite }
+.shimmer-btn { background: linear-gradient(100deg, #1C1B2E 0%, #1C1B2E 38%, #1E3050 50%, #1C1B2E 62%, #1C1B2E 100%); background-size: 200% 100%; animation: shimmer 2.5s linear infinite }
 
 /* Confetti fall */
 @keyframes confettiFall { 0% { transform: translateY(-20vh) rotate(0); opacity: 1 } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0 } }

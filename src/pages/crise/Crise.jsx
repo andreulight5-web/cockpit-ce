@@ -6,7 +6,7 @@ import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 import mamanMain from '../../assets/characters/maman/maman-main-tendue.webp'
 
-const STEP_COLORS = ['#FF6B4A', '#FFE17B', '#A8DED1', '#0D9373']
+const STEP_COLORS = ['#C0506A', '#F5E06D', '#2A9490', '#2A9490']
 
 export default function Crise() {
   const [step, setStep] = useState(0)
@@ -59,7 +59,7 @@ function Step1Stop({ onNext }) {
 
   return (
     <div style={S.step}>
-      <div style={{ ...S.stepBorder, borderTopColor: '#FF6B4A' }} />
+      <div style={{ ...S.stepBorder, borderTopColor: '#C0506A' }} />
       <img src={monstreTriste} alt="Monstre" style={S.charImg} draggable={false} />
       <h1 style={S.stepTitle}>STOP. Respire.</h1>
       <p style={S.stepSub}>Avant tout le reste — 3 respirations.</p>
@@ -68,7 +68,7 @@ function Step1Stop({ onNext }) {
       <div onClick={startTimer} style={S.timerWrap}>
         <svg width={120} height={120} viewBox="0 0 120 120">
           <circle cx="60" cy="60" r={r} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="6" />
-          <circle cx="60" cy="60" r={r} fill="none" stroke="#FF6B4A" strokeWidth="6" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s linear', transform: 'rotate(-90deg)', transformOrigin: '60px 60px' }} />
+          <circle cx="60" cy="60" r={r} fill="none" stroke="#C0506A" strokeWidth="6" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s linear', transform: 'rotate(-90deg)', transformOrigin: '60px 60px' }} />
         </svg>
         <span style={S.timerText}>{seconds}s</span>
         {!running && <span style={S.timerHint}>Tape pour lancer</span>}
@@ -91,15 +91,15 @@ function Step2Secure({ onNext }) {
 
   return (
     <div style={S.step}>
-      <div style={{ ...S.stepBorder, borderTopColor: '#FFE17B' }} />
+      <div style={{ ...S.stepBorder, borderTopColor: '#F5E06D' }} />
       <img src={monstreCalin} alt="Monstre" style={S.charImg} draggable={false} />
       <h1 style={S.stepTitle}>Sécurise l'espace</h1>
       <p style={S.stepSub}>Éloigne les objets dangereux. Ne touche pas encore.</p>
 
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {checks.map((txt, i) => (
-          <button key={i} onClick={() => toggle(i)} style={{ ...S.checkCard, borderColor: done[i] ? '#0D9373' : 'rgba(255,255,255,0.1)', background: done[i] ? 'rgba(13,147,115,0.15)' : 'rgba(255,255,255,0.04)' }}>
-            <span style={{ width: 22, height: 22, borderRadius: 6, border: done[i] ? '2px solid #0D9373' : '2px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#0D9373', flexShrink: 0 }}>{done[i] ? '✓' : ''}</span>
+          <button key={i} onClick={() => toggle(i)} style={{ ...S.checkCard, borderColor: done[i] ? '#2A9490' : 'rgba(255,255,255,0.1)', background: done[i] ? 'rgba(42,148,144,0.15)' : 'rgba(255,255,255,0.04)' }}>
+            <span style={{ width: 22, height: 22, borderRadius: 6, border: done[i] ? '2px solid #2A9490' : '2px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#2A9490', flexShrink: 0 }}>{done[i] ? '✓' : ''}</span>
             <span style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif' }}>{txt}</span>
           </button>
         ))}
@@ -171,7 +171,7 @@ function Step4After({ navigate }) {
 
   return (
     <div style={S.step}>
-      <div style={{ ...S.stepBorder, borderTopColor: '#0D9373' }} />
+      <div style={{ ...S.stepBorder, borderTopColor: '#2A9490' }} />
       <img src={monstreRigole} alt="Monstre" style={S.charImg} draggable={false} />
       <h1 style={S.stepTitle}>La crise est passée</h1>
       <p style={S.stepSub}>Attends qu'il soit calme. Puis reconnecte.</p>
@@ -179,14 +179,14 @@ function Step4After({ navigate }) {
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {postSteps.map((txt, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-            <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(13,147,115,0.2)', color: '#0D9373', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
+            <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(13,147,115,0.2)', color: '#2A9490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
             <p style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5, margin: 0 }}>{txt}</p>
           </div>
         ))}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', marginTop: 'auto', paddingTop: 24 }}>
-        <button onClick={() => navigate('/journal')} style={{ ...S.nextBtn, background: '#0D9373' }}>Logger cette crise</button>
+        <button onClick={() => navigate('/journal')} style={{ ...S.nextBtn, background: '#2A9490' }}>Logger cette crise</button>
         <button onClick={() => navigate('/')} style={{ ...S.nextBtn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)' }}>Retour à l'accueil</button>
       </div>
     </div>
@@ -198,14 +198,14 @@ function ScriptCard({ type, text }) {
   const good = type === 'good'
   return (
     <div style={{
-      background: good ? 'rgba(13,147,115,0.15)' : 'rgba(212,83,126,0.15)',
-      border: `1px solid ${good ? '#0D9373' : '#D4537E'}`,
+      background: good ? 'rgba(42,148,144,0.15)' : 'rgba(192,80,106,0.15)',
+      border: `1px solid ${good ? '#2A9490' : '#C0506A'}`,
       borderRadius: 12, padding: '12px 16px', width: '100%',
     }}>
-      <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: good ? '#A8DED1' : '#F2B8C6' }}>
+      <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: good ? '#2A9490' : '#2A1824' }}>
         {good ? '✅ Dis plutôt' : '❌ Évite'}
       </span>
-      <p style={{ fontSize: 15, fontWeight: 600, color: good ? '#A8DED1' : '#F2B8C6', marginTop: 6, textDecoration: good ? 'none' : 'line-through', fontFamily: 'Inter, sans-serif', lineHeight: 1.4 }}>
+      <p style={{ fontSize: 15, fontWeight: 600, color: good ? '#2A9490' : '#2A1824', marginTop: 6, textDecoration: good ? 'none' : 'line-through', fontFamily: 'Inter, sans-serif', lineHeight: 1.4 }}>
         "{text}"
       </p>
     </div>
@@ -214,7 +214,7 @@ function ScriptCard({ type, text }) {
 
 /* ═══ Styles ═══ */
 const S = {
-  root: { minHeight: '100dvh', background: '#0F172A', display: 'flex', flexDirection: 'column' },
+  root: { minHeight: '100dvh', background: '#1C1B2E', display: 'flex', flexDirection: 'column' },
   progressRow: { display: 'flex', gap: 4, padding: '48px 16px 0', alignItems: 'center' },
   closeBtn: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 18, cursor: 'pointer', marginLeft: 12, padding: 4 },
   body: { flex: 1, display: 'flex', flexDirection: 'column' },
@@ -224,9 +224,9 @@ const S = {
   stepTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 700, color: '#fff', textAlign: 'center', margin: 0 },
   stepSub: { fontFamily: 'Inter, sans-serif', fontSize: 16, color: '#94A3B8', textAlign: 'center', margin: '0 0 8px', lineHeight: 1.5 },
   timerWrap: { position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 120, height: 120, cursor: 'pointer', margin: '8px 0' },
-  timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#fff' },
+  timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#F5E06D' },
   timerHint: { position: 'absolute', bottom: -18, fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' },
   checkCard: { display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, border: '1.5px solid', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' },
   scriptCard: { display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(168,222,209,0.08)', border: '1px solid rgba(168,222,209,0.15)', borderRadius: 12, padding: '12px 16px' },
-  nextBtn: { width: '100%', maxWidth: 320, padding: '16px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', background: '#0D9373', border: 'none', cursor: 'pointer', marginTop: 'auto' },
+  nextBtn: { width: '100%', maxWidth: 320, padding: '16px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#fff', background: '#2A9490', border: 'none', cursor: 'pointer', marginTop: 'auto' },
 }

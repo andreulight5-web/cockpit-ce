@@ -4,14 +4,14 @@ import { LECONS } from '../../data/lecons'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
 const MODULES = [
-  { key: '1', label: 'Gérer les crises', color: '#FF6B4A', badge: 'URGENT' },
-  { key: '2', label: 'Comprendre le TDAH', color: '#0D9373' },
+  { key: '1', label: 'Gérer les crises', color: '#C0506A', badge: 'URGENT' },
+  { key: '2', label: 'Comprendre le TDAH', color: '#2A9490' },
   { key: '3', label: 'Les 5 Piliers Barkley', color: '#A8DED1' },
 ]
 
 const statusStyle = {
-  done: { bg: '#0D9373', color: '#fff' },
-  current: { bg: '#FFE17B', color: '#0F172A' },
+  done: { bg: '#2A9490', color: '#fff' },
+  current: { bg: '#F5E06D', color: '#1C1B2E' },
   locked: { bg: 'rgba(255,255,255,0.08)', color: '#475569' },
 }
 
@@ -57,7 +57,7 @@ export default function Cours() {
             <div key={mod.key} style={{ marginBottom: 28 }}>
               {/* Module header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                <span style={{ ...s.modBadge, background: mod.color, color: mod.color === '#A8DED1' ? '#0F172A' : '#fff' }}>{mod.badge || mod.key}</span>
+                <span style={{ ...s.modBadge, background: mod.color, color: mod.color === '#A8DED1' ? '#1C1B2E' : '#fff' }}>{mod.badge || mod.key}</span>
                 <div style={{ flex: 1 }}>
                   <h2 style={s.modTitle}>{mod.label}</h2>
                   <span style={s.modCount}>{doneCount}/{items.length} leçons</span>
@@ -98,11 +98,11 @@ export default function Cours() {
 }
 
 const s = {
-  page: { minHeight: '100dvh', background: '#0F172A' },
+  page: { minHeight: '100dvh', background: '#1C1B2E' },
   header: { padding: '48px 20px 20px' },
   back: { background: 'none', border: 'none', color: '#A8DED1', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 12, fontFamily: 'Inter, sans-serif' },
   title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
-  sub: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#A8DED1', marginTop: 4 },
+  sub: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#F5E06D', marginTop: 4 },
   body: { padding: '20px 20px 40px' },
   modBadge: { width: 28, height: 28, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700, flexShrink: 0 },
   modTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 },

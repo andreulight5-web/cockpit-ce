@@ -62,7 +62,7 @@ export default function Login() {
       <div style={styles.brand} className="fade-up">
         <div style={styles.logo}>⚡ CE</div>
         <h1 style={{ color: 'var(--white)', fontFamily: 'var(--font-heading)', fontSize: '1.625rem', marginTop: 12 }}>
-          Cockpit <span style={{ color: '#FFE17B' }}>Crises</span>
+          Cockpit <span style={{ color: '#F5E06D' }}>Crises</span>
         </h1>
         <p style={{ color: 'var(--mint)', fontSize: '0.875rem', marginTop: 4 }}>
           {mode === 'signin' ? 'Heureux de te revoir !' : 'Crée ton compte parent'}

@@ -20,7 +20,11 @@
       "Bash(mv \"src/assets/characters/monstre~/Le Monstre — Qui rigole franchement.webp\" \"src/assets/characters/monstre~/monstre-rigole.webp\")",
       "Bash(mv \"src/assets/characters/monstre~/Monstre caché \\(on voit juste ses yeux:tête qui dépasse\\).webp\" \"src/assets/characters/monstre~/monstre-cache.webp\")",
       "Bash(mv \"src/assets/characters/monstre~/Monstre découvert \\(il saute de derrière\\).webp\" \"src/assets/characters/monstre~/monstre-decouvert.webp\")",
-      "Bash(mv \"src/assets/characters/maman/La Maman — Qui tend la main.webp\" \"src/assets/characters/maman/maman-main-tendue.webp\")"
+      "Bash(mv \"src/assets/characters/maman/La Maman — Qui tend la main.webp\" \"src/assets/characters/maman/maman-main-tendue.webp\")",
+      "Bash(sed -i '' \"s/#0F172A/#1C1B2E/g; s/#0D9373/#2A9490/g; s/#FFE17B/#F5E06D/g; s/#F2B8C6/#2A1824/g; s/#D4537E/#C0506A/g\" src/pages/crise/Crise.jsx)",
+      "Bash(sed -i '' \"s/#0F172A/#1C1B2E/g; s/#0D9373/#2A9490/g; s/#FFE17B/#F5E06D/g; s/#F2B8C6/#2A1824/g; s/rgba\\(75, 21, 40, 0.25\\)/rgba\\(192,80,106,0.3\\)/g; s/#4B1528/#C0506A/g\" src/pages/onboarding/Onboarding.jsx)",
+      "Bash(sed -i '' \"s/#0D9373/#2A9490/g; s/#D4537E/#C0506A/g\" src/pages/cours/Lecon.jsx)",
+      "Bash(sed -i '' \"s/#FFE17B/#F5E06D/g\" src/pages/auth/Login.jsx)"
     ]
   }
 }
