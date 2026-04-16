@@ -48,7 +48,7 @@ export default function Cours() {
                 <span style={{ ...s.modBadge, background: mod.color, color: '#fff' }}>{mod.badge || mod.key}</span>
                 <div style={{ flex: 1 }}>
                   <h2 style={s.modTitle}>{mod.label}</h2>
-                  <span style={s.modCount}>{doneCount}/{items.length} leçons</span>
+                  <span style={s.modCount}>{doneCount}/{items.length} leçons · {items.length > 0 ? Math.round((doneCount / items.length) * 100) : 0}%</span>
                 </div>
               </div>
               {items.map((l, i) => {
@@ -83,7 +83,7 @@ const s = {
   body: { padding: '20px 20px 40px' },
   modBadge: { minWidth: 28, height: 28, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, flexShrink: 0, padding: '0 8px' },
   modTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 },
-  modCount: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.4)' },
+  modCount: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#94A3B8' },
   lessonRow: { display: 'flex', alignItems: 'center', gap: 12, width: '100%', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: '14px 16px', marginBottom: 8, fontFamily: 'Inter, sans-serif' },
   numCircle: { width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 },
   lessonTitle: { fontSize: 14, fontWeight: 600, color: '#E2E8F0', margin: 0, lineHeight: 1.3 },

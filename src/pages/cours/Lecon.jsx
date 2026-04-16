@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LECONS, ANNEXES } from '../../data/lecons'
 import { useSwipe } from '../../hooks/useSwipe'
+import { AppContext } from '../../lib/AppContext'
 
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
@@ -9,17 +10,26 @@ import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 
 const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne, perplexe: cortexPerplexe }
 
-export default function Lecon() {
-  const { id } = useParams()
+function LeconInner({ id }) {
   const navigate = useNavigate()
   const location = useLocation()
+  const { appData, saveData } = useContext(AppContext)
   const isAnnexe = location.pathname.startsWith('/annexes')
   const dataset = isAnnexe ? ANNEXES : LECONS
   const backPath = isAnnexe ? '/annexes' : '/cours'
+  const doneKey = isAnnexe ? 'annexes_done' : 'lecons_done'
   const lecon = dataset.find((l) => String(l.id) === id)
   const [cardIdx, setCardIdx] = useState(0)
   const [showAfter, setShowAfter] = useState(false)
   const [openAccordion, setOpenAccordion] = useState(null)
+
+  // Mark the current lesson as done in appData (idempotent)
+  const markDone = () => {
+    if (!lecon || !saveData) return
+    const current = appData?.[doneKey] || []
+    if (current.some((x) => String(x) === String(lecon.id))) return
+    saveData({ [doneKey]: [...current, lecon.id] })
+  }
 
   const totalCards = lecon ? lecon.cartes.length : 0
   const goNext = () => { if (cardIdx < totalCards - 1) setCardIdx((i) => i + 1); else setShowAfter(true) }
@@ -47,7 +57,7 @@ export default function Lecon() {
       {!showAfter && (
         <div {...swipe} style={S.cardArea}>
           <div key={cardIdx} className="fade-up" style={S.cardContainer}>
-            <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} lecon={lecon} onShowScenario={() => setShowAfter(true)} basePath={backPath} />
+            <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} lecon={lecon} onShowScenario={() => { markDone(); setShowAfter(true) }} onComplete={markDone} basePath={backPath} />
           </div>
           <div style={S.navRow}>
             <button onClick={goPrev} style={{ ...S.navBtn, opacity: cardIdx > 0 ? 1 : 0.25 }}>←</button>
@@ -62,7 +72,7 @@ export default function Lecon() {
           <button onClick={goPrev} style={{ ...S.backBtn, color: '#2A9490', marginBottom: 20 }}>← Revoir les cartes</button>
           <Scenario scenario={lecon.scenario} color={color} openAccordion={openAccordion} setOpenAccordion={setOpenAccordion} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 28 }}>
-            {nextLecon && <button onClick={() => { navigate(`${backPath}/${nextLecon.id}`); setCardIdx(0); setShowAfter(false) }} style={{ ...S.btn, background: color, color: color === '#2A9490' || color === '#F5E06D' ? '#1C1B2E' : '#fff' }}>Lecon suivante →</button>}
+            {nextLecon && <button onClick={() => { markDone(); navigate(`${backPath}/${nextLecon.id}`) }} style={{ ...S.btn, background: color, color: color === '#2A9490' || color === '#F5E06D' ? '#1C1B2E' : '#fff' }}>Lecon suivante →</button>}
             <button onClick={() => navigate(backPath)} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>Retour au programme</button>
           </div>
         </div>
@@ -71,8 +81,15 @@ export default function Lecon() {
   )
 }
 
+export default function Lecon() {
+  const { id } = useParams()
+  // Keying on id forces a fresh component instance when the route changes,
+  // resetting cardIdx/showAfter/openAccordion cleanly without effects.
+  return <LeconInner key={id} id={id} />
+}
+
 /* ═══════ Card Renderer ═══════ */
-function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, basePath }) {
+function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete, basePath }) {
   const nav = useNavigate()
   switch (c.type) {
     case 'intro': {
@@ -202,8 +219,8 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, basePath }
             </div>
           ))}
           <div style={{ marginTop: 'auto', paddingTop: 24, width: '100%' }}>
-            {nextL && <button onClick={() => nav(`${basePath}/${nextL.id}`)} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Lecon suivante →</button>}
-            {!nextL && <button onClick={() => nav(basePath)} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Retour au programme</button>}
+            {nextL && <button onClick={() => { if (onComplete) onComplete(); nav(`${basePath}/${nextL.id}`) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Lecon suivante →</button>}
+            {!nextL && <button onClick={() => { if (onComplete) onComplete(); nav(basePath) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Retour au programme</button>}
             {lecon.scenario && onShowScenario && <button onClick={onShowScenario} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', width: '100%', borderRadius: 50, padding: '12px 28px', marginTop: 8 }}>Scenario du jour</button>}
           </div>
         </div>

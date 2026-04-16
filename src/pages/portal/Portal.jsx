@@ -92,7 +92,10 @@ export default function Portal() {
       {/* MODULES */}
       <div style={s.modules}>
         {modules.map((m, i) => {
-          const pct = Math.round((m.progress / m.total) * 100)
+          let progress = m.progress
+          if (m.to === '/cours') progress = appData?.lecons_done?.length || 0
+          else if (m.to === '/annexes') progress = appData?.annexes_done?.length || 0
+          const pct = Math.round((progress / m.total) * 100)
           return (
             <Link
               key={m.to}
@@ -113,7 +116,7 @@ export default function Portal() {
               <p style={s.cardSub}>{m.sub}</p>
               <div style={s.progressWrap}>
                 <div style={s.progressLabels}>
-                  <span>{m.progress}/{m.total} {m.to === '/cours' ? 'leçons' : m.to === '/quiz' ? 'quiz' : 'outils'}</span>
+                  <span>{progress}/{m.total} {m.to === '/cours' ? 'leçons' : m.to === '/quiz' ? 'quiz' : m.to === '/annexes' ? 'leçons' : 'outils'}</span>
                   <span>{pct}%</span>
                 </div>
                 <div style={s.progressTrack}>
