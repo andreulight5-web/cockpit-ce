@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { LECONS, ANNEXES } from '../../data/lecons'
+import { useNavigate, useParams } from 'react-router-dom'
+import { LECONS } from '../../data/lecons'
 import { useSwipe } from '../../hooks/useSwipe'
 import { AppContext } from '../../lib/AppContext'
 
@@ -12,12 +12,10 @@ const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne
 
 function LeconInner({ id }) {
   const navigate = useNavigate()
-  const location = useLocation()
   const { appData, saveData } = useContext(AppContext)
-  const isAnnexe = location.pathname.startsWith('/annexes')
-  const dataset = isAnnexe ? ANNEXES : LECONS
-  const backPath = isAnnexe ? '/annexes' : '/cours'
-  const doneKey = isAnnexe ? 'annexes_done' : 'lecons_done'
+  const dataset = LECONS
+  const backPath = '/cours'
+  const doneKey = 'lecons_done'
   const lecon = dataset.find((l) => String(l.id) === id)
   const [cardIdx, setCardIdx] = useState(0)
   const [showAfter, setShowAfter] = useState(false)
@@ -218,6 +216,7 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
               <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#E2E8F0', lineHeight: 1.5 }}>{item}</span>
             </div>
           ))}
+          {c.reflexe && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#F5E06D', fontStyle: 'italic', textAlign: 'center', marginTop: 18, lineHeight: 1.5 }}>💡 Ton réflexe : {c.reflexe}</p>}
           <div style={{ marginTop: 'auto', paddingTop: 24, width: '100%' }}>
             {nextL && <button onClick={() => { if (onComplete) onComplete(); nav(`${basePath}/${nextL.id}`) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Lecon suivante →</button>}
             {!nextL && <button onClick={() => { if (onComplete) onComplete(); nav(basePath) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Retour au programme</button>}

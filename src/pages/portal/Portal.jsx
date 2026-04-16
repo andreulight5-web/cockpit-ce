@@ -5,8 +5,6 @@ import { AppContext } from '../../lib/AppContext'
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
-import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
-import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 import logoCE from '../../assets/logo-ce.png'
@@ -18,66 +16,22 @@ const personnages = [
   { label: 'Monstre', img: monstreCalin },
 ]
 
-const modules = [
-  {
-    to: '/cours',
-    img: cortexBienveillant,
-    tag: 'COURS',
-    title: 'Gérer les crises',
-    sub: 'Protocoles et situations · 10 lecons',
-    progress: 2,
-    total: 10,
-    bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
-    border: 'none',
-  },
-  {
-    to: '/quiz',
-    img: monstreRigole,
-    tag: 'MODULE 2',
-    title: 'Quiz & XP',
-    sub: 'Le Monstre t\'accompagne',
-    progress: 3,
-    total: 6,
-    bg: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)',
-    border: 'none',
-  },
-  {
-    to: '/annexes',
-    img: cortexPassionne,
-    tag: 'ANNEXES',
-    title: 'Méthode Barkley',
-    sub: 'Comprendre le pourquoi · Pr. Cortex',
-    progress: 0,
-    total: 8,
-    bg: 'linear-gradient(135deg, #1E293B 0%, #16152A 100%)',
-    border: '1px solid rgba(245,224,109,0.2)',
-  },
-  {
-    to: '/ressources',
-    img: cortexPerplexe,
-    tag: 'OUTILS',
-    title: 'Ressources',
-    sub: 'Scripts · Sources HAS',
-    progress: 2,
-    total: 8,
-    bg: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
-    border: '1px solid rgba(255,255,255,0.08)',
-  },
-]
+const TOTAL_LECONS = 5 // Module 1 "Gestion des crises"
 
 export default function Portal() {
   const { appData } = useContext(AppContext)
   const prenomParent = appData?.onboarding?.prenomParent || ''
+  const leconsDone = (appData?.lecons_done || []).filter((id) => Number(id) >= 1 && Number(id) <= 5)
+  const formationPct = Math.round((leconsDone.length / TOTAL_LECONS) * 100)
 
   return (
     <div style={s.page}>
-      {/* HEADER */}
+      {/* Header */}
       <div style={s.header}>
         <div style={s.headerRow}>
           <span style={s.headerTitle}>Cockpit Crises</span>
           <img src={logoCE} alt="Cerveaux Électriques" style={s.logoImg} draggable={false} />
         </div>
-
         <div className="fade-up" style={{ marginTop: 20 }}>
           <p style={s.greeting}>Bonjour {prenomParent || 'parent'} 👋</p>
           <h1 style={s.title}>
@@ -86,49 +40,64 @@ export default function Portal() {
         </div>
       </div>
 
-      {/* SEPARATOR */}
       <div style={s.separator} />
 
-      {/* MODULES */}
+      {/* 3 Modules */}
       <div style={s.modules}>
-        {modules.map((m, i) => {
-          let progress = m.progress
-          if (m.to === '/cours') progress = appData?.lecons_done?.length || 0
-          else if (m.to === '/annexes') progress = appData?.annexes_done?.length || 0
-          const pct = Math.round((progress / m.total) * 100)
-          return (
-            <Link
-              key={m.to}
-              to={m.to}
-              className={`fade-up fade-up-d${i + 1}`}
-              style={{ ...s.card, background: m.bg, border: m.border, textDecoration: 'none', color: '#FFFFFF' }}
-            >
-              <div style={s.cardTop}>
-                <div style={s.cardCircle}>
-                  <img src={m.img} alt="" style={s.cardCircleImg} draggable={false} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <span style={s.cardTag}>{m.tag}</span>
-                  <h3 style={s.cardTitle}>{m.title}</h3>
-                </div>
-                <span style={s.cardArrow}>›</span>
-              </div>
-              <p style={s.cardSub}>{m.sub}</p>
-              <div style={s.progressWrap}>
-                <div style={s.progressLabels}>
-                  <span>{progress}/{m.total} {m.to === '/cours' ? 'leçons' : m.to === '/quiz' ? 'quiz' : m.to === '/annexes' ? 'leçons' : 'outils'}</span>
-                  <span>{pct}%</span>
-                </div>
-                <div style={s.progressTrack}>
-                  <div style={{ ...s.progressFill, width: `${pct}%` }} />
-                </div>
-              </div>
-            </Link>
-          )
-        })}
+        {/* Module 1 — Formation */}
+        <Link to="/cours" className="fade-up" style={{ ...s.card, background: 'linear-gradient(135deg, #C0506A 0%, #7A2040 100%)' }}>
+          <div style={s.cardTop}>
+            <div style={{ ...s.cardCircle, background: 'rgba(255,255,255,0.15)' }}>
+              <img src={cortexBienveillant} alt="" style={s.cardCircleImg} draggable={false} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span style={s.cardTag}>FORMATION</span>
+              <h3 style={s.cardTitle}>Gestion des crises</h3>
+            </div>
+            <span style={s.cardArrow}>›</span>
+          </div>
+          <p style={s.cardSub}>Prépare tes réflexes · 5 leçons · 4 min</p>
+          <div style={s.progressWrap}>
+            <div style={s.progressLabels}>
+              <span>{leconsDone.length}/{TOTAL_LECONS} leçons</span>
+              <span>{formationPct}%</span>
+            </div>
+            <div style={s.progressTrack}>
+              <div style={{ ...s.progressFill, width: `${formationPct}%` }} />
+            </div>
+          </div>
+        </Link>
+
+        {/* Module 2 — Quiz Émotions */}
+        <Link to="/quiz" className="fade-up fade-up-d1" style={{ ...s.card, background: 'linear-gradient(135deg, #2A9490 0%, #1A5F5C 100%)' }}>
+          <div style={s.cardTop}>
+            <div style={{ ...s.cardCircle, background: 'rgba(255,255,255,0.15)' }}>
+              <img src={monstreRigole} alt="" style={s.cardCircleImg} draggable={false} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span style={s.cardTag}>POUR LUCAS</span>
+              <h3 style={s.cardTitle}>Quiz Émotions</h3>
+            </div>
+            <span style={s.cardArrow}>›</span>
+          </div>
+          <p style={s.cardSub}>Apprend à reconnaître tes émotions · 3 min</p>
+        </Link>
+
+        {/* Module 3 — Mes Outils */}
+        <Link to="/ressources" className="fade-up fade-up-d2" style={{ ...s.card, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(245,224,109,0.3)' }}>
+          <div style={s.cardTop}>
+            <div style={{ ...s.cardCircle, background: 'rgba(245,224,109,0.15)', fontSize: 32 }}>🛠️</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ ...s.cardTag, color: 'rgba(245,224,109,0.8)' }}>BUNDLE</span>
+              <h3 style={s.cardTitle}>Mes Outils</h3>
+            </div>
+            <span style={s.cardArrow}>›</span>
+          </div>
+          <p style={s.cardSub}>Cards · Affiches · Journal à imprimer</p>
+        </Link>
       </div>
 
-      {/* PERSONNAGES STRIP + STREAK */}
+      {/* Personnages strip */}
       <div className="fade-up fade-up-d4" style={s.stripRow}>
         {personnages.map((p) => (
           <div key={p.label} style={s.stripItem}>
@@ -140,72 +109,38 @@ export default function Portal() {
         ))}
       </div>
       <div className="fade-up fade-up-d4" style={{ padding: '8px 20px 0' }}>
-        <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · 35%</div>
+        <div style={s.streakPill}>🔥 4 jours · Semaine 2/4 · {formationPct}%</div>
       </div>
-
     </div>
   )
 }
 
 const s = {
-  page: {
-    minHeight: '100dvh',
-    background: '#1C1B2E',
-    paddingBottom: 100,
-  },
-
-  /* Header */
+  page: { minHeight: '100dvh', background: '#1C1B2E', paddingBottom: 100 },
   header: { padding: '20px 20px 0' },
   headerRow: { display: 'flex', alignItems: 'center' },
   headerTitle: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: 'rgba(255,255,255,0.5)' },
   logoImg: { height: 38, width: 'auto', borderRadius: '50%', marginLeft: 'auto', flexShrink: 0 },
-
   greeting: { fontFamily: "'Caveat', cursive", fontSize: 22, color: '#F5E06D', margin: '0 0 4px' },
   title: { fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 32, color: '#FFFFFF', margin: 0, lineHeight: 1.15 },
-
-  /* Streak */
-  streakPill: {
-    display: 'inline-block',
-    marginTop: 12,
-    background: 'rgba(42,148,144,0.2)',
-    border: '1px solid rgba(42,148,144,0.4)',
-    borderRadius: 20,
-    padding: '6px 14px',
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 12,
-    color: '#2A9490',
-  },
-
-  /* Personnages strip */
+  streakPill: { display: 'inline-block', background: 'rgba(42,148,144,0.2)', border: '1px solid rgba(42,148,144,0.4)', borderRadius: 20, padding: '6px 14px', fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#2A9490' },
   stripRow: { display: 'flex', gap: 10, padding: '20px 20px 0', justifyContent: 'flex-start' },
   stripItem: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 },
   stripCircle: { width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', flexShrink: 0 },
   stripImg: { width: '100%', height: '100%', objectFit: 'cover' },
   stripLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, color: '#64748B' },
-
-  /* Separator */
   separator: { margin: '24px 20px 0', height: 1, background: 'rgba(255,255,255,0.08)' },
-
-  /* Modules */
   modules: { padding: '20px 16px 0' },
-  card: {
-    display: 'block',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 12,
-    transition: 'transform 0.15s',
-  },
+  card: { display: 'block', borderRadius: 20, padding: 20, marginBottom: 12, textDecoration: 'none', color: '#fff' },
   cardTop: { display: 'flex', alignItems: 'center', gap: 12 },
-  cardCircle: { width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(255,255,255,0.15)' },
+  cardCircle: { width: 48, height: 48, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   cardCircleImg: { width: '100%', height: '100%', objectFit: 'cover' },
-  cardTag: { fontFamily: 'Inter, sans-serif', fontSize: 8, letterSpacing: 1.5, color: 'rgba(168,222,209,0.6)', textTransform: 'uppercase', display: 'block' },
+  cardTag: { fontFamily: 'Inter, sans-serif', fontSize: 8, letterSpacing: 1.5, color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', display: 'block' },
   cardTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 18, fontWeight: 700, color: '#FFFFFF', margin: 0 },
   cardArrow: { fontSize: 22, opacity: 0.4, flexShrink: 0, fontWeight: 300, lineHeight: 1 },
-  cardSub: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.6)', margin: '6px 0 0' },
-
+  cardSub: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.65)', margin: '6px 0 0' },
   progressWrap: { marginTop: 14 },
-  progressLabels: { display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 4 },
+  progressLabels: { display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.6)', marginBottom: 4 },
   progressTrack: { height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 999, overflow: 'hidden' },
   progressFill: { height: '100%', background: '#FFFFFF', borderRadius: 999, transition: 'width 0.5s ease' },
-
 }

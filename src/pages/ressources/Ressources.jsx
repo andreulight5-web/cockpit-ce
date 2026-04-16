@@ -1,113 +1,83 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-const outils = [
-  { emoji: '🚨', title: 'Cartes urgence', desc: 'Fiches réflexes pour les crises' },
-  { emoji: '📓', title: 'Journal émotionnel', desc: 'Suivi des humeurs et progrès' },
-  { emoji: '💬', title: 'Phrases Barkley', desc: 'Scripts de communication validés' },
-]
-
-const situationsRes = [
-  { emoji: '🌅', label: 'Matin' },
-  { emoji: '📚', label: 'Devoirs' },
-  { emoji: '🛒', label: 'Supermarché' },
-  { emoji: '📱', label: 'Écrans' },
-  { emoji: '🌙', label: 'Coucher' },
-  { emoji: '🍽️', label: 'Repas' },
-]
-
-const sources = [
-  { title: 'Russell A. Barkley, PhD', desc: 'Taking Charge of ADHD (4th Edition)' },
-  { title: 'Thomas E. Brown, PhD', desc: 'ADHD Comorbidities Handbook' },
-  { title: 'HAS France', desc: 'Recommandations TDAH 2024' },
+const SECTIONS = [
+  {
+    badge: '⚡ PENDANT LA CRISE', color: '#C0506A',
+    items: [
+      { vignetteBg: '#C0506A', icon: '🃏', tag: 'CARDS', titre: 'Cards Émotions de Lucas', desc: "L'enfant pointe ce qu'il ressent sans parler" },
+      { vignetteBg: '#FF6B4A', icon: '🌡️', tag: 'AFFICHE', titre: 'Thermomètre des émotions', desc: 'À plastifier et coller dans la chambre' },
+      { vignetteBg: '#7A2040', icon: '✋', tag: 'CARTE FRIGO', titre: 'Les phrases STOP', desc: '3 phrases à dire · 3 à ne jamais dire' },
+    ],
+  },
+  {
+    badge: '🛡️ AVANT LA CRISE', color: '#2A9490',
+    items: [
+      { vignetteBg: '#2A9490', icon: '🏠', tag: 'CHECKLIST', titre: 'Prépare le coin calme de Lucas', desc: 'À faire ensemble avant la prochaine crise' },
+      { vignetteBg: '#1A5F5C', icon: '🔍', tag: 'FICHE', titre: 'Les déclencheurs de Lucas', desc: "Note les signaux avant l'explosion" },
+    ],
+  },
+  {
+    badge: '📊 APRÈS LA CRISE', color: '#F5E06D',
+    items: [
+      { vignetteBg: '#1C1B2E', vignetteBorder: '1px solid #F5E06D', icon: '📓', tag: 'JOURNAL', titre: 'Journal des crises', desc: 'À remplir après chaque crise pour voir les patterns' },
+      { vignetteBg: '#2A2040', vignetteBorder: '1px solid #F5E06D', icon: '📅', tag: 'TRACKER', titre: 'Calendrier 30 jours', desc: 'Visualise les progrès sur un mois' },
+    ],
+  },
 ]
 
 export default function Ressources() {
+  const navigate = useNavigate()
+  const handleDownload = () => alert('PDF disponible bientôt !')
+
   return (
-    <div className="page">
-      {/* Header */}
-      <div style={styles.header}>
-        <Link to="/" style={styles.back}>← Retour</Link>
-        <h1 style={{ color: 'var(--navy)' }}>Ressources</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-sm)', marginTop: 'var(--sp-sm)' }}>
-          <span style={{ fontSize: '1.5rem' }}>🧠</span>
-          <p style={{ color: 'var(--gray-600)', fontSize: '0.8125rem' }}>
-            Professeur Cortex valide chaque source
-          </p>
-        </div>
+    <div style={s.page}>
+      <div style={s.header}>
+        <button onClick={() => navigate('/')} style={s.back}>‹ Retour</button>
+        <h1 style={s.title}>Mes Outils</h1>
+        <p style={s.sub}>Prépare ta maison avant la prochaine crise</p>
+        <p style={s.desc}>Tous ces outils s'utilisent sans téléphone. Imprime-les, plastifie-les, pose-les.</p>
       </div>
 
-      <div className="page-content">
-        {/* Outils parents */}
-        <h2 style={{ marginBottom: 'var(--sp-md)' }}>Outils parents</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-sm)' }}>
-          {outils.map((o, i) => (
-            <div
-              key={o.title}
-              className={`card fade-up fade-up-d${Math.min(i + 1, 4)}`}
-              style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-md)', padding: 'var(--sp-md)' }}
-            >
-              <span style={{ fontSize: '2rem' }}>{o.emoji}</span>
-              <div>
-                <h4>{o.title}</h4>
-                <p style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>{o.desc}</p>
+      <div style={s.body}>
+        {SECTIONS.map((section) => (
+          <div key={section.badge} style={{ marginBottom: 24 }}>
+            <div style={{ ...s.sectionBadge, background: `${section.color}26`, color: section.color, border: `1px solid ${section.color}4d` }}>{section.badge}</div>
+            {section.items.map((item) => (
+              <div key={item.titre} style={s.card} className="fade-up">
+                <div style={{ ...s.vignette, background: item.vignetteBg, border: item.vignetteBorder || 'none' }}>
+                  <span style={{ fontSize: 32 }}>{item.icon}</span>
+                  <span style={{ ...s.vignetteLabel, color: 'rgba(255,255,255,0.7)' }}>{item.tag}</span>
+                </div>
+                <div style={s.cardBody}>
+                  <span style={{ ...s.cardTag, background: `${section.color}26`, color: section.color }}>{item.tag}</span>
+                  <h3 style={s.cardTitle}>{item.titre}</h3>
+                  <p style={s.cardDesc}>{item.desc}</p>
+                  <button onClick={handleDownload} style={s.dlBtn}>📥 Télécharger</button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Situations */}
-        <h2 style={{ margin: 'var(--sp-lg) 0 var(--sp-md)' }}>Par situation</h2>
-        <div style={styles.grid}>
-          {situationsRes.map((s) => (
-            <div
-              key={s.label}
-              className="card"
-              style={{ padding: 'var(--sp-md)', textAlign: 'center' }}
-            >
-              <span style={{ fontSize: '1.75rem', display: 'block', marginBottom: 4 }}>{s.emoji}</span>
-              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>{s.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Sources scientifiques */}
-        <h2 style={{ margin: 'var(--sp-lg) 0 var(--sp-md)' }}>Sources scientifiques</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-sm)' }}>
-          {sources.map((s, i) => (
-            <div
-              key={s.title}
-              className={`card fade-up fade-up-d${Math.min(i + 1, 4)}`}
-              style={{
-                padding: 'var(--sp-md)',
-                borderLeft: '4px solid var(--teal)',
-              }}
-            >
-              <h4>{s.title}</h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   )
 }
 
-const styles = {
-  header: {
-    background: 'var(--yellow)',
-    padding: 'var(--sp-2xl) var(--sp-md) var(--sp-lg)',
-    borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
-  },
-  back: {
-    color: 'var(--navy)',
-    fontSize: '0.875rem',
-    textDecoration: 'none',
-    display: 'block',
-    marginBottom: 'var(--sp-md)',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: 'var(--sp-sm)',
-  },
+const s = {
+  page: { minHeight: '100dvh', background: '#1C1B2E' },
+  header: { padding: '48px 20px 20px' },
+  back: { background: 'none', border: 'none', color: '#2A9490', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 12, fontFamily: 'Inter, sans-serif' },
+  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
+  sub: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#F5E06D', marginTop: 4 },
+  desc: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#94A3B8', lineHeight: 1.6, marginTop: 10 },
+  body: { padding: '20px 20px 40px' },
+  sectionBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, padding: '5px 12px', borderRadius: 99, marginBottom: 14, fontFamily: 'Inter, sans-serif' },
+  card: { display: 'flex', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden', marginBottom: 10 },
+  vignette: { width: 80, minHeight: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, flexShrink: 0, padding: 8 },
+  vignetteLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 700, letterSpacing: 1, textAlign: 'center' },
+  cardBody: { flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 },
+  cardTag: { display: 'inline-block', fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, padding: '3px 8px', borderRadius: 99, alignSelf: 'flex-start', fontFamily: 'Inter, sans-serif' },
+  cardTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 },
+  cardDesc: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#94A3B8', margin: 0, lineHeight: 1.4 },
+  dlBtn: { alignSelf: 'flex-start', marginTop: 6, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 20, padding: '6px 14px', fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)', cursor: 'pointer' },
 }

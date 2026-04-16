@@ -5,8 +5,8 @@ import { restore, save, migrateOldKeys } from './lib/sync'
 import Portal from './pages/portal/Portal'
 import Cours from './pages/cours/Cours'
 import Lecon from './pages/cours/Lecon'
-import Annexes from './pages/annexes/Annexes'
 import Quiz from './pages/quiz/Quiz'
+import QuizDetail from './pages/quiz/QuizDetail'
 import Ressources from './pages/ressources/Ressources'
 import Crise from './pages/crise/Crise'
 import Journal from './pages/journal/Journal'
@@ -52,9 +52,8 @@ function AppLayout() {
         <Route path="/" element={<Portal />} />
         <Route path="/cours" element={<Cours />} />
         <Route path="/cours/:id" element={<Lecon />} />
-        <Route path="/annexes" element={<Annexes />} />
-        <Route path="/annexes/:id" element={<Lecon />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/:id" element={<QuizDetail />} />
         <Route path="/ressources" element={<Ressources />} />
         <Route path="/crise" element={<Crise />} />
         <Route path="/journal" element={<Journal />} />
