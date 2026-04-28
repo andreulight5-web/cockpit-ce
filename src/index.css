@@ -112,44 +112,21 @@ img { max-width: 100%; display: block; }
 .scroll-row { display: flex; gap: var(--sp-md); overflow-x: auto; padding-bottom: var(--sp-sm); scrollbar-width: none; }
 .scroll-row::-webkit-scrollbar { display: none; }
 
-/* ── RESPONSIVE DESKTOP — carte téléphone centrée ──────────── */
+/* ── RESPONSIVE DESKTOP — full screen ──────────────────────── */
 @media (min-width: 768px) {
-  html { background: #0C0B1A; }
-
-  body {
-    background: radial-gradient(ellipse 120% 55% at 50% -8%, #221A3B 0%, #0C0B1A 65%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 32px 16px;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
+  body { overflow-x: hidden; }
 
   #root {
-    max-width: 440px;
+    max-width: 100%;
     width: 100%;
-    min-width: 0;
-    height: calc(100vh - 64px);
-    max-height: 900px;
-    min-height: 600px;
+    min-height: 100vh;
+    height: auto;
     margin: 0;
-    border-radius: 32px;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,.07),
-      0 40px 90px rgba(0,0,0,.65),
-      0 10px 24px rgba(0,0,0,.35);
-    overflow-y: auto;
+    border-radius: 0;
+    box-shadow: none;
     overflow-x: hidden;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.12) transparent;
   }
-
-  #root::-webkit-scrollbar { display: none; }
-}
-
-@media (min-width: 1280px) {
-  body  { padding: 40px 20px; }
-  #root { max-width: 460px; height: calc(100vh - 80px); max-height: 940px; }
 }

@@ -797,9 +797,13 @@ const CSS = `
 .ob-confetti { position:absolute; top:0; animation: obConfetti linear forwards }
 
 /* ── Desktop responsive ──────────────────────────────────────
-   #root fournit une hauteur fixe sur desktop (calc(100vh-64px)),
-   la div .ob-root doit remplir ce conteneur plutôt que 100dvh. */
+   Full screen height + content centered in a 480px column.
+   Section padding pushes flex children into the center column. */
 @media (min-width: 768px) {
-  .ob-root { height: 100% !important; }
+  .ob-root { height: 100dvh !important; }
+  .ob-root section {
+    padding-left:  max(20px, calc((100vw - 480px) / 2)) !important;
+    padding-right: max(20px, calc((100vw - 480px) / 2)) !important;
+  }
 }
 `
