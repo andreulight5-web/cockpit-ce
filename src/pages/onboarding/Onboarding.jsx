@@ -70,7 +70,7 @@ export default function Onboarding() {
   const isLastStep = step === TOTAL_STEPS - 1
 
   return (
-    <div style={S.root}>
+    <div className="ob-root" style={S.root}>
       <style>{CSS}</style>
 
       <ProgressDots current={step} total={TOTAL_STEPS} dark={BG[step] !== '#F5E06D'} />
@@ -795,4 +795,11 @@ const CSS = `
 /* Confetti fall */
 @keyframes obConfetti { 0% { transform:translateY(-15vh) rotate(0); opacity:1 } 100% { transform:translateY(108vh) rotate(360deg); opacity:0 } }
 .ob-confetti { position:absolute; top:0; animation: obConfetti linear forwards }
+
+/* ── Desktop responsive ──────────────────────────────────────
+   #root fournit une hauteur fixe sur desktop (calc(100vh-64px)),
+   la div .ob-root doit remplir ce conteneur plutôt que 100dvh. */
+@media (min-width: 768px) {
+  .ob-root { height: 100% !important; }
+}
 `
