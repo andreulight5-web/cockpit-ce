@@ -1,6 +1,7 @@
-import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from '../../lib/AppContext'
+import { CAS_DU_JOUR } from '../../data/cas-du-jour'
 
 import mamanFiere from '../../assets/characters/maman/maman-fiere.webp'
 import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
@@ -16,13 +17,33 @@ const personnages = [
   { label: 'Monstre', img: monstreCalin },
 ]
 
-const TOTAL_LECONS = 5 // Module 1 "Gestion des crises"
+const TOTAL_LECONS = 5
+const TOTAL_QUIZ = 5
 
 export default function Portal() {
   const { appData } = useContext(AppContext)
+  const navigate = useNavigate()
   const prenomParent = appData?.onboarding?.prenomParent || ''
   const leconsDone = (appData?.lecons_done || []).filter((id) => Number(id) >= 1 && Number(id) <= 5)
   const formationPct = Math.round((leconsDone.length / TOTAL_LECONS) * 100)
+
+  // Cas du jour — index basé sur le nb de jours depuis l'installation
+  const [installDate] = useState(() => {
+    const existing = localStorage.getItem('cockpit_install_date')
+    if (existing) return existing
+    const d = new Date().toISOString()
+    localStorage.setItem('cockpit_install_date', d)
+    return d
+  })
+  const dayIndex = Math.floor((Date.now() - new Date(installDate).getTime()) / 86400000) % 30
+  const casJour = CAS_DU_JOUR[dayIndex]
+  const [casExpanded, setCasExpanded] = useState(false)
+
+  // Progression quiz (clé localStorage indépendante pour cohérence portail ↔ quiz)
+  const quizDone = (() => {
+    try { return JSON.parse(localStorage.getItem('cockpit_quiz_done') || '[]') } catch { return [] }
+  })()
+  const quizPct = Math.round((quizDone.length / TOTAL_QUIZ) * 100)
 
   return (
     <div style={s.page}>
@@ -37,6 +58,56 @@ export default function Portal() {
           <h1 style={s.title}>
             Ton Cockpit <span style={{ color: '#F5E06D' }}>Crises ⚡</span>
           </h1>
+        </div>
+      </div>
+
+      {/* Cas du jour */}
+      <div className="fade-up" style={s.casWrap}>
+        <div style={s.casCard}>
+          <div style={s.casHead}>
+            <span style={s.casBadge}>📅 CAS DU JOUR · Jour {dayIndex + 1}/30</span>
+            <span style={s.casTag}>{casJour.tag}</span>
+          </div>
+
+          <p style={s.casPrenom}>{casJour.prenom}, parent de Lucas {casJour.age_enfant} ans</p>
+
+          {!casExpanded && (
+            <>
+              <p style={{ ...s.casSituation, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {casJour.situation}
+              </p>
+              <button onClick={() => setCasExpanded(true)} style={s.casOpenBtn}>
+                Voir la résolution →
+              </button>
+            </>
+          )}
+
+          {casExpanded && (
+            <>
+              <p style={s.casSituation}>{casJour.situation}</p>
+
+              <div style={s.casSep} />
+              <p style={s.casLabelMuted}>❌ Ce qui a été essayé</p>
+              <p style={s.casText}>{casJour.essaye}</p>
+
+              <div style={s.casSep} />
+              <p style={s.casLabelTeal}>✅ Ce qui a marché</p>
+              <p style={s.casText}>{casJour.solution}</p>
+
+              <div style={s.casSep} />
+              <p style={s.casLabelYellow}>💡 La leçon</p>
+              <p style={{ ...s.casText, color: '#F5E06D', fontStyle: 'italic' }}>{casJour.lecon}</p>
+
+              <div style={s.casFooter}>
+                {casJour.lecon_liee && (
+                  <button onClick={() => navigate(`/cours/${casJour.lecon_liee}`)} style={s.casLeconBtn}>
+                    → Revoir leçon {casJour.lecon_liee}
+                  </button>
+                )}
+                <button onClick={() => setCasExpanded(false)} style={s.casCloseBtn}>Réduire ↑</button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -81,6 +152,15 @@ export default function Portal() {
             <span style={s.cardArrow}>›</span>
           </div>
           <p style={s.cardSub}>Apprend à reconnaître tes émotions · 3 min</p>
+          <div style={s.progressWrap}>
+            <div style={s.progressLabels}>
+              <span>{quizDone.length}/{TOTAL_QUIZ} quiz</span>
+              <span>{quizPct}%</span>
+            </div>
+            <div style={s.progressTrack}>
+              <div style={{ ...s.progressFill, width: `${quizPct}%` }} />
+            </div>
+          </div>
         </Link>
 
         {/* Module 3 — Mes Outils */}
@@ -129,7 +209,7 @@ const s = {
   stripCircle: { width: 40, height: 40, borderRadius: '50%', overflow: 'hidden', flexShrink: 0 },
   stripImg: { width: '100%', height: '100%', objectFit: 'cover' },
   stripLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, color: '#64748B' },
-  separator: { margin: '24px 20px 0', height: 1, background: 'rgba(255,255,255,0.08)' },
+  separator: { margin: '20px 20px 0', height: 1, background: 'rgba(255,255,255,0.08)' },
   modules: { padding: '20px 16px 0' },
   card: { display: 'block', borderRadius: 20, padding: 20, marginBottom: 12, textDecoration: 'none', color: '#fff' },
   cardTop: { display: 'flex', alignItems: 'center', gap: 12 },
@@ -143,4 +223,22 @@ const s = {
   progressLabels: { display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.6)', marginBottom: 4 },
   progressTrack: { height: 4, background: 'rgba(255,255,255,0.15)', borderRadius: 999, overflow: 'hidden' },
   progressFill: { height: '100%', background: '#FFFFFF', borderRadius: 999, transition: 'width 0.5s ease' },
+
+  /* Cas du jour */
+  casWrap: { padding: '20px 20px 0' },
+  casCard: { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(245,224,109,0.2)', borderRadius: 16, padding: 16, marginBottom: 16 },
+  casHead: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10, flexWrap: 'wrap' },
+  casBadge: { display: 'inline-block', background: 'rgba(245,224,109,0.15)', color: '#F5E06D', fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: 0.5, padding: '4px 10px', borderRadius: 99 },
+  casTag: { display: 'inline-block', background: 'rgba(255,255,255,0.08)', color: '#94A3B8', fontFamily: 'Inter, sans-serif', fontSize: 11, padding: '4px 10px', borderRadius: 99 },
+  casPrenom: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#94A3B8', margin: '0 0 8px' },
+  casSituation: { fontFamily: 'Inter, sans-serif', fontSize: 14, fontWeight: 600, color: '#fff', lineHeight: 1.5, margin: '0 0 10px' },
+  casSep: { height: 1, background: 'rgba(255,255,255,0.08)', margin: '12px 0' },
+  casLabelMuted: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#94A3B8', fontWeight: 600, margin: '0 0 4px' },
+  casLabelTeal: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#2A9490', fontWeight: 700, margin: '0 0 4px' },
+  casLabelYellow: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#F5E06D', fontWeight: 600, fontStyle: 'italic', margin: '0 0 4px' },
+  casText: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#E2E8F0', lineHeight: 1.55, margin: 0 },
+  casOpenBtn: { background: 'transparent', border: '1px solid rgba(245,224,109,0.4)', color: '#F5E06D', borderRadius: 20, padding: '8px 16px', fontFamily: 'Inter, sans-serif', fontSize: 13, fontWeight: 600, cursor: 'pointer', marginTop: 4 },
+  casCloseBtn: { background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', borderRadius: 20, padding: '8px 16px', fontFamily: 'Inter, sans-serif', fontSize: 12, cursor: 'pointer' },
+  casLeconBtn: { background: 'rgba(42,148,144,0.18)', border: '1px solid rgba(42,148,144,0.4)', color: '#2A9490', borderRadius: 20, padding: '8px 16px', fontFamily: 'Inter, sans-serif', fontSize: 12, fontWeight: 600, cursor: 'pointer' },
+  casFooter: { display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 },
 }

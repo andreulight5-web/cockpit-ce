@@ -1,29 +1,32 @@
 import { useNavigate } from 'react-router-dom'
+import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
+import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
-const SECTIONS = [
-  {
-    badge: '⚡ PENDANT LA CRISE', color: '#C0506A',
-    items: [
-      { vignetteBg: '#C0506A', icon: '🃏', tag: 'CARDS', titre: 'Cards Émotions de Lucas', desc: "L'enfant pointe ce qu'il ressent sans parler" },
-      { vignetteBg: '#FF6B4A', icon: '🌡️', tag: 'AFFICHE', titre: 'Thermomètre des émotions', desc: 'À plastifier et coller dans la chambre' },
-      { vignetteBg: '#7A2040', icon: '✋', tag: 'CARTE FRIGO', titre: 'Les phrases STOP', desc: '3 phrases à dire · 3 à ne jamais dire' },
-    ],
-  },
-  {
-    badge: '🛡️ AVANT LA CRISE', color: '#2A9490',
-    items: [
-      { vignetteBg: '#2A9490', icon: '🏠', tag: 'CHECKLIST', titre: 'Prépare le coin calme de Lucas', desc: 'À faire ensemble avant la prochaine crise' },
-      { vignetteBg: '#1A5F5C', icon: '🔍', tag: 'FICHE', titre: 'Les déclencheurs de Lucas', desc: "Note les signaux avant l'explosion" },
-    ],
-  },
-  {
-    badge: '📊 APRÈS LA CRISE', color: '#F5E06D',
-    items: [
-      { vignetteBg: '#1C1B2E', vignetteBorder: '1px solid #F5E06D', icon: '📓', tag: 'JOURNAL', titre: 'Journal des crises', desc: 'À remplir après chaque crise pour voir les patterns' },
-      { vignetteBg: '#2A2040', vignetteBorder: '1px solid #F5E06D', icon: '📅', tag: 'TRACKER', titre: 'Calendrier 30 jours', desc: 'Visualise les progrès sur un mois' },
-    ],
-  },
+const RESOURCES = [
+  // ⚡ PENDANT LA CRISE
+  { id: 1,  badge: 'OUTIL ENFANT', badgeColor: '#C0506A', icon: '🃏', vignetteFond: '#C0506A', titre: 'Cards Émotions de Lucas', description: "L'enfant pointe ce qu'il ressent sans parler", objectif: "L'enfant met des mots sur ce qu'il ressent sans parler", section: 'pendant' },
+  { id: 2,  badge: 'OUTIL ENFANT', badgeColor: '#FF6B4A', icon: '🌡️', vignetteFond: '#FF6B4A', titre: 'Thermomètre des émotions', description: 'À plastifier et coller dans la chambre', objectif: "Anticiper la montée avant l'explosion", section: 'pendant' },
+  { id: 3,  badge: 'OUTIL PARENT', badgeColor: '#7A2040', icon: '✋', vignetteFond: '#7A2040', titre: 'Les phrases STOP', description: '3 phrases à dire · 3 à ne jamais dire', objectif: 'Remplacer les réactions automatiques par des réponses choisies', section: 'pendant' },
+  { id: 8,  badge: 'OUTIL ENFANT', badgeColor: '#C0506A', icon: '🎡', vignetteFond: '#7A2040', titre: 'La Roue de la Colère de Lucas', description: 'Lucas cartographie sa colère — déclencheurs, ressentis, solutions', objectif: "L'enfant comprend sa colère et trouve ses propres solutions", section: 'pendant' },
+  { id: 11, badge: 'OUTIL PARENT', badgeColor: '#7C3AED', icon: '🧘', vignetteFond: '#4C1D95', titre: 'Respiration 4-4-4 (pour toi)', description: '30 secondes pour te réguler avant d\'intervenir. Ton calme = son ancre.', objectif: "Le parent se régule d'abord pour mieux co-réguler", section: 'pendant' },
+
+  // 🛡️ AVANT LA CRISE
+  { id: 4,  badge: 'OUTIL ENFANT', badgeColor: '#2A9490', icon: '🏠', vignetteFond: '#2A9490', titre: 'Prépare le coin calme de Lucas', description: 'À faire ensemble avant la prochaine crise', objectif: "Créer un espace refuge que l'enfant utilise seul", section: 'avant' },
+  { id: 5,  badge: 'OUTIL PARENT', badgeColor: '#1A5F5C', icon: '🔍', vignetteFond: '#1A5F5C', titre: 'Les déclencheurs de Lucas', description: "Note les signaux avant l'explosion", objectif: 'Identifier les patterns qui déclenchent les crises', section: 'avant' },
+  { id: 9,  badge: 'OUTIL ENFANT', badgeColor: '#2A9490', icon: '🛑', vignetteFond: '#1A5F5C', titre: 'Stop Think & Go de Lucas', description: "STOP je m'arrête → THINK je réfléchis → GO j'agis. Pour apprendre à faire une pause.", objectif: "L'enfant s'auto-régule avant d'exploser", section: 'avant' },
+
+  // 📊 APRÈS LA CRISE
+  { id: 10, badge: 'OUTIL ENFANT', badgeColor: '#F5A623', icon: '🏆', vignetteFond: '#7A4A00', titre: 'Les Chèques Bonheur de Lucas', description: "Après la crise, on célèbre ce qui s'est bien passé pour reconstruire la confiance", objectif: 'Reconstruire l\'estime de soi après chaque crise', section: 'apres' },
+  { id: 6,  badge: 'OUTIL PARENT', badgeColor: '#F5E06D', icon: '📓', vignetteFond: '#1C1B2E', titre: 'Journal des crises', description: 'À remplir après chaque crise pour voir les patterns', objectif: 'Voir les progrès sur 30 jours', section: 'apres' },
+  { id: 7,  badge: 'OUTIL PARENT', badgeColor: '#F5E06D', icon: '📅', vignetteFond: '#2A2040', titre: 'Calendrier 30 jours', description: 'Visualise les progrès sur un mois', objectif: 'Visualiser les cycles pour anticiper les pics', section: 'apres' },
 ]
+
+const SECTION_META = {
+  pendant: { label: '⚡ PENDANT LA CRISE', color: '#C0506A' },
+  avant:   { label: '🛡️ AVANT LA CRISE', color: '#2A9490' },
+  apres:   { label: '📊 APRÈS LA CRISE', color: '#F5E06D' },
+}
+const SECTION_ORDER = ['pendant', 'avant', 'apres']
 
 export default function Ressources() {
   const navigate = useNavigate()
@@ -39,25 +42,38 @@ export default function Ressources() {
       </div>
 
       <div style={s.body}>
-        {SECTIONS.map((section) => (
-          <div key={section.badge} style={{ marginBottom: 24 }}>
-            <div style={{ ...s.sectionBadge, background: `${section.color}26`, color: section.color, border: `1px solid ${section.color}4d` }}>{section.badge}</div>
-            {section.items.map((item) => (
-              <div key={item.titre} style={s.card} className="fade-up">
-                <div style={{ ...s.vignette, background: item.vignetteBg, border: item.vignetteBorder || 'none' }}>
-                  <span style={{ fontSize: 32 }}>{item.icon}</span>
-                  <span style={{ ...s.vignetteLabel, color: 'rgba(255,255,255,0.7)' }}>{item.tag}</span>
-                </div>
-                <div style={s.cardBody}>
-                  <span style={{ ...s.cardTag, background: `${section.color}26`, color: section.color }}>{item.tag}</span>
-                  <h3 style={s.cardTitle}>{item.titre}</h3>
-                  <p style={s.cardDesc}>{item.desc}</p>
-                  <button onClick={handleDownload} style={s.dlBtn}>📥 Télécharger</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
+        {SECTION_ORDER.map((key) => {
+          const items = RESOURCES.filter((r) => r.section === key)
+          if (!items.length) return null
+          const meta = SECTION_META[key]
+          return (
+            <div key={key} style={{ marginBottom: 24 }}>
+              <div style={{ ...s.sectionBadge, background: `${meta.color}26`, color: meta.color, border: `1px solid ${meta.color}4d` }}>{meta.label}</div>
+              {items.map((item) => {
+                const isEnfant = item.badge.includes('ENFANT')
+                const isParent = item.badge.includes('PARENT')
+                const character = isEnfant ? monstreCalin : isParent ? cortexBienveillant : null
+                const lightFond = item.vignetteFond === '#1C1B2E' || item.vignetteFond === '#2A2040'
+                return (
+                  <div key={item.id} style={s.card} className="fade-up">
+                    <div style={{ ...s.vignette, background: item.vignetteFond, border: lightFond ? `1px solid ${item.badgeColor}` : 'none' }}>
+                      <span style={{ fontSize: 32 }}>{item.icon}</span>
+                      <span style={s.vignetteLabel}>{item.badge.split(' ')[1]}</span>
+                      {character && <img src={character} alt="" style={s.charOverlay} draggable={false} />}
+                    </div>
+                    <div style={s.cardBody}>
+                      <span style={{ ...s.cardTag, background: `${item.badgeColor}26`, color: item.badgeColor }}>{item.badge}</span>
+                      <h3 style={s.cardTitle}>{item.titre}</h3>
+                      <p style={s.cardDesc}>{item.description}</p>
+                      <p style={s.objectif}>→ Objectif : {item.objectif}</p>
+                      <button onClick={handleDownload} style={s.dlBtn}>📥 Télécharger</button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -73,11 +89,13 @@ const s = {
   body: { padding: '20px 20px 40px' },
   sectionBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, padding: '5px 12px', borderRadius: 99, marginBottom: 14, fontFamily: 'Inter, sans-serif' },
   card: { display: 'flex', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden', marginBottom: 10 },
-  vignette: { width: 80, minHeight: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, flexShrink: 0, padding: 8 },
-  vignetteLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 700, letterSpacing: 1, textAlign: 'center' },
+  vignette: { position: 'relative', width: 80, minHeight: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, flexShrink: 0, padding: 8 },
+  vignetteLabel: { fontFamily: 'Inter, sans-serif', fontSize: 8, fontWeight: 700, letterSpacing: 1, textAlign: 'center', color: 'rgba(255,255,255,0.7)' },
+  charOverlay: { position: 'absolute', bottom: 0, right: 0, width: 32, height: 32, objectFit: 'contain', zIndex: 2, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' },
   cardBody: { flex: 1, padding: 14, display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 },
   cardTag: { display: 'inline-block', fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, padding: '3px 8px', borderRadius: 99, alignSelf: 'flex-start', fontFamily: 'Inter, sans-serif' },
   cardTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 },
   cardDesc: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#94A3B8', margin: 0, lineHeight: 1.4 },
-  dlBtn: { alignSelf: 'flex-start', marginTop: 6, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 20, padding: '6px 14px', fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)', cursor: 'pointer' },
+  objectif: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#F5E06D', fontStyle: 'italic', margin: '4px 0 0', lineHeight: 1.4 },
+  dlBtn: { alignSelf: 'flex-start', marginTop: 8, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 20, padding: '6px 14px', fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)', cursor: 'pointer' },
 }

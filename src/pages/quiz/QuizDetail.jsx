@@ -1,15 +1,43 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { QUIZ, MONSTRE_IMAGES } from '../../data/quiz'
+import { AppContext } from '../../lib/AppContext'
 
 function QuizDetailInner({ id }) {
   const navigate = useNavigate()
+  const { appData, saveData } = useContext(AppContext)
   const quiz = QUIZ.find((q) => String(q.id) === id)
 
   const [step, setStep] = useState('video') // 'video' | 'questions' | 'result'
   const [qIdx, setQIdx] = useState(0)
   const [selected, setSelected] = useState([]) // for current question
   const [answers, setAnswers] = useState({})
+  const [xpAwarded, setXpAwarded] = useState(false)
+
+  // Award XP + badge once when reaching the result step (idempotent across replays)
+  useEffect(() => {
+    if (step !== 'result' || !quiz || !saveData || xpAwarded) return
+    setXpAwarded(true)
+
+    // Clé localStorage indépendante consommée par le portail
+    try {
+      const done = JSON.parse(localStorage.getItem('cockpit_quiz_done') || '[]')
+      if (!done.includes(quiz.id)) {
+        done.push(quiz.id)
+        localStorage.setItem('cockpit_quiz_done', JSON.stringify(done))
+      }
+    } catch { /* localStorage indisponible — on continue */ }
+
+    const quizDone = appData?.quiz_done || []
+    if (quizDone.some((x) => String(x) === String(quiz.id))) return
+    const badges = appData?.badges || []
+    const xpTotal = appData?.xp_total || 0
+    saveData({
+      quiz_done: [...quizDone, quiz.id],
+      xp_total: xpTotal + (quiz.xp || 0),
+      badges: badges.includes(quiz.badge) ? badges : [...badges, quiz.badge],
+    })
+  }, [step, quiz, saveData, appData, xpAwarded])
 
   if (!quiz) return <div style={{ background: '#1C1B2E', color: '#fff', minHeight: '100dvh', padding: 40 }}>Quiz introuvable</div>
 
