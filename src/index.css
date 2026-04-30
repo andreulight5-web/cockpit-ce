@@ -112,7 +112,7 @@ img { max-width: 100%; display: block; }
 .scroll-row { display: flex; gap: var(--sp-md); overflow-x: auto; padding-bottom: var(--sp-sm); scrollbar-width: none; }
 .scroll-row::-webkit-scrollbar { display: none; }
 
-/* ── RESPONSIVE DESKTOP — full screen ──────────────────────── */
+/* ── RESPONSIVE DESKTOP — vraie interface avec sidebar ─────── */
 @media (min-width: 768px) {
   body { overflow-x: hidden; }
 
@@ -125,8 +125,17 @@ img { max-width: 100%; display: block; }
     border-radius: 0;
     box-shadow: none;
     overflow-x: hidden;
-    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,.12) transparent;
   }
+}
+
+/* Au-delà de 1024px, le DesktopShell prend la main : sidebar 240px à gauche
+   + contenu principal qui exploite l'espace. Les pages mobiles s'adaptent
+   via leur propre variante desktop. */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
 }

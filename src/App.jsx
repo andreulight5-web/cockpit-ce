@@ -13,6 +13,7 @@ import Journal from './pages/journal/Journal'
 import Profil from './pages/profil/Profil'
 import Login from './pages/auth/Login'
 import Onboarding from './pages/onboarding/Onboarding'
+import DesktopShell from './components/layout/DesktopShell'
 import './App.css'
 
 function AppLayout() {
@@ -48,19 +49,21 @@ function AppLayout() {
 
   return (
     <AppContext.Provider value={{ appData, saveData }}>
-      <Routes>
-        <Route path="/" element={<Portal />} />
-        <Route path="/cours" element={<Cours />} />
-        <Route path="/cours/:id" element={<Lecon />} />
-        <Route path="/quiz" element={<Quiz />} />
-        <Route path="/quiz/:id" element={<QuizDetail />} />
-        <Route path="/ressources" element={<Ressources />} />
-        <Route path="/crise" element={<Crise />} />
-        <Route path="/journal" element={<Journal />} />
-        <Route path="/profil" element={<Profil />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/onboarding" element={<Onboarding />} />
-      </Routes>
+      <DesktopShell>
+        <Routes>
+          <Route path="/" element={<Portal />} />
+          <Route path="/cours" element={<Cours />} />
+          <Route path="/cours/:id" element={<Lecon />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/quiz/:id" element={<QuizDetail />} />
+          <Route path="/ressources" element={<Ressources />} />
+          <Route path="/crise" element={<Crise />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/profil" element={<Profil />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+        </Routes>
+      </DesktopShell>
     </AppContext.Provider>
   )
 }
