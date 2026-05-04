@@ -584,11 +584,11 @@ const PhrasesStopTemplate = ({ cfg }: { cfg: StopConfig }) => {
       <Page size="A5" style={[s.pageCream, { padding: 24, paddingBottom: 16 }]}>
         {/* Hero — STOP dominant + sous-titre contexte (optionnel) */}
         <View style={{ alignItems: 'flex-start', marginTop: 0, marginBottom: cfg.contexte ? 22 : 28 }}>
-          <Text style={{ fontFamily: 'Poppins', fontSize: 92, fontWeight: 800, color: C.rose, lineHeight: 0.95, letterSpacing: -2 }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 84, fontWeight: 800, color: C.rose, lineHeight: 1.05, letterSpacing: -2 }}>
             STOP
           </Text>
           {cfg.contexte && (
-            <Text style={{ fontFamily: 'Poppins', fontSize: 13, fontWeight: 700, color: C.teal, letterSpacing: 3.5, textTransform: 'uppercase', marginTop: 2 }}>
+            <Text style={{ fontFamily: 'Poppins', fontSize: 13, fontWeight: 700, color: C.teal, letterSpacing: 3.5, textTransform: 'uppercase', marginTop: 6 }}>
               · {cfg.contexte} ·
             </Text>
           )}
