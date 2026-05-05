@@ -779,7 +779,7 @@ const EMOTIONS = [
   { label: 'Honte',        phrase: 'J\'ai honte',        img: './assets/monstre-honte.png',     color: '#A0758E' },
   { label: 'Confusion',    phrase: 'Je comprends pas',   img: './assets/monstre-confus.png',    color: '#6B7280' },
   { label: 'Besoin câlin', phrase: 'Viens me voir',      img: './assets/monstre-calin.png',     color: '#2A9490' },
-  { label: 'Câlin libre',  phrase: 'Joker · sans parler',img: './assets/monstre-calin.png',     color: '#F5E06D' },
+  { label: 'Surprise',     phrase: 'Ça me surprend !',   img: './assets/monstre-surpris.png',   color: '#10B981' },
 ]
 
 const REPONSES = [
