@@ -766,6 +766,150 @@ const STOPS: StopConfig[] = [
 ]
 
 /* ═══════════════════════════════════════════════════ */
+/* 9. Cards Émotions — A4 portrait, 2 pages           */
+/* Recto : 8 émotions à découper                      */
+/* Verso : 5 réponses parent                          */
+/* ═══════════════════════════════════════════════════ */
+const EMOTIONS = [
+  { label: 'Colère',       phrase: 'Je suis en colère',  img: './assets/monstre-colere.png',    color: '#C0506A' },
+  { label: 'Peur',         phrase: 'J\'ai peur',         img: './assets/monstre-peur.png',      color: '#7C3AED' },
+  { label: 'Tristesse',    phrase: 'Je suis triste',     img: './assets/monstre-triste.png',    color: '#5B7FBE' },
+  { label: 'Trop plein',   phrase: 'C\'est trop',        img: './assets/monstre-surexcite.png', color: '#F5A623' },
+  { label: 'Joie',         phrase: 'Je suis content',    img: './assets/monstre-rigole.png',    color: '#E8B84B' },
+  { label: 'Honte',        phrase: 'J\'ai honte',        img: './assets/monstre-honte.png',     color: '#A0758E' },
+  { label: 'Confusion',    phrase: 'Je comprends pas',   img: './assets/monstre-confus.png',    color: '#6B7280' },
+  { label: 'Besoin câlin', phrase: 'Viens me voir',      img: './assets/monstre-calin.png',     color: '#2A9490' },
+  { label: 'Câlin libre',  phrase: 'Joker · sans parler',img: './assets/monstre-calin.png',     color: '#F5E06D' },
+]
+
+const REPONSES = [
+  { icon: '✋', label: 'STOP silence', desc: 'Pose ta main sur ta bouche. Compte 5 secondes avant de parler.' },
+  { icon: '💛', label: 'Je suis là',   desc: 'Pose ta main sur son épaule. Reste à côté. Ne dis rien.' },
+  { icon: '🏠', label: 'Coin calme',   desc: 'Propose : « On va dans ton coin ensemble si tu veux. »' },
+  { icon: '🌬', label: 'On respire',   desc: 'Inspire 4 secondes. Expire 4 secondes. Fais-le avec lui.' },
+  { icon: '💞', label: 'Je t\'aime',   desc: 'Avant tout, après tout. Quoi qu\'il arrive. Toujours.' },
+]
+
+// Card format jeu de cartes : 63×88mm = 178.6×249.4 pt
+// Grille 3×3 sur A4 (595×842pt) → 9 cards par page
+const EmotionCard = ({ emo }: { emo: typeof EMOTIONS[number] }) => (
+  <View style={{
+    width: 178,
+    height: 249,
+    marginBottom: 6,
+    padding: 8,
+    backgroundColor: C.white,
+    borderWidth: 1.2,
+    borderStyle: 'dashed',
+    borderColor: emo.color,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }}>
+    {/* Bandeau couleur en haut */}
+    <View style={{ alignSelf: 'stretch', height: 4, backgroundColor: emo.color, borderRadius: 2, marginBottom: 4 }} />
+    <Image src={emo.img} style={{ width: 110, height: 110 }} />
+    <View style={{ alignItems: 'center' }}>
+      <Text style={{ fontFamily: 'Poppins', fontSize: 17, fontWeight: 800, color: emo.color, textAlign: 'center', marginBottom: 4 }}>
+        {emo.label}
+      </Text>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.text, textAlign: 'center', lineHeight: 1.0 }}>
+        « {emo.phrase} »
+      </Text>
+    </View>
+  </View>
+)
+
+const ReponseRow = ({ r }: { r: typeof REPONSES[number] }) => (
+  <View style={{
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: C.white,
+    borderRadius: 8,
+    padding: 9,
+    marginBottom: 5,
+    borderLeftWidth: 4,
+    borderLeftColor: C.rose,
+  }}>
+    <Text style={{ fontSize: 18, marginRight: 10, width: 22, textAlign: 'center' }}>{r.icon}</Text>
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontFamily: 'Poppins', fontSize: 12, fontWeight: 800, color: C.text, marginBottom: 1 }}>
+        {r.label}
+      </Text>
+      <Text style={{ fontFamily: 'Inter', fontSize: 9.5, color: C.muted, lineHeight: 1.4 }}>
+        {r.desc}
+      </Text>
+    </View>
+  </View>
+)
+
+const PdfCardsEmotions = () => (
+  <Document title="Cards Émotions · Cockpit Crises TDAH" author="Cerveaux Électriques">
+    {/* ═══ Page 1 — RECTO : 9 cards format jeu de cartes ═══ */}
+    <Page size="A4" style={[s.pageCream, { padding: 22 }]}>
+      <View style={[s.brandRow, { marginBottom: 4 }]}>
+        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
+          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · MES ÉMOTIONS · OUTIL ENFANT
+        </Text>
+        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
+      </View>
+
+      {/* Grille 3×3 — 9 cards format poker (178×249pt) */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 6 }}>
+        {EMOTIONS.map((emo, i) => <EmotionCard key={i} emo={emo} />)}
+      </View>
+
+      <Footer text="Plastifie la feuille entière · Découpe sur les pointillés · 9 cartes prêtes" />
+    </Page>
+
+    {/* ═══ Page 2 — MÉMO PARENT A5 : 5 réponses ═══ */}
+    <Page size="A5" style={[s.pageCream, { padding: 22, paddingBottom: 16 }]}>
+      <View style={[s.brandRow, { marginBottom: 6 }]}>
+        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
+          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · MÉMO PARENT
+        </Text>
+        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
+      </View>
+
+      <View style={{ alignItems: 'flex-start', marginBottom: 2 }}>
+        <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.teal, marginBottom: -2 }}>
+          Quand il pointe une carte
+        </Text>
+        <Text style={{ fontFamily: 'Poppins', fontSize: 22, fontWeight: 800, color: C.text, lineHeight: 1.1, letterSpacing: -0.3 }}>
+          Mes 5 réponses
+        </Text>
+        <Text style={{ fontFamily: 'Inter', fontSize: 9.5, color: C.muted, marginTop: 3 }}>
+          Choisis-en une. N'importe laquelle. Aucune n'est mauvaise.
+        </Text>
+      </View>
+
+      <View style={[s.hairline, { marginVertical: 10 }]} />
+
+      {REPONSES.map((r, i) => <ReponseRow key={i} r={r} />)}
+
+      {/* Mémo bas — bandeau jaune compact */}
+      <View style={{
+        backgroundColor: C.yellow,
+        borderRadius: 10,
+        padding: 12,
+        marginTop: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
+        <Image src="./assets/monstre-calin.png" style={{ width: 56, height: 56, marginRight: 12 }} />
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontFamily: 'Caveat', fontSize: 19, fontWeight: 700, color: C.text, lineHeight: 1.05 }}>
+            La carte qu'il choisit{'\n'}n'est jamais la mauvaise.
+          </Text>
+        </View>
+      </View>
+
+      <Footer text="Plastifie · Garde-le visible · Ton mémo, pas ton jugement" />
+    </Page>
+  </Document>
+)
+
+/* ═══════════════════════════════════════════════════ */
 /* Run all                                            */
 /* ═══════════════════════════════════════════════════ */
 const docs = [
@@ -777,6 +921,7 @@ const docs = [
   { name: '6-guide-reparation.pdf', doc: <Pdf6 /> },
   { name: '7-journal-crise-vierge.pdf', doc: <Pdf7 /> },
   ...STOPS.map(cfg => ({ name: cfg.file, doc: <PhrasesStopTemplate cfg={cfg} /> })),
+  { name: 'cards-emotions.pdf', doc: <PdfCardsEmotions /> },
 ]
 
 ;(async () => {

@@ -31,7 +31,9 @@ const SECTION_ORDER = ['pendant', 'avant', 'apres']
 
 // Outils dont l'id ouvre directement un PDF unique.
 // L'outil 3 (Phrases STOP) ouvre un menu contextuel (voir STOP_LIST + handleDownload).
-const PDF_MAP = {}
+const PDF_MAP = {
+  1: '/pdfs/cards-emotions.pdf',
+}
 
 // Bibliothèque Phrases STOP — universel + 8 contextes
 const STOP_LIST = [
