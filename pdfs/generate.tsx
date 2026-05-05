@@ -878,7 +878,7 @@ const PdfCardsEmotions = () => (
         <Text style={{ fontFamily: 'Poppins', fontSize: 22, fontWeight: 800, color: C.text, lineHeight: 1.1, letterSpacing: -0.3 }}>
           Mes 5 réponses
         </Text>
-        <Text style={{ fontFamily: 'Inter', fontSize: 9.5, color: C.muted, marginTop: 3 }}>
+        <Text style={{ fontFamily: 'Inter', fontSize: 9.5, color: C.muted, marginTop: 10 }}>
           Choisis-en une. N'importe laquelle. Aucune n'est mauvaise.
         </Text>
       </View>
