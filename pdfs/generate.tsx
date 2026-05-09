@@ -616,7 +616,7 @@ const PhrasesStopTemplate = ({ cfg }: { cfg: StopConfig }) => {
           padding: 14,
           marginTop: 14,
         }}>
-          <Image src="./assets/monstre-calin.png" style={{ width: 80, height: 80, marginRight: 14 }} />
+          <Image src="./assets/monstre-decouvert.png" style={{ width: 80, height: 80, marginRight: 14 }} />
           <View style={{ flex: 1 }}>
             <Text style={{ fontFamily: 'Caveat', fontSize: mantraFontSize, fontWeight: 700, color: C.text, lineHeight: 1.05 }}>
               {cfg.mantra}
@@ -910,6 +910,151 @@ const PdfCardsEmotions = () => (
 )
 
 /* ═══════════════════════════════════════════════════ */
+/* 10. Thermomètre des émotions — A4 portrait         */
+/* ═══════════════════════════════════════════════════ */
+const NIVEAUX = [
+  {
+    n: 1, label: 'Calme',          color: '#10B981',
+    img: './assets/monstre-calin.png',
+    enfant: 'Tout va bien.',
+    corps: 'Je respire doucement. Mon corps est tranquille.',
+    action: 'Je joue, je parle, je profite.',
+  },
+  {
+    n: 2, label: 'Un peu agité',   color: '#F5E06D',
+    img: './assets/monstre-rigole.png',
+    enfant: 'Quelque chose me chatouille.',
+    corps: 'Je bouge plus. Ma voix monte un peu.',
+    action: 'Je fais une pause. Je respire 3 fois.',
+  },
+  {
+    n: 3, label: 'Tendu',           color: '#F5A623',
+    img: './assets/monstre-surexcite.png',
+    enfant: 'Ça commence à tirer.',
+    corps: 'Mon ventre se serre. Mes mains bougent fort.',
+    action: 'Je vais au coin calme. Je dis : « j\'ai besoin d\'air ».',
+  },
+  {
+    n: 4, label: 'Très en colère',  color: '#E0705A',
+    img: './assets/monstre-confus.png',
+    enfant: 'Je vais craquer.',
+    corps: 'Mon cœur tape fort. Ma tête est chaude.',
+    action: 'Je dis : « aide-moi MAINTENANT ». Je tape un coussin.',
+  },
+  {
+    n: 5, label: 'Explosion',       color: '#C0506A',
+    img: './assets/monstre-colere.png',
+    enfant: 'C\'est trop !',
+    corps: 'Je crie. Je pleure. Je tape.',
+    action: 'J\'ai besoin de silence et de présence.',
+  },
+]
+
+const NiveauRow = ({ niv }: { niv: typeof NIVEAUX[number] }) => (
+  <View style={{
+    flexDirection: 'row',
+    backgroundColor: C.white,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginBottom: 7,
+    minHeight: 110,
+    borderWidth: 1.2,
+    borderColor: niv.color,
+  }}>
+    {/* Bandeau gauche : numéro + couleur */}
+    <View style={{
+      width: 56,
+      backgroundColor: niv.color,
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <Text style={{ fontFamily: 'Poppins', fontSize: 36, fontWeight: 800, color: C.white, lineHeight: 1 }}>
+        {niv.n}
+      </Text>
+    </View>
+
+    {/* Le Monstre */}
+    <View style={{
+      width: 88,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 6,
+    }}>
+      <Image src={niv.img} style={{ width: 76, height: 76 }} />
+    </View>
+
+    {/* Texte */}
+    <View style={{ flex: 1, padding: 10, paddingLeft: 4, justifyContent: 'center' }}>
+      <Text style={{ fontFamily: 'Poppins', fontSize: 14, fontWeight: 800, color: niv.color, marginBottom: 3 }}>
+        {niv.label}
+      </Text>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 17, fontWeight: 700, color: C.text, lineHeight: 1.05, marginBottom: 4 }}>
+        « {niv.enfant} »
+      </Text>
+      <Text style={{ fontFamily: 'Inter', fontSize: 9, color: C.muted, lineHeight: 1.4, marginBottom: 2 }}>
+        <Text style={{ fontWeight: 700, color: C.text }}>Mon corps : </Text>{niv.corps}
+      </Text>
+      <Text style={{ fontFamily: 'Inter', fontSize: 9, color: niv.color, lineHeight: 1.4 }}>
+        <Text style={{ fontWeight: 700 }}>→ </Text>{niv.action}
+      </Text>
+    </View>
+  </View>
+)
+
+const PdfThermometre = () => (
+  <Document title="Thermomètre des émotions · Cockpit Crises TDAH" author="Cerveaux Électriques">
+    <Page size="A4" style={[s.pageCream, { padding: 28, paddingBottom: 18 }]}>
+      <View style={[s.brandRow, { marginBottom: 6 }]}>
+        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
+          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · OUTIL ENFANT · À AFFICHER
+        </Text>
+        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
+      </View>
+
+      {/* Hero */}
+      <View style={{ alignItems: 'flex-start', marginBottom: 4 }}>
+        <Text style={{ fontFamily: 'Caveat', fontSize: 22, fontWeight: 700, color: C.rose, marginBottom: -2 }}>
+          Pour mon enfant
+        </Text>
+        <Text style={{ fontFamily: 'Poppins', fontSize: 28, fontWeight: 800, color: C.text, lineHeight: 1.1, letterSpacing: -0.3 }}>
+          Mon thermomètre
+        </Text>
+        <Text style={{ fontFamily: 'Inter', fontSize: 11, color: C.muted, marginTop: 8 }}>
+          Je montre où j'en suis avant que ça explose.
+        </Text>
+      </View>
+
+      <View style={[s.hairline, { marginVertical: 10 }]} />
+
+      {/* 5 niveaux empilés */}
+      {NIVEAUX.map((niv) => <NiveauRow key={niv.n} niv={niv} />)}
+
+      {/* Mémo parent — bandeau jaune compact */}
+      <View style={{
+        backgroundColor: C.yellow,
+        borderRadius: 10,
+        padding: 11,
+        marginTop: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
+        <Image src="./assets/monstre-calin.png" style={{ width: 56, height: 56, marginRight: 12 }} />
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 8, fontWeight: 700, color: C.text, letterSpacing: 1.5, marginBottom: 2 }}>
+            POUR LE PARENT
+          </Text>
+          <Text style={{ fontFamily: 'Caveat', fontSize: 17, fontWeight: 700, color: C.text, lineHeight: 1.1 }}>
+            S'il pointe 3, tu agis. À 4, c'est déjà tard.{'\n'}Aide-le à monter SES marches, pas les tiennes.
+          </Text>
+        </View>
+      </View>
+
+      <Footer text="Plastifie · Affiche dans sa chambre ou la cuisine · Une pince à linge pour pointer son niveau" />
+    </Page>
+  </Document>
+)
+
+/* ═══════════════════════════════════════════════════ */
 /* Run all                                            */
 /* ═══════════════════════════════════════════════════ */
 const docs = [
@@ -922,6 +1067,7 @@ const docs = [
   { name: '7-journal-crise-vierge.pdf', doc: <Pdf7 /> },
   ...STOPS.map(cfg => ({ name: cfg.file, doc: <PhrasesStopTemplate cfg={cfg} /> })),
   { name: 'cards-emotions.pdf', doc: <PdfCardsEmotions /> },
+  { name: 'thermometre-emotions.pdf', doc: <PdfThermometre /> },
 ]
 
 ;(async () => {

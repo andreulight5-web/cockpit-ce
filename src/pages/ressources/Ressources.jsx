@@ -33,6 +33,7 @@ const SECTION_ORDER = ['pendant', 'avant', 'apres']
 // L'outil 3 (Phrases STOP) ouvre un menu contextuel (voir STOP_LIST + handleDownload).
 const PDF_MAP = {
   1: '/pdfs/cards-emotions.pdf',
+  2: '/pdfs/thermometre-emotions.pdf',
 }
 
 // Bibliothèque Phrases STOP — universel + 8 contextes
