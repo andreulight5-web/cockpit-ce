@@ -13,16 +13,19 @@ import Journal from './pages/journal/Journal'
 import Profil from './pages/profil/Profil'
 import Login from './pages/auth/Login'
 import Onboarding from './pages/onboarding/Onboarding'
+import Access from './pages/access/Access'
 import DesktopShell from './components/layout/DesktopShell'
 import './App.css'
 
 function AppLayout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [hasAccess, setHasAccess] = useState(() => !!localStorage.getItem('cockpit_access'))
   const [appData, setAppData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!hasAccess) { setLoading(false); return }
     // Migrate old keys first (sync)
     migrateOldKeys()
     // Restore from local + Supabase
@@ -30,20 +33,31 @@ function AppLayout() {
       setAppData(data)
       setLoading(false)
     }).catch(() => setLoading(false))
-  }, [])
+  }, [hasAccess])
 
   // Onboarding redirect
   useEffect(() => {
+    if (!hasAccess) return
     if (loading || !appData) return
     if (location.pathname === '/onboarding') return
     if (!appData.onboarding?.onboardingDone) {
       navigate('/onboarding', { replace: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, appData])
+  }, [loading, appData, hasAccess])
 
   const saveData = (updates) =>
     save(updates).then((newData) => { setAppData(newData); return newData })
+
+  // Access gate — bloque tout tant qu'aucun code valide n'a été saisi
+  if (!hasAccess) {
+    return (
+      <Access onSuccess={() => {
+        setHasAccess(true)
+        navigate('/', { replace: true })
+      }} />
+    )
+  }
 
   if (loading) return <div style={{ background: '#1C1B2E', minHeight: '100vh' }} />
 
