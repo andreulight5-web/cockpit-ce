@@ -4,6 +4,9 @@ import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 
 const RESOURCES = [
+  // 📘 GUIDE DE DÉMARRAGE
+  { id: 0,  badge: 'PACK DIGITAL', badgeColor: '#F5E06D', icon: '📘', vignetteFond: '#1C1B2E', titre: 'Bienvenue dans ton Cockpit', description: 'Pour les acheteurs du Pack Digital — guide de prise en main en 5 min', objectif: 'Démarrer sereinement avec toutes tes ressources', section: 'intro' },
+
   // ⚡ PENDANT LA CRISE
   { id: 1,  badge: 'OUTIL ENFANT', badgeColor: '#C0506A', icon: '🃏', vignetteFond: '#C0506A', titre: 'Cards Émotions de Lucas', description: "L'enfant pointe ce qu'il ressent sans parler", objectif: "L'enfant met des mots sur ce qu'il ressent sans parler", section: 'pendant' },
   { id: 2,  badge: 'OUTIL ENFANT', badgeColor: '#FF6B4A', icon: '🌡️', vignetteFond: '#FF6B4A', titre: 'Thermomètre des émotions', description: 'À plastifier et coller dans la chambre', objectif: "Anticiper la montée avant l'explosion", section: 'pendant' },
@@ -18,15 +21,17 @@ const RESOURCES = [
 ]
 
 const SECTION_META = {
+  intro:   { label: '📘 GUIDE DE DÉMARRAGE', color: '#F5E06D' },
   pendant: { label: '⚡ PENDANT LA CRISE', color: '#C0506A' },
   avant:   { label: '🛡️ AVANT LA CRISE', color: '#2A9490' },
   apres:   { label: '📊 APRÈS LA CRISE', color: '#F5E06D' },
 }
-const SECTION_ORDER = ['pendant', 'avant', 'apres']
+const SECTION_ORDER = ['intro', 'pendant', 'avant', 'apres']
 
 // Outils dont l'id ouvre directement un PDF unique.
 // L'outil 3 (Phrases STOP) ouvre un menu contextuel (voir STOP_LIST + handleDownload).
 const PDF_MAP = {
+  0:  '/pdfs/bienvenue-digital.pdf',              // guide de démarrage Pack Digital
   1:  '/pdfs/cards-emotions.pdf',
   2:  '/pdfs/thermometre-emotions.pdf',
   4:  '/pdfs/kit-anti-crise.pdf',                 // recto coin calme + verso déclencheurs
