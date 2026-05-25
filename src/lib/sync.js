@@ -6,12 +6,25 @@ const DEFAULT_DATA = {
   onboarding: null,
   lecons_done: [],
   annexes_done: [],
+  quiz_done: [],
+  badges: [],
   xp_total: 0,
   journal: [],
   updated_at: null,
 }
 
-// Anonymous session init
+// Access code (identifiant cross-device de la progression)
+export function getAccessCode() {
+  try {
+    const raw = localStorage.getItem('cockpit_access')
+    if (!raw) return null
+    return JSON.parse(raw)?.code || null
+  } catch {
+    return null
+  }
+}
+
+// Anonymous session init (legacy, conservée si d'autres flux en dépendent)
 export async function initSession() {
   try {
     const { data: { session } } = await supabase.auth.getSession()
@@ -39,29 +52,22 @@ export function writeLocal(data) {
   return payload
 }
 
-// Supabase read/write (silent failures)
+// Supabase read/write — keyé par code d'accès (sync multi-appareils)
 export async function writeSupabase(data) {
+  const code = getAccessCode()
+  if (!code) return
   try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    await supabase.from('user_data').upsert({
-      user_id: user.id,
-      data,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'user_id' })
+    await supabase.rpc('upsert_app_data', { input_code: code, input_data: data })
   } catch { /* silent */ }
 }
 
 export async function readSupabase() {
+  const code = getAccessCode()
+  if (!code) return null
   try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return null
-    const { data } = await supabase
-      .from('user_data')
-      .select('data, updated_at')
-      .eq('user_id', user.id)
-      .single()
-    return data?.data || null
+    const { data, error } = await supabase.rpc('read_app_data', { input_code: code })
+    if (error) return null
+    return data || null
   } catch {
     return null
   }
@@ -76,11 +82,10 @@ export async function save(updates) {
   return newData
 }
 
-// Main restore: called at app startup
+// Main restore: called at app startup (après que l'access gate a validé un code)
 export async function restore() {
   const local = readLocal()
 
-  await initSession()
   const remote = await readSupabase()
 
   // Remote is newer → use it

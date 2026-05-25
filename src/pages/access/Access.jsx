@@ -25,13 +25,26 @@ export default function Access({ onSuccess }) {
       // Le code est valide dans 2 cas : nouvellement activé OU déjà activé
       // (l'utilisateur se reconnecte depuis un autre appareil).
       if (data?.status === 'activated' || data?.status === 'already_used') {
+        const accessCode = data.code ?? trimmed
         localStorage.setItem(
           'cockpit_access',
           JSON.stringify({
-            code: data.code ?? trimmed,
+            code: accessCode,
             activatedAt: new Date().toISOString(),
           })
         )
+
+        // Sync multi-appareils : charge la progression existante (si elle existe)
+        // dans localStorage AVANT de rentrer dans l'app
+        try {
+          const { data: remoteData } = await supabase.rpc('read_app_data', {
+            input_code: accessCode,
+          })
+          if (remoteData) {
+            localStorage.setItem('cockpit_data', JSON.stringify(remoteData))
+          }
+        } catch { /* silent — l'app démarrera avec un état vide */ }
+
         onSuccess?.()
         return
       }
