@@ -22,19 +22,20 @@ export default function Access({ onSuccess }) {
         setLoading(false)
         return
       }
-      if (data?.status === 'activated') {
+      // Le code est valide dans 2 cas : nouvellement activé OU déjà activé
+      // (l'utilisateur se reconnecte depuis un autre appareil).
+      if (data?.status === 'activated' || data?.status === 'already_used') {
         localStorage.setItem(
           'cockpit_access',
-          JSON.stringify({ code: data.code, activatedAt: new Date().toISOString() })
+          JSON.stringify({
+            code: data.code ?? trimmed,
+            activatedAt: new Date().toISOString(),
+          })
         )
         onSuccess?.()
         return
       }
-      if (data?.status === 'already_used') {
-        setError('Ce code a déjà été utilisé sur un autre appareil.')
-      } else {
-        setError('Code invalide. Vérifie ta saisie.')
-      }
+      setError('Code invalide. Vérifie ta saisie.')
     } catch {
       setError('Erreur réseau. Réessaie dans un instant.')
     } finally {
