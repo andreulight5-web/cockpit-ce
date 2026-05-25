@@ -8,8 +8,6 @@ const NAV_ITEMS = [
   { to: '/cours',      icon: '📚', label: 'Cours' },
   { to: '/quiz',       icon: '🎯', label: 'Quiz' },
   { to: '/ressources', icon: '🛠️', label: 'Outils' },
-  { to: '/journal',    icon: '📓', label: 'Journal' },
-  { to: '/profil',     icon: '👤', label: 'Profil' },
 ]
 
 export default function Sidebar() {
