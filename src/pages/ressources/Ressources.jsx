@@ -8,13 +8,10 @@ const RESOURCES = [
   { id: 1,  badge: 'OUTIL ENFANT', badgeColor: '#C0506A', icon: '🃏', vignetteFond: '#C0506A', titre: 'Cards Émotions de Lucas', description: "L'enfant pointe ce qu'il ressent sans parler", objectif: "L'enfant met des mots sur ce qu'il ressent sans parler", section: 'pendant' },
   { id: 2,  badge: 'OUTIL ENFANT', badgeColor: '#FF6B4A', icon: '🌡️', vignetteFond: '#FF6B4A', titre: 'Thermomètre des émotions', description: 'À plastifier et coller dans la chambre', objectif: "Anticiper la montée avant l'explosion", section: 'pendant' },
   { id: 3,  badge: 'OUTIL PARENT', badgeColor: '#7A2040', icon: '✋', vignetteFond: '#7A2040', titre: 'Les phrases STOP', description: '3 phrases à dire · 3 à ne jamais dire', objectif: 'Remplacer les réactions automatiques par des réponses choisies', section: 'pendant' },
-  { id: 8,  badge: 'OUTIL ENFANT', badgeColor: '#C0506A', icon: '🎡', vignetteFond: '#7A2040', titre: 'La Roue de la Colère de Lucas', description: 'Lucas cartographie sa colère — déclencheurs, ressentis, solutions', objectif: "L'enfant comprend sa colère et trouve ses propres solutions", section: 'pendant' },
-  { id: 11, badge: 'OUTIL PARENT', badgeColor: '#7C3AED', icon: '🧘', vignetteFond: '#4C1D95', titre: 'Respiration 4-4-4 (pour toi)', description: '30 secondes pour te réguler avant d\'intervenir. Ton calme = son ancre.', objectif: "Le parent se régule d'abord pour mieux co-réguler", section: 'pendant' },
 
   // 🛡️ AVANT LA CRISE
   { id: 4,  badge: 'OUTIL ENFANT', badgeColor: '#2A9490', icon: '🏠', vignetteFond: '#2A9490', titre: 'Prépare le coin calme de Lucas', description: 'À faire ensemble avant la prochaine crise', objectif: "Créer un espace refuge que l'enfant utilise seul", section: 'avant' },
   { id: 5,  badge: 'OUTIL PARENT', badgeColor: '#1A5F5C', icon: '🔍', vignetteFond: '#1A5F5C', titre: 'Les déclencheurs de Lucas', description: "Note les signaux avant l'explosion", objectif: 'Identifier les patterns qui déclenchent les crises', section: 'avant' },
-  { id: 9,  badge: 'OUTIL ENFANT', badgeColor: '#2A9490', icon: '🛑', vignetteFond: '#1A5F5C', titre: 'Stop Think & Go de Lucas', description: "STOP je m'arrête → THINK je réfléchis → GO j'agis. Pour apprendre à faire une pause.", objectif: "L'enfant s'auto-régule avant d'exploser", section: 'avant' },
 
   // 📊 APRÈS LA CRISE
   { id: 10, badge: 'OUTIL ENFANT', badgeColor: '#F5A623', icon: '🏆', vignetteFond: '#7A4A00', titre: 'Les Chèques Bonheur de Lucas', description: "Après la crise, on célèbre ce qui s'est bien passé pour reconstruire la confiance", objectif: 'Reconstruire l\'estime de soi après chaque crise', section: 'apres' },
@@ -32,12 +29,18 @@ const SECTION_ORDER = ['pendant', 'avant', 'apres']
 // Outils dont l'id ouvre directement un PDF unique.
 // L'outil 3 (Phrases STOP) ouvre un menu contextuel (voir STOP_LIST + handleDownload).
 const PDF_MAP = {
-  1: '/pdfs/cards-emotions.pdf',
-  2: '/pdfs/thermometre-emotions.pdf',
+  1:  '/pdfs/cards-emotions.pdf',
+  2:  '/pdfs/thermometre-emotions.pdf',
+  4:  '/pdfs/kit-anti-crise.pdf',        // recto = coin calme
+  5:  '/pdfs/kit-anti-crise.pdf',        // verso = déclencheurs (même PDF)
+  6:  '/pdfs/journal-simple.pdf',
+  7:  '/pdfs/journal-simple-planche.pdf',
+  10: '/pdfs/systeme-victoires.pdf',
 }
 
-// Bibliothèque Phrases STOP — universel + 8 contextes
+// Bibliothèque Phrases STOP — deck + universel + 8 contextes
 const STOP_LIST = [
+  { file: 'phrases-stop-deck.pdf',        emoji: '🃏', label: 'Deck à découper',       desc: '9 cartes A4 pour porte-clé' },
   { file: 'phrases-stop.pdf',             emoji: '🧊', label: 'Universel (frigo)',     desc: 'Les 3 phrases passe-partout' },
   { file: 'phrases-stop-devoirs.pdf',     emoji: '🍝', label: 'Devoirs',               desc: 'La guerre du soir' },
   { file: 'phrases-stop-transitions.pdf', emoji: '⏱️', label: 'Transitions',           desc: 'Écran, douche, départ' },
@@ -65,7 +68,7 @@ export default function Ressources() {
   const handleDownload = (item) => {
     if (item.id === 3) return setStopMenuOpen(true)
     const url = PDF_MAP[item.id]
-    if (!url) return alert('PDF disponible bientôt !')
+    if (!url) return
     triggerDownload(url)
   }
 
