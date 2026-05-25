@@ -10,13 +10,11 @@ const RESOURCES = [
   { id: 3,  badge: 'OUTIL PARENT', badgeColor: '#7A2040', icon: '✋', vignetteFond: '#7A2040', titre: 'Les phrases STOP', description: '3 phrases à dire · 3 à ne jamais dire', objectif: 'Remplacer les réactions automatiques par des réponses choisies', section: 'pendant' },
 
   // 🛡️ AVANT LA CRISE
-  { id: 4,  badge: 'OUTIL ENFANT', badgeColor: '#2A9490', icon: '🏠', vignetteFond: '#2A9490', titre: 'Prépare le coin calme de Lucas', description: 'À faire ensemble avant la prochaine crise', objectif: "Créer un espace refuge que l'enfant utilise seul", section: 'avant' },
-  { id: 5,  badge: 'OUTIL PARENT', badgeColor: '#1A5F5C', icon: '🔍', vignetteFond: '#1A5F5C', titre: 'Les déclencheurs de Lucas', description: "Note les signaux avant l'explosion", objectif: 'Identifier les patterns qui déclenchent les crises', section: 'avant' },
+  { id: 4,  badge: 'OUTIL PARENT', badgeColor: '#2A9490', icon: '🏠', vignetteFond: '#2A9490', titre: 'Kit Anti-Crise de Lucas', description: 'Coin calme + carte des déclencheurs · à préparer ensemble un jour calme', objectif: 'Préparer le refuge et repérer les patterns avant la prochaine crise', section: 'avant' },
 
   // 📊 APRÈS LA CRISE
   { id: 10, badge: 'OUTIL ENFANT', badgeColor: '#F5A623', icon: '🏆', vignetteFond: '#7A4A00', titre: 'Les Chèques Bonheur de Lucas', description: "Après la crise, on célèbre ce qui s'est bien passé pour reconstruire la confiance", objectif: 'Reconstruire l\'estime de soi après chaque crise', section: 'apres' },
-  { id: 6,  badge: 'OUTIL PARENT', badgeColor: '#F5E06D', icon: '📓', vignetteFond: '#1C1B2E', titre: 'Journal des crises', description: 'À remplir après chaque crise pour voir les patterns', objectif: 'Voir les progrès sur 30 jours', section: 'apres' },
-  { id: 7,  badge: 'OUTIL PARENT', badgeColor: '#F5E06D', icon: '📅', vignetteFond: '#2A2040', titre: 'Calendrier 30 jours', description: 'Visualise les progrès sur un mois', objectif: 'Visualiser les cycles pour anticiper les pics', section: 'apres' },
+  { id: 6,  badge: 'OUTIL PARENT', badgeColor: '#F5E06D', icon: '📓', vignetteFond: '#1C1B2E', titre: 'Journal des crises', description: 'Planche de 4 fiches A6 à découper · à remplir après chaque crise', objectif: 'Voir les patterns sur 30 jours pour anticiper les pics', section: 'apres' },
 ]
 
 const SECTION_META = {
@@ -31,10 +29,8 @@ const SECTION_ORDER = ['pendant', 'avant', 'apres']
 const PDF_MAP = {
   1:  '/pdfs/cards-emotions.pdf',
   2:  '/pdfs/thermometre-emotions.pdf',
-  4:  '/pdfs/kit-anti-crise.pdf',        // recto = coin calme
-  5:  '/pdfs/kit-anti-crise.pdf',        // verso = déclencheurs (même PDF)
-  6:  '/pdfs/journal-simple.pdf',
-  7:  '/pdfs/journal-simple-planche.pdf',
+  4:  '/pdfs/kit-anti-crise.pdf',                 // recto coin calme + verso déclencheurs
+  6:  '/pdfs/journal-simple-planche.pdf',         // planche 4 fiches A6
   10: '/pdfs/systeme-victoires.pdf',
 }
 

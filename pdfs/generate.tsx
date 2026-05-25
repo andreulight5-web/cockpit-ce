@@ -2246,6 +2246,7 @@ const PdfJournalSimple = () => (
 
 const PdfJournalPlanche = () => (
   <Document title="Après la tempête — planche 4 fiches · Cockpit Crises TDAH" author="Cerveaux Électriques">
+    <IntercalaireJournalPage />
     <Page size="A4" style={{ backgroundColor: C.cream }}>
       {/* 4 fiches en grille 2×2 — collées (parfait alignement A4 = 4 × A6) */}
       <View style={{ position: 'absolute', top: 0, left: 0, width: FICHE_W, height: FICHE_H }}>
