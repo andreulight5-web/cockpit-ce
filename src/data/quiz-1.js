@@ -36,7 +36,7 @@ export const QUIZ_1 = {
       type: 'timer_challenge',
       emoji: '⏱️',
       question: "Léo dit que 5 minutes et 20 minutes c'est pareil pour lui. On va vérifier ensemble !",
-      instruction: 'Ferme les yeux. Papa ou maman lance le chrono. Dis STOP quand tu penses qu\'une minute est passée.',
+      instruction: 'Ferme les yeux. Papa ou maman lance le chrono. Dis STOP quand tu penses que 30 secondes sont passées.',
       options: [
         "J'ai dit stop trop tôt",
         "J'ai dit stop pile au bon moment",
@@ -45,7 +45,7 @@ export const QUIZ_1 = {
       hasCorrectAnswer: false,
       feedback: "Si tu as dit stop trop tôt ou trop tard, c'est NORMAL. Ton cerveau ne voit pas le temps. C'est pour ça que le minuteur visuel est ton meilleur allié — il rend le temps visible.",
       showTimer: true,
-      timerDuration: 60,
+      timerDuration: 30,
     },
     {
       id: 4,

@@ -257,14 +257,17 @@ function TimerChallenge({ question, answer, showFeedback, onAnswer }) {
   }
 
   const elapsedSec = elapsed / 1000
-  const offsetFromMin = elapsedSec - 60
+  const targetSec = question.timerDuration || 60
+  const targetLabel = targetSec >= 60 ? `${targetSec / 60} min` : `${targetSec} s`
+  const targetSentence = targetSec >= 60 ? `${targetSec / 60} minute${targetSec >= 120 ? 's' : ''}` : `${targetSec} secondes`
+  const offsetFromTarget = elapsedSec - targetSec
 
   return (
     <div style={{ marginTop: 18 }}>
       <p style={s.instruction}>{question.instruction}</p>
 
       <div style={s.timerCard}>
-        <CircularTimer elapsedMs={elapsed} max={question.timerDuration * 1000} running={phase === 'running'} />
+        <CircularTimer elapsedMs={elapsed} max={targetSec * 1000} targetLabel={targetLabel} running={phase === 'running'} />
 
         {phase === 'idle' && (
           <button onClick={start} style={{ ...s.timerBtn, background: TEAL, color: '#fff' }}>
@@ -282,11 +285,11 @@ function TimerChallenge({ question, answer, showFeedback, onAnswer }) {
               <div style={s.timerResultLabel}>Temps écoulé</div>
               <div style={s.timerResultValue}>{fmt(elapsed)}</div>
               <div style={s.timerResultDelta}>
-                {offsetFromMin > 0
-                  ? `+${offsetFromMin.toFixed(1)}s de plus qu'une minute`
-                  : offsetFromMin < 0
-                    ? `${offsetFromMin.toFixed(1)}s de moins qu'une minute`
-                    : 'Pile une minute !'}
+                {offsetFromTarget > 0
+                  ? `+${offsetFromTarget.toFixed(1)}s de plus que ${targetSentence}`
+                  : offsetFromTarget < 0
+                    ? `${offsetFromTarget.toFixed(1)}s de moins que ${targetSentence}`
+                    : `Pile ${targetSentence} !`}
               </div>
             </div>
             <button onClick={reset} style={{ ...s.timerBtn, background: 'transparent', color: DARK, border: '1px solid rgba(28,27,46,0.15)' }}>
@@ -326,7 +329,7 @@ function TimerChallenge({ question, answer, showFeedback, onAnswer }) {
   )
 }
 
-function CircularTimer({ elapsedMs, max, running }) {
+function CircularTimer({ elapsedMs, max, running, targetLabel = '1 min' }) {
   const pct = Math.min(elapsedMs / max, 1)
   const r = 56
   const C = 2 * Math.PI * r
@@ -354,7 +357,7 @@ function CircularTimer({ elapsedMs, max, running }) {
           {fmt(elapsedMs)}
         </div>
         <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(28,27,46,0.5)' }}>
-          objectif : 1 min
+          objectif : {targetLabel}
         </div>
       </div>
     </div>
