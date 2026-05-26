@@ -4,10 +4,10 @@ import { AppContext } from '../../lib/AppContext'
 import logoCE from '../../assets/logo-ce.png'
 
 const NAV_ITEMS = [
-  { to: '/',           icon: '🏠', label: 'Accueil',  exact: true },
-  { to: '/cours',      icon: '📚', label: 'Cours' },
-  { to: '/quiz',       icon: '🎯', label: 'Quiz' },
-  { to: '/ressources', icon: '🛠️', label: 'Outils' },
+  { to: '/accueil',   icon: '🏠', label: 'Accueil' },
+  { to: '/formation', icon: '📚', label: 'Formation' },
+  { to: '/outils',    icon: '🧰', label: 'Outils' },
+  { to: '/aide',      icon: '💬', label: 'Aide' },
 ]
 
 export default function Sidebar() {

@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AppContext } from './lib/AppContext'
 import { restore, save, migrateOldKeys } from './lib/sync'
-import Portal from './pages/portal/Portal'
-import Cours from './pages/cours/Cours'
+import Accueil from './pages/accueil/Accueil'
+import Formation from './pages/formation/Formation'
 import Lecon from './pages/cours/Lecon'
 import Quiz from './pages/quiz/Quiz'
 import QuizDetail from './pages/quiz/QuizDetail'
-import Ressources from './pages/ressources/Ressources'
+import Outils from './pages/outils/Outils'
+import Aide from './pages/aide/Aide'
 import Crise from './pages/crise/Crise'
-import Journal from './pages/journal/Journal'
-import Profil from './pages/profil/Profil'
 import Login from './pages/auth/Login'
 import Onboarding from './pages/onboarding/Onboarding'
 import Access from './pages/access/Access'
@@ -54,7 +53,7 @@ function AppLayout() {
     return (
       <Access onSuccess={() => {
         setHasAccess(true)
-        navigate('/', { replace: true })
+        navigate('/accueil', { replace: true })
       }} />
     )
   }
@@ -65,21 +64,41 @@ function AppLayout() {
     <AppContext.Provider value={{ appData, saveData }}>
       <DesktopShell>
         <Routes>
-          <Route path="/" element={<Portal />} />
-          <Route path="/cours" element={<Cours />} />
-          <Route path="/cours/:id" element={<Lecon />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/quiz/:id" element={<QuizDetail />} />
-          <Route path="/ressources" element={<Ressources />} />
-          <Route path="/crise" element={<Crise />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/profil" element={<Profil />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/onboarding" element={<Onboarding />} />
+          {/* 4 tabs principaux */}
+          <Route path="/accueil"        element={<Accueil />} />
+          <Route path="/formation"      element={<Formation />} />
+          <Route path="/formation/:id"  element={<Lecon />} />
+          <Route path="/outils"         element={<Outils />} />
+          <Route path="/aide"           element={<Aide />} />
+
+          {/* Quiz : accessible depuis Outils */}
+          <Route path="/quiz"           element={<Quiz />} />
+          <Route path="/quiz/:id"       element={<QuizDetail />} />
+
+          {/* Outils internes */}
+          <Route path="/crise"          element={<Crise />} />
+          <Route path="/login"          element={<Login />} />
+          <Route path="/onboarding"     element={<Onboarding />} />
+
+          {/* Alias d'anciennes routes (compat liens externes / emails) */}
+          <Route path="/"               element={<Navigate to="/accueil" replace />} />
+          <Route path="/cours"          element={<Navigate to="/formation" replace />} />
+          <Route path="/cours/:id"      element={<RedirectLecon />} />
+          <Route path="/ressources"     element={<Navigate to="/outils" replace />} />
+          <Route path="/journal"        element={<Navigate to="/accueil" replace />} />
+          <Route path="/profil"         element={<Navigate to="/accueil" replace />} />
+
+          {/* Catch-all */}
+          <Route path="*"               element={<Navigate to="/accueil" replace />} />
         </Routes>
       </DesktopShell>
     </AppContext.Provider>
   )
+}
+
+function RedirectLecon() {
+  const { pathname } = useLocation()
+  return <Navigate to={pathname.replace('/cours/', '/formation/')} replace />
 }
 
 export default function App() {

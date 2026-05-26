@@ -14,7 +14,7 @@ function LeconInner({ id }) {
   const navigate = useNavigate()
   const { appData, saveData } = useContext(AppContext)
   const dataset = LECONS
-  const backPath = '/cours'
+  const backPath = '/formation'
   const doneKey = 'lecons_done'
   const lecon = dataset.find((l) => String(l.id) === id)
   const [cardIdx, setCardIdx] = useState(0)
