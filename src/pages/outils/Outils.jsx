@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const triggerDownload = async (url) => {
@@ -49,11 +49,29 @@ const STOP_LIST = [
 export default function Outils() {
   const navigate = useNavigate()
   const [stopOpen, setStopOpen] = useState(false)
+  const [loadingKey, setLoadingKey] = useState(null)   // tool.id ou file.file
+  const [slowLoad, setSlowLoad]     = useState(false)
+  const slowTimerRef = useRef(null)
+
+  const runDownload = async (key, url) => {
+    if (loadingKey) return // évite les doubles clics
+    setLoadingKey(key)
+    setSlowLoad(false)
+    slowTimerRef.current = setTimeout(() => setSlowLoad(true), 10000)
+    try {
+      await triggerDownload(url)
+    } finally {
+      if (slowTimerRef.current) clearTimeout(slowTimerRef.current)
+      slowTimerRef.current = null
+      setLoadingKey(null)
+      setSlowLoad(false)
+    }
+  }
 
   const handle = (tool) => {
     if (tool.action.type === 'modal') return setStopOpen(true)
     if (tool.action.type === 'route') return navigate(tool.action.url)
-    if (tool.action.type === 'pdf')   return triggerDownload(tool.action.url)
+    if (tool.action.type === 'pdf')   return runDownload(tool.id, tool.action.url)
   }
 
   return (
@@ -64,20 +82,36 @@ export default function Outils() {
       </header>
 
       <div style={s.grid}>
-        {TOOLS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => handle(t)}
-            style={{ ...s.card, background: t.color, color: t.accent }}
-          >
-            <span style={s.cardEmoji}>{t.emoji}</span>
-            <span style={s.cardLabel}>{t.label}</span>
-            <span style={{ ...s.cardHint, color: t.accent === '#fff' ? 'rgba(255,255,255,0.7)' : 'rgba(28,27,46,0.7)' }}>{t.hint}</span>
-            <span style={s.cardCta}>
-              {t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger'}
-            </span>
-          </button>
-        ))}
+        {TOOLS.map((t) => {
+          const isLoading = loadingKey === t.id
+          const isDisabled = !!loadingKey && !isLoading
+          const ctaText = isLoading
+            ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
+            : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
+
+          return (
+            <button
+              key={t.id}
+              onClick={() => handle(t)}
+              disabled={isLoading || isDisabled}
+              style={{
+                ...s.card,
+                background: t.color,
+                color: t.accent,
+                opacity: isDisabled ? 0.55 : 1,
+                cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <span style={s.cardEmoji}>{t.emoji}</span>
+              <span style={s.cardLabel}>{t.label}</span>
+              <span style={{ ...s.cardHint, color: t.accent === '#fff' ? 'rgba(255,255,255,0.7)' : 'rgba(28,27,46,0.7)' }}>{t.hint}</span>
+              <span style={{ ...s.cardCta, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                {isLoading && <span className="spinner" />}
+                <span>{ctaText}</span>
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       {stopOpen && (
@@ -93,20 +127,36 @@ export default function Outils() {
             </div>
 
             <div style={s.sheetList}>
-              {STOP_LIST.map((it) => (
-                <button
-                  key={it.file}
-                  onClick={() => { triggerDownload(`/pdfs/${it.file}`); setStopOpen(false) }}
-                  style={s.sheetItem}
-                >
-                  <span style={s.sheetItemEmoji}>{it.emoji}</span>
-                  <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
-                    <div style={s.sheetItemLabel}>{it.label}</div>
-                    <div style={s.sheetItemDesc}>{it.desc}</div>
-                  </div>
-                  <span style={s.sheetItemDl}>📥</span>
-                </button>
-              ))}
+              {STOP_LIST.map((it) => {
+                const isLoading = loadingKey === it.file
+                const isDisabled = !!loadingKey && !isLoading
+                return (
+                  <button
+                    key={it.file}
+                    disabled={isLoading || isDisabled}
+                    onClick={async () => {
+                      await runDownload(it.file, `/pdfs/${it.file}`)
+                      setStopOpen(false)
+                    }}
+                    style={{
+                      ...s.sheetItem,
+                      opacity: isDisabled ? 0.55 : 1,
+                      cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    <span style={s.sheetItemEmoji}>{it.emoji}</span>
+                    <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
+                      <div style={s.sheetItemLabel}>
+                        {isLoading ? (slowLoad ? 'Encore un instant…' : 'Chargement…') : it.label}
+                      </div>
+                      <div style={s.sheetItemDesc}>{it.desc}</div>
+                    </div>
+                    <span style={{ ...s.sheetItemDl, display: 'inline-flex', alignItems: 'center' }}>
+                      {isLoading ? <span className="spinner" style={{ color: '#F5E06D' }} /> : '📥'}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>

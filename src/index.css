@@ -87,7 +87,21 @@ img { max-width: 100%; display: block; }
   0%, 100% { transform: rotate(-3deg); }
   50% { transform: rotate(3deg); }
 }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 .sway { animation: sway 3s ease-in-out infinite; }
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
 .fade-up { animation: fadeUp 0.4s ease-out both; }
 .fade-up-d1 { animation-delay: 0.08s; }
 .fade-up-d2 { animation-delay: 0.16s; }
