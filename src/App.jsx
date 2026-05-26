@@ -7,6 +7,7 @@ import Formation from './pages/formation/Formation'
 import Lecon from './pages/cours/Lecon'
 import Quiz from './pages/quiz/Quiz'
 import QuizDetail from './pages/quiz/QuizDetail'
+import QuizOne from './pages/quiz/QuizOne'
 import Outils from './pages/outils/Outils'
 import Aide from './pages/aide/Aide'
 import Crise from './pages/crise/Crise'
@@ -73,6 +74,7 @@ function AppLayout() {
 
           {/* Quiz : accessible depuis Outils */}
           <Route path="/quiz"           element={<Quiz />} />
+          <Route path="/quiz/1"         element={<QuizOne />} />
           <Route path="/quiz/:id"       element={<QuizDetail />} />
 
           {/* Outils internes */}

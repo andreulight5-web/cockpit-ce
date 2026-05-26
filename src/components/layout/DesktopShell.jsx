@@ -6,10 +6,13 @@ import BottomNav from './BottomNav'
 // Routes plein écran : ni sidebar (desktop) ni bottom nav (mobile)
 const FULLSCREEN_ROUTES = new Set(['/onboarding', '/login', '/access'])
 
+// /quiz/1, /quiz/2 ... : quiz en session = plein écran (mais /quiz seul garde la nav)
+const isQuizSession = (pathname) => /^\/quiz\/[^/]+/.test(pathname)
+
 export default function DesktopShell({ children }) {
   const isDesktop = useDesktop(1024)
   const { pathname } = useLocation()
-  const fullscreen = FULLSCREEN_ROUTES.has(pathname)
+  const fullscreen = FULLSCREEN_ROUTES.has(pathname) || isQuizSession(pathname)
 
   if (fullscreen) return children
 
