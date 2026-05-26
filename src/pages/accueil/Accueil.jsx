@@ -31,6 +31,7 @@ export default function Accueil() {
   const { appData } = useContext(AppContext)
   const navigate = useNavigate()
 
+  const prenomParent = appData?.onboarding?.prenomParent || ''
   const prenomEnfant = appData?.onboarding?.prenomEnfant || 'Lucas'
   const leconsDone = (appData?.lecons_done || []).map(Number).filter((id) => id >= 1 && id <= 5)
   const formationPct = Math.round((leconsDone.length / TOTAL_LECONS) * 100)
@@ -54,7 +55,10 @@ export default function Accueil() {
       </header>
 
       <div style={s.body}>
-        {/* Titre prénom enfant */}
+        {/* Salutation manuscrite + titre prénom enfant */}
+        {prenomParent && (
+          <p style={s.greeting}>Bienvenue {prenomParent}</p>
+        )}
         <h1 style={s.titlePrenom}>Le cockpit de {prenomEnfant}</h1>
         <p style={s.subtitle}>Tu prépares les bons réflexes à froid. Le moment venu, ils seront déjà là.</p>
 
@@ -169,6 +173,14 @@ const s = {
 
   body: { padding: '8px 20px 32px' },
 
+  greeting: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: 28,
+    fontWeight: 700,
+    color: '#F5E06D',
+    margin: '12px 0 -4px',
+    lineHeight: 1.1,
+  },
   titlePrenom: {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 24,
