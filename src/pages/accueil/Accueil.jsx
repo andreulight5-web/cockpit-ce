@@ -84,6 +84,20 @@ export default function Accueil() {
           )}
         </section>
 
+        {/* Quiz Émotions — CTA dédié, activité enfant */}
+        <button
+          onClick={() => navigate('/quiz')}
+          style={s.quizCard}
+          className="fade-up"
+        >
+          <span style={{ fontSize: 32, marginRight: 14, flexShrink: 0 }}>🎯</span>
+          <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+            <div style={s.quizLabel}>Quiz Émotions</div>
+            <div style={s.quizSub}>Lance une session avec ton enfant — 10 min</div>
+          </div>
+          <span style={s.quizArrow}>›</span>
+        </button>
+
         {/* Outils rapides */}
         <section style={{ marginTop: 28 }}>
           <h2 style={s.sectionTitle}>Tes outils rapides</h2>
@@ -237,6 +251,38 @@ const s = {
     fontSize: 13,
     color: '#2A9490',
     fontWeight: 600,
+  },
+
+  quizCard: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    background: 'linear-gradient(135deg, #3E8E5E, #2A6F47)',
+    border: 'none',
+    borderRadius: 16,
+    padding: '16px 18px',
+    cursor: 'pointer',
+    marginTop: 16,
+    color: '#fff',
+  },
+  quizLabel: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 15,
+    fontWeight: 700,
+    color: '#fff',
+    lineHeight: 1.2,
+  },
+  quizSub: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: 3,
+  },
+  quizArrow: {
+    fontSize: 22,
+    color: 'rgba(255,255,255,0.6)',
+    marginLeft: 8,
+    flexShrink: 0,
   },
 
   sectionTitle: {
