@@ -1,7 +1,7 @@
 export const QUIZ_1 = {
   id: 1,
   title: "Et toi, c'est comment le matin ?",
-  videoUrl: 'https://www.youtube.com/embed/-YFC9aOzhjo',
+  videoUrl: 'https://www.youtube.com/embed/u2FcMxJ9dXk',
   videoDescription: 'Regarde la vidéo de Léo avec ton enfant avant de commencer le quiz.',
   questions: [
     {
