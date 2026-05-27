@@ -60,13 +60,13 @@ export const QUIZ = [
    * ═══════════════════════════════════════════════════════ */
   {
     id: 2,
-    titre: 'Écrans & devoirs',
-    emoji: '📚',
-    sousTitre: "Hyperfocus + frustration scolaire = le moment le plus explosif",
-    couleur: '#F5A623',
+    titre: "Et toi, c'est comment le soir ?",
+    emoji: '🌙',
+    sousTitre: 'Mini-coaching parent-enfant — 5 minutes',
+    couleur: '#5D4192',
     xp: 30,
-    badge: '📚 Tactiques devoirs & écrans',
-    video: { disponible: false, titre: 'Lâcher la tablette' },
+    badge: '🌙 Maître des soirs',
+    video: { disponible: true, titre: 'Le soir chez Léo' },
     questions: [
       {
         id: 'q1',
