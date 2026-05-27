@@ -27,8 +27,37 @@ const FAQ = [
   },
 ]
 
+function getAccessCode() {
+  try {
+    const raw = localStorage.getItem('cockpit_access')
+    return raw ? (JSON.parse(raw)?.code || '') : ''
+  } catch { return '' }
+}
+
 export default function Aide() {
-  const [openIdx, setOpenIdx] = useState(null)
+  const [openIdx, setOpenIdx]       = useState(null)
+  const [formOpen, setFormOpen]     = useState(false)
+  const [subject, setSubject]       = useState('')
+  const [message, setMessage]       = useState('')
+  const [submitted, setSubmitted]   = useState(false)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!message.trim()) return
+    const code = getAccessCode()
+    const subj = subject.trim() || 'Aide Cockpit CE'
+    const footer = code ? `\n\n---\nCode d'accès : ${code}` : ''
+    const url = `mailto:info@cerveau-electrique.fr?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(message + footer)}`
+    window.location.href = url
+    setSubmitted(true)
+  }
+
+  const closeForm = () => {
+    setFormOpen(false)
+    setSubmitted(false)
+    setSubject('')
+    setMessage('')
+  }
 
   return (
     <div style={s.page}>
@@ -45,12 +74,69 @@ export default function Aide() {
           <p style={s.supportDesc}>
             Écris-nous, on te répond personnellement sous 24 à 48h. Aucune question est bête — surtout celles sur ton enfant.
           </p>
-          <a
-            href="mailto:info@cerveau-electrique.fr?subject=Aide%20Cockpit%20CE"
-            style={s.supportCta}
-          >
-            ✉️ Envoyer un message
-          </a>
+
+          {!formOpen && (
+            <button
+              type="button"
+              onClick={() => setFormOpen(true)}
+              style={s.supportCta}
+            >
+              ✉️ Envoyer un message
+            </button>
+          )}
+
+          {formOpen && !submitted && (
+            <form onSubmit={handleSubmit} style={s.form} className="fade-up">
+              <label style={s.formLabel}>
+                Sujet
+                <input
+                  type="text"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="ex. Question sur les Phrases STOP"
+                  style={s.formInput}
+                  maxLength={120}
+                />
+              </label>
+              <label style={s.formLabel}>
+                Message <span style={{ color: '#FFB1B1' }}>*</span>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Raconte ta situation, on te lit attentivement…"
+                  style={s.formTextarea}
+                  rows={5}
+                  required
+                />
+              </label>
+              <p style={s.formHint}>
+                Ton code d'accès sera ajouté automatiquement à la fin du message — ça nous aide à retrouver ton compte.
+              </p>
+              <div style={s.formActions}>
+                <button type="button" onClick={closeForm} style={s.formCancel}>
+                  Annuler
+                </button>
+                <button type="submit" disabled={!message.trim()} style={{ ...s.supportCta, opacity: message.trim() ? 1 : 0.5, cursor: message.trim() ? 'pointer' : 'not-allowed' }}>
+                  ✉️ Envoyer
+                </button>
+              </div>
+            </form>
+          )}
+
+          {submitted && (
+            <div style={s.confirm} className="fade-up">
+              <div style={s.confirmIcon}>✓</div>
+              <div>
+                <div style={s.confirmTitle}>Email préparé dans ton app mail</div>
+                <div style={s.confirmDesc}>
+                  Vérifie que le message s'est bien ouvert, puis envoie-le. On te répond sous 24 à 48h.
+                </div>
+                <button type="button" onClick={closeForm} style={s.confirmClose}>
+                  Fermer
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Comment utiliser le kit */}
@@ -169,7 +255,134 @@ const s = {
     fontWeight: 700,
     padding: '12px 20px',
     borderRadius: 50,
+    border: 'none',
+    cursor: 'pointer',
     textDecoration: 'none',
+  },
+
+  /* Formulaire support */
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12,
+    marginTop: 4,
+  },
+  formLabel: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 11.5,
+    fontWeight: 700,
+    color: 'rgba(255,255,255,0.9)',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  formInput: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.12)',
+    border: '1px solid rgba(255,255,255,0.18)',
+    borderRadius: 10,
+    padding: '11px 14px',
+    color: '#fff',
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 13.5,
+    fontWeight: 500,
+    outline: 'none',
+    boxSizing: 'border-box',
+    textTransform: 'none',
+    letterSpacing: 0,
+  },
+  formTextarea: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.12)',
+    border: '1px solid rgba(255,255,255,0.18)',
+    borderRadius: 10,
+    padding: '11px 14px',
+    color: '#fff',
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 13.5,
+    fontWeight: 500,
+    outline: 'none',
+    resize: 'vertical',
+    minHeight: 110,
+    boxSizing: 'border-box',
+    textTransform: 'none',
+    letterSpacing: 0,
+    lineHeight: 1.5,
+  },
+  formHint: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.7)',
+    margin: '-2px 0 0',
+    lineHeight: 1.5,
+  },
+  formActions: {
+    display: 'flex',
+    gap: 10,
+    marginTop: 6,
+  },
+  formCancel: {
+    background: 'transparent',
+    border: '1px solid rgba(255,255,255,0.25)',
+    borderRadius: 50,
+    padding: '11px 18px',
+    color: '#fff',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 12.5,
+    fontWeight: 600,
+    cursor: 'pointer',
+  },
+
+  /* Confirmation post-submit */
+  confirm: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 12,
+    background: 'rgba(255,255,255,0.12)',
+    border: '1px solid rgba(255,255,255,0.2)',
+    borderRadius: 12,
+    padding: 14,
+    marginTop: 4,
+  },
+  confirmIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: '50%',
+    background: '#F5E06D',
+    color: '#1C1B2E',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 800,
+    fontSize: 14,
+    flexShrink: 0,
+  },
+  confirmTitle: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#fff',
+    marginBottom: 4,
+  },
+  confirmDesc: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.85)',
+    lineHeight: 1.5,
+    marginBottom: 10,
+  },
+  confirmClose: {
+    background: 'transparent',
+    border: '1px solid rgba(255,255,255,0.25)',
+    borderRadius: 50,
+    padding: '7px 14px',
+    color: '#fff',
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12,
+    cursor: 'pointer',
   },
 
   sectionTitle: {
