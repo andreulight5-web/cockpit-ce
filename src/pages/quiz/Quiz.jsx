@@ -28,7 +28,7 @@ export default function Quiz() {
               <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
                 <h3 style={s.cardTitle}>{q.titre}</h3>
                 {q.sousTitre && <p style={s.cardSub}>{q.sousTitre}</p>}
-                <p style={s.cardMeta}>{q.questions.length} situations · ⭐ {q.xp} XP</p>
+                <p style={s.cardMeta}>5 questions · ⭐ {q.xp} XP</p>
                 {isDone && <span style={{ ...s.soon, background: 'rgba(42,148,144,0.18)', color: '#2A9490' }}>✓ Terminé</span>}
               </div>
               <span style={{ color: '#999', fontSize: 20, flexShrink: 0 }}>›</span>
