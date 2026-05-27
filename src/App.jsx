@@ -6,7 +6,6 @@ import Accueil from './pages/accueil/Accueil'
 import Formation from './pages/formation/Formation'
 import Lecon from './pages/cours/Lecon'
 import Quiz from './pages/quiz/Quiz'
-import QuizDetail from './pages/quiz/QuizDetail'
 import QuizOne from './pages/quiz/QuizOne'
 import QuizTwo from './pages/quiz/QuizTwo'
 import QuizThree from './pages/quiz/QuizThree'
@@ -83,7 +82,6 @@ function AppLayout() {
           <Route path="/quiz/3"         element={<QuizThree />} />
           <Route path="/quiz/4"         element={<QuizFour />} />
           <Route path="/quiz/5"         element={<QuizFive />} />
-          <Route path="/quiz/:id"       element={<QuizDetail />} />
 
           {/* Outils internes */}
           <Route path="/crise"          element={<Crise />} />
