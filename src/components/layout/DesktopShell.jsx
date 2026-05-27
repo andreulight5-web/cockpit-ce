@@ -20,7 +20,9 @@ export default function DesktopShell({ children }) {
     return (
       <div style={s.shell}>
         <Sidebar />
-        <main style={s.main}>{children}</main>
+        <main style={s.main}>
+          <div style={s.mainInner}>{children}</div>
+        </main>
       </div>
     )
   }
@@ -35,8 +37,9 @@ export default function DesktopShell({ children }) {
 }
 
 const s = {
-  shell: { display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: '100vh', width: '100%' },
-  main: { minWidth: 0, minHeight: '100vh', background: '#1C1B2E', overflowX: 'hidden' },
-  mobileWrap: { minHeight: '100dvh' },
-  mobileContent: { paddingBottom: 'calc(60px + env(safe-area-inset-bottom))' },
+  shell: { display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: '100vh', width: '100%', background: '#FAFAF5' },
+  main: { minWidth: 0, minHeight: '100vh', background: '#FAFAF5', overflowX: 'hidden' },
+  mainInner: { maxWidth: 800, margin: '0 auto', minHeight: '100vh', background: '#FAFAF5' },
+  mobileWrap: { minHeight: '100dvh', background: '#FAFAF5' },
+  mobileContent: { paddingBottom: 'calc(60px + env(safe-area-inset-bottom))', background: '#FAFAF5' },
 }

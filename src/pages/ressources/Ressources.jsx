@@ -53,13 +53,33 @@ const STOP_LIST = [
   { file: 'phrases-stop-sensoriel.pdf',   emoji: '🔊', label: 'Surcharge sensorielle', desc: 'Bruit, lumière, étiquette' },
 ]
 
-const triggerDownload = (url) => {
-  const a = document.createElement('a')
-  a.href = url
-  a.download = url.split('/').pop()
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
+/**
+ * Téléchargement robuste cross-browser :
+ * 1. fetch → blob → URL.createObjectURL → lien temporaire avec download + target=_blank
+ *    → marche sur desktop et la plupart des mobiles (sauve dans le dossier "Téléchargements"
+ *    ou ouvre dans un nouvel onglet selon le browser)
+ * 2. fallback : window.open dans un nouvel onglet — l'app n'est JAMAIS perdue
+ */
+const triggerDownload = async (url) => {
+  const filename = url.split('/').pop()
+  try {
+    const res = await fetch(url)
+    if (!res.ok) throw new Error('fetch failed')
+    const blob = await res.blob()
+    const blobUrl = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = filename
+    a.target = '_blank'
+    a.rel = 'noopener noreferrer'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1500)
+  } catch {
+    // Fallback : ouvre la ressource dans un nouvel onglet (l'app reste ouverte)
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
 }
 
 export default function Ressources() {

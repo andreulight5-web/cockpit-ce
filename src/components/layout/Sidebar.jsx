@@ -49,8 +49,13 @@ export default function Sidebar() {
             end={item.exact}
             style={({ isActive }) => ({ ...s.navLink, ...(isActive ? s.navLinkActive : null) })}
           >
-            <span style={s.navIcon}>{item.icon}</span>
-            <span>{item.label}</span>
+            {({ isActive }) => (
+              <>
+                {isActive && <span style={s.navIndicator} />}
+                <span style={s.navIcon}>{item.icon}</span>
+                <span>{item.label}</span>
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
@@ -91,8 +96,8 @@ const s = {
   sidebar: {
     width: 240,
     minHeight: '100vh',
-    background: '#16152A',
-    borderRight: '1px solid rgba(255,255,255,0.06)',
+    background: '#FFFFFF',
+    borderRight: '1px solid #E5E5E5',
     padding: '20px 16px 24px',
     display: 'flex',
     flexDirection: 'column',
@@ -101,30 +106,31 @@ const s = {
     overflowY: 'auto',
   },
 
-  brand: { display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)' },
-  logoWrap: { width: 38, height: 38, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(245,224,109,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  brand: { display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 16, borderBottom: '1px solid #E5E5E5' },
+  logoWrap: { width: 38, height: 38, borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(245,224,109,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   logoImg: { width: '100%', height: '100%', objectFit: 'cover' },
-  brandTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.85)', lineHeight: 1.1 },
-  brandTitle2: { fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 800, color: '#fff', lineHeight: 1.1 },
+  brandTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 700, color: '#1C1B2E', lineHeight: 1.1 },
+  brandTitle2: { fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 800, color: '#1C1B2E', lineHeight: 1.1 },
 
   hello: { padding: '14px 4px 4px' },
-  helloLabel: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#F5E06D' },
-  helloName: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginTop: 2 },
+  helloLabel: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#2A9490' },
+  helloName: { fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 18, color: '#1C1B2E', marginTop: 2 },
 
-  nav: { display: 'flex', flexDirection: 'column', gap: 2, marginTop: 14 },
-  navHead: { fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 1.6, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', padding: '12px 8px 6px' },
-  navLink: { display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 10, fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', textDecoration: 'none', transition: 'background 0.15s, color 0.15s', border: '1px solid transparent' },
-  navLinkActive: { background: 'linear-gradient(90deg, rgba(245,224,109,0.16), rgba(245,224,109,0.04))', color: '#F5E06D', fontWeight: 600, borderColor: 'rgba(245,224,109,0.25)' },
+  nav: { display: 'flex', flexDirection: 'column', gap: 4, marginTop: 14 },
+  navHead: { fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 1.6, color: '#999', textTransform: 'uppercase', padding: '12px 8px 6px' },
+  navLink: { position: 'relative', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px 10px 16px', borderRadius: 10, fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 500, color: '#999', textDecoration: 'none', transition: 'background 0.15s, color 0.15s' },
+  navLinkActive: { background: 'rgba(42,148,144,0.08)', color: '#2A9490', fontWeight: 700 },
+  navIndicator: { position: 'absolute', left: 0, top: 8, bottom: 8, width: 3, borderRadius: 99, background: '#2A9490' },
   navIcon: { fontSize: 16, width: 22, textAlign: 'center', flexShrink: 0 },
 
-  progressBlock: { marginTop: 'auto', paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' },
+  progressBlock: { marginTop: 'auto', paddingTop: 16, borderTop: '1px solid #E5E5E5' },
   progRow: { padding: '8px 4px' },
   progRowHead: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
-  progLabel: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 500 },
+  progLabel: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#64748B', fontWeight: 500 },
   progPct: { fontFamily: 'Poppins, sans-serif', fontSize: 12, fontWeight: 700 },
-  progBar: { height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 99, overflow: 'hidden' },
+  progBar: { height: 4, background: '#E5E5E5', borderRadius: 99, overflow: 'hidden' },
   progFill: { height: '100%', borderRadius: 99, transition: 'width 0.4s' },
-  progSub: { fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4 },
+  progSub: { fontSize: 10, color: '#999', marginTop: 4 },
 
-  streak: { display: 'inline-block', marginTop: 12, padding: '6px 12px', borderRadius: 20, background: 'rgba(245,224,109,0.10)', border: '1px solid rgba(245,224,109,0.2)', fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#F5E06D' },
+  streak: { display: 'inline-block', marginTop: 12, padding: '6px 12px', borderRadius: 20, background: 'rgba(245,224,109,0.18)', border: '1px solid rgba(245,224,109,0.45)', fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#1C1B2E', fontWeight: 600 },
 }

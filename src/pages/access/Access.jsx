@@ -59,10 +59,10 @@ export default function Access({ onSuccess }) {
   return (
     <div style={s.page}>
       <div style={s.inner}>
-        <img src={logoCE} alt="Cerveaux Électriques" style={s.logo} />
+        <img src={logoCE} alt="Cerveau Électrique" style={s.logo} />
 
         <div style={s.brand}>
-          Cerveaux <span style={{ color: '#F5E06D' }}>Électriques</span>
+          Cerveau <span style={{ color: '#F5E06D' }}>Électrique</span>
         </div>
 
         <h1 style={s.title}>Entre ton code d'accès</h1>

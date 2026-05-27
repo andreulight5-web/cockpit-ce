@@ -40,7 +40,7 @@ function QuizDetailInner({ id }) {
     })
   }, [step, quiz, saveData, appData, xpAwarded])
 
-  if (!quiz) return <div style={{ background: '#1C1B2E', color: '#fff', minHeight: '100dvh', padding: 40 }}>Quiz introuvable</div>
+  if (!quiz) return <div style={{ background: '#FAFAF5', color: '#1C1B2E', minHeight: '100dvh', padding: 40 }}>Quiz introuvable</div>
 
   const color = quiz.couleur
   const question = quiz.questions[qIdx]
@@ -103,10 +103,10 @@ function IntroStep({ quiz, color, onStart }) {
     <div style={S.stepWrap}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '0 8px' }}>
         <div style={{ fontSize: 80, marginBottom: 12 }}>{quiz.emoji}</div>
-        <h1 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 26, fontWeight: 800, color: '#fff', margin: '0 0 10px', lineHeight: 1.2 }}>{quiz.titre}</h1>
+        <h1 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 26, fontWeight: 800, color: '#1C1B2E', margin: '0 0 10px', lineHeight: 1.2 }}>{quiz.titre}</h1>
         <p style={{ fontFamily: "'Caveat', cursive", fontSize: 20, color, margin: 0 }}>{quiz.sousTitre}</p>
 
-        <div style={{ marginTop: 28, padding: 18, borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', maxWidth: 360, width: '100%' }}>
+        <div style={{ marginTop: 28, padding: 18, borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(28,27,46,0.08)', maxWidth: 360, width: '100%' }}>
           <div style={{ ...S.metaRow, marginBottom: 6 }}>
             <span style={S.metaLabel}>Format</span>
             <span style={S.metaValue}>{quiz.questions.length} situations</span>
@@ -118,7 +118,7 @@ function IntroStep({ quiz, color, onStart }) {
         </div>
 
         {!quiz.video.disponible && (
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 14 }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#999', marginTop: 14 }}>
             🎬 Vidéo bientôt disponible
           </p>
         )}
@@ -155,7 +155,7 @@ function QuestionStep({ question, color, qIdx, total, onChoose }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {question.options.map((opt, i) => (
           <button key={opt.id} onClick={() => onChoose(opt)} style={{ ...S.optionCard, animationDelay: `${i * 60}ms` }} className="fade-up">
-            <span style={{ ...S.optionLetter, background: 'rgba(255,255,255,0.08)' }}>{opt.id.toUpperCase()}</span>
+            <span style={{ ...S.optionLetter, background: 'rgba(28,27,46,0.08)' }}>{opt.id.toUpperCase()}</span>
             <span style={S.optionText}>{opt.text}</span>
           </button>
         ))}
@@ -174,7 +174,7 @@ function FeedbackStep({ picked, color, isLast, onContinue }) {
           <div style={{ ...S.scoreBadge, background: tier.dotBg }}>{tier.icon}</div>
           <div>
             <div style={{ ...S.tierLabel, color: tier.borderColor }}>{tier.label}</div>
-            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.55)' }}>+{picked.score} point{picked.score > 1 ? 's' : ''} sur 3</div>
+            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#64748B' }}>+{picked.score} point{picked.score > 1 ? 's' : ''} sur 3</div>
           </div>
         </div>
 
@@ -223,14 +223,14 @@ function ResultStep({ quiz, color, totalScore, maxScore, answers, nextQ, onResta
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', zIndex: 1 }}>
         <div style={{ fontSize: 64, marginBottom: 6 }}>{verdict.emoji}</div>
-        <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 800, color: '#fff', margin: '6px 0 4px', lineHeight: 1.25 }}>{verdict.titre}</h2>
-        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.65)', margin: '0 16px', lineHeight: 1.5 }}>{verdict.sub}</p>
+        <h2 style={{ fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 800, color: '#1C1B2E', margin: '6px 0 4px', lineHeight: 1.25 }}>{verdict.titre}</h2>
+        <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#64748B', margin: '0 16px', lineHeight: 1.5 }}>{verdict.sub}</p>
 
         {/* Score circulaire */}
         <div style={{ marginTop: 22, display: 'flex', justifyContent: 'center' }}>
           <div style={{ ...S.scoreRing, borderColor: color }}>
-            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 36, fontWeight: 800, color, lineHeight: 1 }}>{totalScore}<span style={{ fontSize: 18, color: 'rgba(255,255,255,0.45)', fontWeight: 600 }}>/{maxScore}</span></div>
-            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 2, letterSpacing: 1 }}>{pct}%</div>
+            <div style={{ fontFamily: 'Poppins, sans-serif', fontSize: 36, fontWeight: 800, color, lineHeight: 1 }}>{totalScore}<span style={{ fontSize: 18, color: '#999', fontWeight: 600 }}>/{maxScore}</span></div>
+            <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#64748B', marginTop: 2, letterSpacing: 1 }}>{pct}%</div>
           </div>
         </div>
 
@@ -242,7 +242,7 @@ function ResultStep({ quiz, color, totalScore, maxScore, answers, nextQ, onResta
               return (
                 <div key={i} style={{ ...S.miniDot, background: t.dotBg, borderColor: t.borderColor }} title={`Q${i + 1} — ${a.score}/3`}>
                   <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 10, fontWeight: 700, color: t.borderColor }}>Q{i + 1}</span>
-                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 800, color: '#fff' }}>{a.score}</span>
+                  <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 800, color: '#1C1B2E' }}>{a.score}</span>
                 </div>
               )
             })}
@@ -273,7 +273,7 @@ function ResultStep({ quiz, color, totalScore, maxScore, answers, nextQ, onResta
             Retour aux quiz
           </button>
         )}
-        <button onClick={() => navigate('/')} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.6)' }}>
+        <button onClick={() => navigate('/')} style={{ ...S.btn, background: 'transparent', border: '1px solid rgba(28,27,46,0.12)', color: '#64748B' }}>
           Accueil
         </button>
       </div>
@@ -301,33 +301,33 @@ export default function QuizDetail() {
 }
 
 const S = {
-  page: { background: '#1C1B2E', minHeight: '100dvh', display: 'flex', flexDirection: 'column' },
+  page: { background: '#FAFAF5', minHeight: '100dvh', display: 'flex', flexDirection: 'column' },
   header: { position: 'fixed', top: 0, left: 0, right: 0, maxWidth: 430, margin: '0 auto', zIndex: 10, display: 'flex', alignItems: 'center', padding: '12px 16px', background: 'linear-gradient(to bottom, rgba(28,27,46,0.95) 0%, rgba(28,27,46,0) 100%)' },
-  backCircle: { width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  count: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: 'rgba(255,255,255,0.5)' },
+  backCircle: { width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#1C1B2E', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  count: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#64748B' },
   stepWrap: { flex: 1, padding: '72px 18px 28px', display: 'flex', flexDirection: 'column', maxWidth: 430, margin: '0 auto', width: '100%' },
 
   /* Intro */
   metaRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  metaLabel: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600 },
-  metaValue: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#fff', fontWeight: 600 },
+  metaLabel: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600 },
+  metaValue: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#1C1B2E', fontWeight: 600 },
 
   /* Question */
   scenarioCard: { background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 14, marginBottom: 16 },
   scenarioLabel: { fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' },
-  scenarioText: { fontFamily: 'Inter, sans-serif', fontSize: 13.5, color: '#E2E8F0', lineHeight: 1.6, margin: '6px 0 0' },
-  questionTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: '#fff', margin: '0 0 14px', lineHeight: 1.4 },
-  optionCard: { display: 'flex', alignItems: 'flex-start', gap: 12, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 14, cursor: 'pointer', textAlign: 'left', fontFamily: 'Inter, sans-serif', transition: 'background 0.15s, border-color 0.15s' },
-  optionLetter: { fontFamily: 'Poppins, sans-serif', fontSize: 11, fontWeight: 800, color: '#fff', width: 26, height: 26, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 },
-  optionText: { fontSize: 13.5, color: '#E2E8F0', lineHeight: 1.5, flex: 1 },
+  scenarioText: { fontFamily: 'Inter, sans-serif', fontSize: 13.5, color: '#1C1B2E', lineHeight: 1.6, margin: '6px 0 0' },
+  questionTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 17, fontWeight: 700, color: '#1C1B2E', margin: '0 0 14px', lineHeight: 1.4 },
+  optionCard: { display: 'flex', alignItems: 'flex-start', gap: 12, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(28,27,46,0.08)', borderRadius: 12, padding: 14, cursor: 'pointer', textAlign: 'left', fontFamily: 'Inter, sans-serif', transition: 'background 0.15s, border-color 0.15s' },
+  optionLetter: { fontFamily: 'Poppins, sans-serif', fontSize: 11, fontWeight: 800, color: '#1C1B2E', width: 26, height: 26, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 },
+  optionText: { fontSize: 13.5, color: '#1C1B2E', lineHeight: 1.5, flex: 1 },
 
   /* Feedback */
   feedbackCard: { borderRadius: 14, padding: 16, border: '1px solid' },
   scoreBadge: { width: 36, height: 36, borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 },
   tierLabel: { fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 700, letterSpacing: 0.4 },
-  pickedQuote: { display: 'flex', alignItems: 'flex-start', gap: 10, background: 'rgba(0,0,0,0.25)', borderRadius: 10, padding: '10px 12px', fontFamily: 'Inter, sans-serif', fontSize: 12.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 },
-  pickedLetter: { fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.08)', padding: '2px 7px', borderRadius: 8, flexShrink: 0, marginTop: 2 },
-  feedbackText: { fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#fff', lineHeight: 1.6, margin: 0 },
+  pickedQuote: { display: 'flex', alignItems: 'flex-start', gap: 10, background: 'rgba(0,0,0,0.25)', borderRadius: 10, padding: '10px 12px', fontFamily: 'Inter, sans-serif', fontSize: 12.5, color: '#64748B', lineHeight: 1.5 },
+  pickedLetter: { fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 800, color: '#64748B', background: 'rgba(28,27,46,0.08)', padding: '2px 7px', borderRadius: 8, flexShrink: 0, marginTop: 2 },
+  feedbackText: { fontFamily: 'Inter, sans-serif', fontSize: 14, color: '#1C1B2E', lineHeight: 1.6, margin: 0 },
 
   /* Result */
   scoreRing: { width: 130, height: 130, borderRadius: '50%', border: '3px solid', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.04)' },

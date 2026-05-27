@@ -100,7 +100,7 @@ function Step2Secure({ onNext }) {
         {checks.map((txt, i) => (
           <button key={i} onClick={() => toggle(i)} style={{ ...S.checkCard, borderColor: done[i] ? '#2A9490' : 'rgba(255,255,255,0.1)', background: done[i] ? 'rgba(42,148,144,0.15)' : 'rgba(255,255,255,0.04)' }}>
             <span style={{ width: 22, height: 22, borderRadius: 6, border: done[i] ? '2px solid #2A9490' : '2px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#2A9490', flexShrink: 0 }}>{done[i] ? '✓' : ''}</span>
-            <span style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif' }}>{txt}</span>
+            <span style={{ color: '#1C1B2E', fontSize: 14, fontFamily: 'Inter, sans-serif' }}>{txt}</span>
           </button>
         ))}
       </div>
@@ -144,7 +144,7 @@ function Step3Validate({ onNext }) {
         {scripts.map((s, i) => (
           <div key={i} style={S.scriptCard}>
             <span style={{ fontSize: 16 }}>💬</span>
-            <p style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif', fontStyle: 'italic', margin: 0, lineHeight: 1.5 }}>"{s}"</p>
+            <p style={{ color: '#1C1B2E', fontSize: 14, fontFamily: 'Inter, sans-serif', fontStyle: 'italic', margin: 0, lineHeight: 1.5 }}>"{s}"</p>
           </div>
         ))}
       </div>
@@ -152,8 +152,8 @@ function Step3Validate({ onNext }) {
       {/* 2 min timer */}
       <div onClick={startTimer} style={{ textAlign: 'center', marginTop: 16, cursor: 'pointer' }}>
         <p style={{ color: '#A8DED1', fontSize: 12, fontFamily: 'Inter, sans-serif', marginBottom: 4 }}>Attends au moins 2 minutes avant de parler</p>
-        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, color: running ? '#A8DED1' : 'rgba(255,255,255,0.3)' }}>{min}:{sec.toString().padStart(2, '0')}</span>
-        {!running && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>Tape pour lancer</p>}
+        <span style={{ fontFamily: 'Poppins, sans-serif', fontSize: 32, fontWeight: 800, color: running ? '#A8DED1' : '#999' }}>{min}:{sec.toString().padStart(2, '0')}</span>
+        {!running && <p style={{ color: '#999', fontSize: 11 }}>Tape pour lancer</p>}
       </div>
 
       <button onClick={onNext} style={S.nextBtn}>Étape suivante →</button>
@@ -180,14 +180,14 @@ function Step4After({ navigate }) {
         {postSteps.map((txt, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <span style={{ width: 26, height: 26, borderRadius: '50%', background: 'rgba(42,148,144,0.2)', color: '#2A9490', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{i + 1}</span>
-            <p style={{ color: '#E2E8F0', fontSize: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5, margin: 0 }}>{txt}</p>
+            <p style={{ color: '#1C1B2E', fontSize: 14, fontFamily: 'Inter, sans-serif', lineHeight: 1.5, margin: 0 }}>{txt}</p>
           </div>
         ))}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', marginTop: 'auto', paddingTop: 24 }}>
         <button onClick={() => navigate('/journal')} style={{ ...S.nextBtn, background: '#2A9490' }}>Logger cette crise</button>
-        <button onClick={() => navigate('/')} style={{ ...S.nextBtn, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)' }}>Retour à l'accueil</button>
+        <button onClick={() => navigate('/')} style={{ ...S.nextBtn, background: 'transparent', border: '1px solid rgba(28,27,46,0.12)' }}>Retour à l'accueil</button>
       </div>
     </div>
   )
@@ -214,18 +214,18 @@ function ScriptCard({ type, text }) {
 
 /* ═══ Styles ═══ */
 const S = {
-  root: { minHeight: '100dvh', background: '#1C1B2E', display: 'flex', flexDirection: 'column' },
+  root: { minHeight: '100dvh', background: '#FAFAF5', display: 'flex', flexDirection: 'column' },
   progressRow: { display: 'flex', gap: 4, padding: '48px 16px 0', alignItems: 'center' },
-  closeBtn: { background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 18, cursor: 'pointer', marginLeft: 12, padding: 4 },
+  closeBtn: { background: 'none', border: 'none', color: '#64748B', fontSize: 18, cursor: 'pointer', marginLeft: 12, padding: 4 },
   body: { flex: 1, display: 'flex', flexDirection: 'column' },
   step: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '12px 20px 40px', overflowY: 'auto' },
   stepBorder: { width: '100%', borderTop: '4px solid', borderRadius: 2, marginBottom: 4 },
   charImg: { height: 180, objectFit: 'contain' },
-  stepTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 700, color: '#fff', textAlign: 'center', margin: 0 },
+  stepTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 700, color: '#1C1B2E', textAlign: 'center', margin: 0 },
   stepSub: { fontFamily: 'Inter, sans-serif', fontSize: 16, color: '#94A3B8', textAlign: 'center', margin: '0 0 8px', lineHeight: 1.5 },
   timerWrap: { position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 120, height: 120, cursor: 'pointer', margin: '8px 0' },
   timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#F5E06D' },
-  timerHint: { position: 'absolute', bottom: -18, fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: 'Inter, sans-serif' },
+  timerHint: { position: 'absolute', bottom: -18, fontSize: 11, color: '#999', fontFamily: 'Inter, sans-serif' },
   checkCard: { display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, border: '1.5px solid', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' },
   scriptCard: { display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(42,148,144,0.08)', border: '1px solid rgba(42,148,144,0.15)', borderRadius: 12, padding: '12px 16px' },
   nextBtn: { width: '100%', maxWidth: 320, padding: '16px 28px', borderRadius: 999, fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15, color: '#1C1B2E', background: '#F5E06D', border: 'none', cursor: 'pointer', marginTop: 'auto' },

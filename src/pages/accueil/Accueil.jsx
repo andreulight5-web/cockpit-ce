@@ -4,7 +4,7 @@ import { AppContext } from '../../lib/AppContext'
 import { LECONS } from '../../data/lecons'
 import logoCE from '../../assets/logo-ce.png'
 
-const TOTAL_LECONS = 5
+const TOTAL_LECONS = LECONS.length
 
 const triggerDownload = async (url) => {
   const filename = url.split('/').pop()
@@ -33,7 +33,7 @@ export default function Accueil() {
 
   const prenomParent = appData?.onboarding?.prenomParent || ''
   const prenomEnfant = appData?.onboarding?.prenomEnfant || 'Lucas'
-  const leconsDone = (appData?.lecons_done || []).map(Number).filter((id) => id >= 1 && id <= 5)
+  const leconsDone = (appData?.lecons_done || []).map(Number).filter((id) => LECONS.some((l) => l.id === id))
   const formationPct = Math.round((leconsDone.length / TOTAL_LECONS) * 100)
 
   const nextLecon = useMemo(() => {
@@ -147,9 +147,9 @@ export default function Accueil() {
 }
 
 const s = {
-  page: { minHeight: '100dvh', background: '#1C1B2E' },
+  page: { minHeight: '100dvh', background: '#FAFAF5' },
   header: {
-    padding: '48px 20px 16px',
+    padding: '40px 20px 12px',
     display: 'flex',
     alignItems: 'center',
     gap: 12,
@@ -159,7 +159,7 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 11,
     fontWeight: 700,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#64748B',
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
@@ -167,7 +167,7 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 14,
     fontWeight: 800,
-    color: '#fff',
+    color: '#1C1B2E',
     marginTop: 2,
   },
 
@@ -177,7 +177,7 @@ const s = {
     fontFamily: "'Caveat', cursive",
     fontSize: 28,
     fontWeight: 700,
-    color: '#F5E06D',
+    color: '#2A9490',
     margin: '12px 0 -4px',
     lineHeight: 1.1,
   },
@@ -185,21 +185,22 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 24,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
     margin: '8px 0 6px',
     lineHeight: 1.2,
   },
   subtitle: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#64748B',
     lineHeight: 1.55,
     margin: 0,
   },
 
   progressCard: {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(28,27,46,0.06)',
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
     borderRadius: 16,
     padding: 18,
     marginTop: 20,
@@ -214,17 +215,17 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 13,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
   },
   progressPct: {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 22,
     fontWeight: 800,
-    color: '#F5E06D',
+    color: '#2A9490',
   },
   progressBar: {
     height: 6,
-    background: 'rgba(255,255,255,0.08)',
+    background: '#E5E5E5',
     borderRadius: 99,
     overflow: 'hidden',
   },
@@ -237,7 +238,7 @@ const s = {
   progressMeta: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#64748B',
     marginTop: 8,
   },
   ctaPrimary: {
@@ -269,30 +270,31 @@ const s = {
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(28,27,46,0.06)',
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
     borderRadius: 16,
     padding: '16px 18px',
     cursor: 'pointer',
     marginTop: 16,
-    color: '#fff',
+    color: '#1C1B2E',
   },
   quizLabel: {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 15,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
     lineHeight: 1.2,
   },
   quizSub: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#64748B',
     marginTop: 3,
   },
   quizArrow: {
     fontSize: 22,
-    color: 'rgba(255,255,255,0.3)',
+    color: '#999',
     marginLeft: 8,
     flexShrink: 0,
   },
@@ -301,13 +303,13 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 16,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
     margin: '0 0 4px',
   },
   sectionSub: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#64748B',
     margin: '0 0 14px',
   },
 
@@ -349,10 +351,10 @@ const s = {
   allTools: {
     width: '100%',
     background: 'transparent',
-    border: '1px solid rgba(255,255,255,0.15)',
+    border: '1px solid #E5E5E5',
     borderRadius: 50,
     padding: '12px 16px',
-    color: 'rgba(255,255,255,0.7)',
+    color: '#64748B',
     fontFamily: 'Inter, sans-serif',
     fontSize: 13,
     marginTop: 24,

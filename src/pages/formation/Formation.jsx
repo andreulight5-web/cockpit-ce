@@ -29,8 +29,8 @@ export default function Formation() {
         {ordered.map((l, i) => {
           const isDone = done.includes(l.id)
           const isCurrent = l.id === currentId
-          const dotBg = isDone ? '#2A9490' : isCurrent ? '#F5E06D' : 'rgba(255,255,255,0.08)'
-          const dotColor = isDone ? '#fff' : isCurrent ? '#1C1B2E' : '#475569'
+          const dotBg = isDone ? '#2A9490' : isCurrent ? '#F5E06D' : '#E5E5E5'
+          const dotColor = isDone ? '#fff' : isCurrent ? '#1C1B2E' : '#999'
 
           return (
             <button
@@ -39,8 +39,8 @@ export default function Formation() {
               className={`fade-up fade-up-d${Math.min(i + 1, 4)}`}
               style={{
                 ...s.lessonRow,
-                borderColor: isCurrent ? 'rgba(245,224,109,0.5)' : 'rgba(255,255,255,0.06)',
-                background: isCurrent ? 'rgba(245,224,109,0.06)' : 'rgba(255,255,255,0.04)',
+                borderColor: isCurrent ? 'rgba(245,224,109,0.6)' : 'rgba(28,27,46,0.06)',
+                background: isCurrent ? 'rgba(245,224,109,0.1)' : '#FFFFFF',
               }}
             >
               <span style={{ ...s.numCircle, background: dotBg, color: dotColor }}>
@@ -54,7 +54,7 @@ export default function Formation() {
                   {isCurrent && !isDone && ' · En cours'}
                 </span>
               </div>
-              <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 18 }}>›</span>
+              <span style={{ color: '#999', fontSize: 18 }}>›</span>
             </button>
           )
         })}
@@ -64,13 +64,13 @@ export default function Formation() {
 }
 
 const s = {
-  page: { minHeight: '100dvh', background: '#1C1B2E' },
-  header: { padding: '48px 20px 24px' },
-  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
-  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#94A3B8', lineHeight: 1.55, margin: '8px 0 18px' },
+  page: { minHeight: '100dvh', background: '#FAFAF5' },
+  header: { padding: '40px 20px 18px' },
+  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
+  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '8px 0 18px' },
   globalBar: {
     height: 6,
-    background: 'rgba(255,255,255,0.08)',
+    background: '#E5E5E5',
     borderRadius: 99,
     overflow: 'hidden',
   },
@@ -82,7 +82,7 @@ const s = {
   globalMeta: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#64748B',
     marginTop: 8,
   },
   body: { padding: '8px 20px 40px' },
@@ -91,7 +91,9 @@ const s = {
     alignItems: 'center',
     gap: 12,
     width: '100%',
-    border: '1px solid rgba(255,255,255,0.06)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(28,27,46,0.06)',
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
     borderRadius: 14,
     padding: '14px 16px',
     marginBottom: 10,
@@ -112,12 +114,12 @@ const s = {
   lessonTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: '#E2E8F0',
+    color: '#1C1B2E',
     margin: 0,
     lineHeight: 1.3,
   },
   lessonMeta: {
     fontSize: 11,
-    color: 'rgba(255,255,255,0.4)',
+    color: '#64748B',
   },
 }

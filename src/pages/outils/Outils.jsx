@@ -166,10 +166,10 @@ export default function Outils() {
 }
 
 const s = {
-  page: { minHeight: '100dvh', background: '#1C1B2E', paddingBottom: 24 },
-  header: { padding: '48px 20px 16px' },
-  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
-  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#94A3B8', lineHeight: 1.55, margin: '8px 0 0' },
+  page: { minHeight: '100dvh', background: '#FAFAF5', paddingBottom: 24 },
+  header: { padding: '40px 20px 12px' },
+  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
+  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '8px 0 0' },
 
   grid: {
     padding: '12px 20px 32px',

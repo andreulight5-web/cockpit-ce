@@ -123,10 +123,10 @@ function HowItem({ n, title, children }) {
 }
 
 const s = {
-  page: { minHeight: '100dvh', background: '#1C1B2E' },
-  header: { padding: '48px 20px 16px' },
-  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 },
-  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#94A3B8', lineHeight: 1.55, margin: '8px 0 0' },
+  page: { minHeight: '100dvh', background: '#FAFAF5' },
+  header: { padding: '40px 20px 12px' },
+  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
+  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '8px 0 0' },
   body: { padding: '12px 20px 32px' },
 
   supportCard: {
@@ -134,6 +134,7 @@ const s = {
     borderRadius: 18,
     padding: 22,
     color: '#fff',
+    boxShadow: '0 4px 16px rgba(42,148,144,0.18)',
   },
   supportBadge: {
     fontFamily: 'Poppins, sans-serif',
@@ -175,7 +176,7 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 16,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
     margin: '0 0 14px',
   },
 
@@ -183,8 +184,9 @@ const s = {
   howItem: {
     display: 'flex',
     gap: 14,
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.06)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(28,27,46,0.06)',
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
     borderRadius: 12,
     padding: 14,
   },
@@ -206,18 +208,18 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 13,
     fontWeight: 700,
-    color: '#fff',
+    color: '#1C1B2E',
     marginBottom: 4,
   },
   howDesc: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 12.5,
-    color: '#94A3B8',
+    color: '#64748B',
     lineHeight: 1.55,
   },
 
   faqItem: {
-    borderBottom: '1px solid rgba(255,255,255,0.08)',
+    borderBottom: '1px solid #E5E5E5',
   },
   faqQ: {
     width: '100%',
@@ -231,11 +233,11 @@ const s = {
     fontFamily: 'Poppins, sans-serif',
     fontSize: 13.5,
     fontWeight: 600,
-    color: '#fff',
+    color: '#1C1B2E',
     textAlign: 'left',
   },
   faqChevron: {
-    color: '#F5E06D',
+    color: '#2A9490',
     fontSize: 14,
     transition: 'transform 0.2s',
     flexShrink: 0,
@@ -243,12 +245,12 @@ const s = {
   faqA: {
     fontFamily: 'Inter, sans-serif',
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#64748B',
     lineHeight: 1.65,
     padding: '0 4px 16px',
   },
 
-  footer: { marginTop: 32, paddingTop: 18, borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' },
-  footerText: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.4)', margin: 0 },
-  footerLink: { color: '#F5E06D', textDecoration: 'none' },
+  footer: { marginTop: 32, paddingTop: 18, borderTop: '1px solid #E5E5E5', textAlign: 'center' },
+  footerText: { fontFamily: 'Inter, sans-serif', fontSize: 11, color: '#999', margin: 0 },
+  footerLink: { color: '#2A9490', textDecoration: 'none' },
 }

@@ -1,5 +1,5 @@
 // 30 cas réels — un par jour pendant un mois.
-// Tirés des verbatims parents Cerveaux Électriques, en cohérence avec les 5 leçons du module 1.
+// Tirés des verbatims parents Cerveau Électrique, en cohérence avec les 5 leçons du module 1.
 export const CAS_DU_JOUR = [
   {
     id: 1,

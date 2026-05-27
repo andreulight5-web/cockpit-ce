@@ -184,7 +184,7 @@ function PortalMobile({ prenomParent, formationPct, leconsDone, quizDone, quizPc
       <div style={s.header}>
         <div style={s.headerRow}>
           <span style={s.headerTitle}>Cockpit Crises</span>
-          <img src={logoCE} alt="Cerveaux Électriques" style={s.logoImg} draggable={false} />
+          <img src={logoCE} alt="Cerveau Électrique" style={s.logoImg} draggable={false} />
         </div>
         <div className="fade-up" style={{ marginTop: 20 }}>
           <p style={s.greeting}>Bonjour {prenomParent || 'parent'} 👋</p>

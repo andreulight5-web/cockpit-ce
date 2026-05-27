@@ -1,11 +1,20 @@
+import { useContext } from 'react'
+import { AppContext } from '../../lib/AppContext'
+
 export default function Profil() {
+  const { appData } = useContext(AppContext)
+  const prenomParent = appData?.onboarding?.prenomParent || 'Maman'
+  const leconsCount = (appData?.lecons_done || []).length
+  const xp = appData?.xp_total || 0
+  const badgesCount = (appData?.badges || []).length
+
   return (
     <div className="page">
       <div style={styles.header}>
         <span style={{ fontSize: '3.5rem' }}>👩</span>
-        <h1 style={{ color: 'var(--white)', marginTop: 'var(--sp-sm)' }}>Maman</h1>
+        <h1 style={{ color: 'var(--white)', marginTop: 'var(--sp-sm)' }}>{prenomParent}</h1>
         <p style={{ color: 'var(--mint)', fontSize: '0.8125rem' }}>
-          Cerveaux Électriques — Membre
+          Cerveau Électrique — Membre
         </p>
       </div>
 
@@ -14,16 +23,16 @@ export default function Profil() {
           <h3>Statistiques</h3>
           <div style={styles.stats}>
             <div style={styles.stat}>
-              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--teal)' }}>3</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>Cours terminés</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--teal)' }}>{leconsCount}</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>Leçons terminées</span>
             </div>
             <div style={styles.stat}>
-              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--pink)' }}>380</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--pink)' }}>{xp}</span>
               <span style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>XP gagnés</span>
             </div>
             <div style={styles.stat}>
-              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--orange)' }}>7</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>Jours actifs</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--orange)' }}>{badgesCount}</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>Badges</span>
             </div>
           </div>
         </div>
