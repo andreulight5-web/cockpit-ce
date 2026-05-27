@@ -1,7 +1,7 @@
 export const QUIZ_2 = {
   id: 2,
   title: "Et toi, c'est comment le soir ?",
-  videoUrl: 'https://www.youtube.com/embed/Hq-AfI00ods',
+  videoUrl: 'https://www.youtube.com/embed/63C_Xe6BIm0',
   videoDescription: 'Regarde la vidéo de Léo avec ton enfant avant de commencer le quiz.',
   questions: [
     {
