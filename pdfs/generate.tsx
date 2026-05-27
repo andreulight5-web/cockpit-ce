@@ -2340,8 +2340,8 @@ const RESSOURCES = [
 
 const OUTILS = [
   { title: 'Minuteur visuel',         desc: 'pour les devoirs et les pauses', color: C.teal },
-  { title: 'Bandes élastiques de chaise', desc: '6 bandes colorées à fixer sur les pieds de chaise', color: C.orange },
-  { title: 'Anneaux sensoriels rotatifs', desc: 'à tourner pour se concentrer', color: C.rose },
+  { title: 'Bande élastique de chaise',   desc: '1 bande à fixer sur les pieds de chaise', color: C.orange },
+  { title: 'Anneaux sensoriels rotatifs', desc: '2 anneaux à tourner pour se concentrer',  color: C.rose },
   { title: 'Feutre effaçable',        desc: 'pour les fiches plastifiées',    color: C.violet },
   { title: 'Pastilles velcro',        desc: 'pour le tableau de victoires',   color: '#A88E1F' },
 ]
@@ -2392,9 +2392,9 @@ const OUTILS_USAGE = [
     body: 'Pose-le sur la table pendant les devoirs : « Tu travailles jusqu\'à ce que le rouge disparaisse. » L\'enfant TDAH a besoin de VOIR le temps passer. 30 min max par session.',
   },
   {
-    title: 'Bandes élastiques de chaise',
+    title: 'Bande élastique de chaise',
     color: C.orange,
-    body: 'Fixe-les entre les pieds avant de sa chaise. Ton enfant peut pousser avec ses pieds pendant les devoirs ou les repas — ça canalise le besoin de bouger SANS déranger. 6 bandes de résistances différentes pour trouver celle qui lui convient.',
+    body: 'Fixe-la entre les pieds avant de sa chaise. Ton enfant peut pousser avec ses pieds pendant les devoirs ou les repas — ça canalise le besoin de bouger SANS déranger.',
   },
   {
     title: 'Anneaux sensoriels rotatifs',
