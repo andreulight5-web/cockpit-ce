@@ -164,13 +164,13 @@ export const QUIZ = [
    * ═══════════════════════════════════════════════════════ */
   {
     id: 4,
-    titre: 'Fins de journée',
-    emoji: '🌙',
-    sousTitre: "L'accumulation de la journée explose entre 17h et 21h",
-    couleur: '#4A6FA5',
+    titre: "Et toi, c'est comment les écrans et les devoirs ?",
+    emoji: '📱',
+    sousTitre: 'Mini-coaching parent-enfant — 5 minutes',
+    couleur: '#F5A623',
     xp: 30,
-    badge: '🌙 Réflexes du soir',
-    video: { disponible: false, titre: "Le retour de l'école" },
+    badge: '📱 Écrans & devoirs',
+    video: { disponible: true, titre: "Les écrans chez Léo" },
     questions: [
       {
         id: 'q1',
