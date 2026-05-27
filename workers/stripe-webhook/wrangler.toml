@@ -1,0 +1,21 @@
+name = "cockpit-stripe-webhook"
+main = "src/index.ts"
+compatibility_date = "2026-05-25"
+
+# Variables NON sensibles. Édite les TODO avant le premier déploiement.
+[vars]
+SUPABASE_URL          = "https://xtxuswytsxqhhgiruqec.supabase.co"
+APP_URL               = "https://cockpit-ce.pages.dev"
+ADMIN_EMAIL           = "remi.aloweb@gmail.com"
+SUPPORT_EMAIL         = "info@cerveau-electrique.fr"
+BREVO_FROM_EMAIL      = "info@cerveau-electrique.fr"
+BREVO_FROM_NAME       = "Cerveau Électrique"
+STRIPE_PRICE_DIGITAL  = "price_1TZU1JEdTY7Poh3S4S4yIRQS"
+STRIPE_PRICE_PHYSICAL = "price_1TZU6CEdTY7Poh3S9orTmr3K"
+LOW_STOCK_THRESHOLD   = "5"
+
+# Secrets (à pousser via `wrangler secret put`, jamais ici) :
+#   STRIPE_WEBHOOK_SECRET   — whsec_… venant du dashboard Stripe
+#   STRIPE_SECRET_KEY       — sk_live_… (pour lire les line_items)
+#   SUPABASE_SERVICE_KEY    — service_role key (bypass RLS)
+#   BREVO_API_KEY           — clé API Brevo v3

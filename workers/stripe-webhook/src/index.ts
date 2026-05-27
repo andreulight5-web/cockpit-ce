@@ -12,6 +12,7 @@ interface Env {
   SUPABASE_URL: string
   APP_URL: string
   ADMIN_EMAIL: string
+  SUPPORT_EMAIL: string
   BREVO_FROM_EMAIL: string
   BREVO_FROM_NAME: string
   STRIPE_PRICE_DIGITAL: string
@@ -297,9 +298,9 @@ async function handleSupportForm(request: Request, env: Env): Promise<Response> 
   try {
     await sendBrevoEmail(env.BREVO_API_KEY, {
       sender: { email: env.BREVO_FROM_EMAIL, name: env.BREVO_FROM_NAME },
-      to: [{ email: env.ADMIN_EMAIL }],
+      to: [{ email: env.SUPPORT_EMAIL || env.ADMIN_EMAIL }],
       replyTo: { email: email! },
-      subject: `[Support] ${subj}`,
+      subject: `email prioritaire : ${subj}`,
       htmlContent: html,
     })
     return jsonResponse({ ok: true })
