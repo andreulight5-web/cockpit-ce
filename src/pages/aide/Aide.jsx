@@ -27,6 +27,8 @@ const FAQ = [
   },
 ]
 
+const SUPPORT_ENDPOINT = 'https://cockpit-stripe-webhook.cerveau-electrique.workers.dev/support'
+
 function getAccessCode() {
   try {
     const raw = localStorage.getItem('cockpit_access')
@@ -37,24 +39,49 @@ function getAccessCode() {
 export default function Aide() {
   const [openIdx, setOpenIdx]       = useState(null)
   const [formOpen, setFormOpen]     = useState(false)
+  const [email, setEmail]           = useState('')
   const [subject, setSubject]       = useState('')
   const [message, setMessage]       = useState('')
+  const [sending, setSending]       = useState(false)
   const [submitted, setSubmitted]   = useState(false)
+  const [error, setError]           = useState(null)
 
-  const handleSubmit = (e) => {
+  const canSubmit = !sending && email.trim() && message.trim()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!message.trim()) return
-    const code = getAccessCode()
-    const subj = subject.trim() || 'Aide Cockpit CE'
-    const footer = code ? `\n\n---\nCode d'accès : ${code}` : ''
-    const url = `mailto:info@cerveau-electrique.fr?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(message + footer)}`
-    window.location.href = url
-    setSubmitted(true)
+    if (!canSubmit) return
+    setSending(true)
+    setError(null)
+    try {
+      const res = await fetch(SUPPORT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          subject: subject.trim(),
+          message: message.trim(),
+          code: getAccessCode(),
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.ok) {
+        setError("Échec de l'envoi. Réessaie dans un instant ou écris directement à info@cerveau-electrique.fr")
+        return
+      }
+      setSubmitted(true)
+    } catch {
+      setError("Erreur réseau. Vérifie ta connexion et réessaie.")
+    } finally {
+      setSending(false)
+    }
   }
 
   const closeForm = () => {
     setFormOpen(false)
     setSubmitted(false)
+    setError(null)
+    setEmail('')
     setSubject('')
     setMessage('')
   }
@@ -88,6 +115,18 @@ export default function Aide() {
           {formOpen && !submitted && (
             <form onSubmit={handleSubmit} style={s.form} className="fade-up">
               <label style={s.formLabel}>
+                Votre email <span style={{ color: '#FFB1B1' }}>*</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ton.email@exemple.fr"
+                  style={s.formInput}
+                  required
+                  autoComplete="email"
+                />
+              </label>
+              <label style={s.formLabel}>
                 Sujet
                 <input
                   type="text"
@@ -106,18 +145,36 @@ export default function Aide() {
                   placeholder="Raconte ta situation, on te lit attentivement…"
                   style={s.formTextarea}
                   rows={5}
+                  maxLength={5000}
                   required
                 />
               </label>
               <p style={s.formHint}>
-                Ton code d'accès sera ajouté automatiquement à la fin du message — ça nous aide à retrouver ton compte.
+                Ton code d'accès est ajouté automatiquement pour qu'on retrouve ton compte.
               </p>
+
+              {error && (
+                <div style={s.formError}>{error}</div>
+              )}
+
               <div style={s.formActions}>
-                <button type="button" onClick={closeForm} style={s.formCancel}>
+                <button type="button" onClick={closeForm} disabled={sending} style={{ ...s.formCancel, opacity: sending ? 0.5 : 1 }}>
                   Annuler
                 </button>
-                <button type="submit" disabled={!message.trim()} style={{ ...s.supportCta, opacity: message.trim() ? 1 : 0.5, cursor: message.trim() ? 'pointer' : 'not-allowed' }}>
-                  ✉️ Envoyer
+                <button
+                  type="submit"
+                  disabled={!canSubmit}
+                  style={{
+                    ...s.supportCta,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    opacity: canSubmit ? 1 : 0.5,
+                    cursor: canSubmit ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  {sending && <span className="spinner" />}
+                  <span>{sending ? 'Envoi…' : '✉️ Envoyer'}</span>
                 </button>
               </div>
             </form>
@@ -127,9 +184,9 @@ export default function Aide() {
             <div style={s.confirm} className="fade-up">
               <div style={s.confirmIcon}>✓</div>
               <div>
-                <div style={s.confirmTitle}>Email préparé dans ton app mail</div>
+                <div style={s.confirmTitle}>Message envoyé !</div>
                 <div style={s.confirmDesc}>
-                  Vérifie que le message s'est bien ouvert, puis envoie-le. On te répond sous 24 à 48h.
+                  On te répond personnellement sous 24 à 48h à l'adresse <strong>{email}</strong>.
                 </div>
                 <button type="button" onClick={closeForm} style={s.confirmClose}>
                   Fermer
@@ -316,6 +373,16 @@ const s = {
     fontSize: 11,
     color: 'rgba(255,255,255,0.7)',
     margin: '-2px 0 0',
+    lineHeight: 1.5,
+  },
+  formError: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12.5,
+    color: '#FFE0E0',
+    background: 'rgba(192,80,106,0.25)',
+    border: '1px solid rgba(255,176,176,0.4)',
+    borderRadius: 10,
+    padding: '10px 12px',
     lineHeight: 1.5,
   },
   formActions: {
