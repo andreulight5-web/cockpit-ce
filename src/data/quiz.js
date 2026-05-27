@@ -112,13 +112,13 @@ export const QUIZ = [
    * ═══════════════════════════════════════════════════════ */
   {
     id: 3,
-    titre: 'Sorties & vie sociale',
-    emoji: '🛒',
-    sousTitre: "Surstimulation + règles invisibles + honte parentale",
-    couleur: '#E8B84B',
+    titre: "Et toi, quand tout change d'un coup ?",
+    emoji: '🌪️',
+    sousTitre: 'Mini-coaching parent-enfant — 5 minutes',
+    couleur: '#C0506A',
     xp: 30,
-    badge: '🛒 Sorties sereines',
-    video: { disponible: false, titre: 'La crise au supermarché' },
+    badge: "🌪️ Maître des imprévus",
+    video: { disponible: true, titre: 'L\'imprévu chez Léo' },
     questions: [
       {
         id: 'q1',
