@@ -216,13 +216,13 @@ export const QUIZ = [
    * ═══════════════════════════════════════════════════════ */
   {
     id: 5,
-    titre: "L'imprévu & la frustration",
-    emoji: '🌪️',
-    sousTitre: "Tout changement de programme = effondrement",
-    couleur: '#7C5CBF',
+    titre: "Et toi, c'est comment les sorties ?",
+    emoji: '🛒',
+    sousTitre: 'Mini-coaching parent-enfant — 5 minutes',
+    couleur: '#3E8E5E',
     xp: 30,
-    badge: '🌪️ Anti-crise frustration',
-    video: { disponible: false, titre: 'Quand le programme change' },
+    badge: '🛒 Sorties sereines',
+    video: { disponible: true, titre: 'La sortie chez Léo' },
     questions: [
       {
         id: 'q1',
