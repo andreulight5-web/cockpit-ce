@@ -102,6 +102,13 @@ img { max-width: 100%; display: block; }
   vertical-align: middle;
   flex-shrink: 0;
 }
+
+/* Formation : carte de leçon (hover desktop) */
+.formation-card { transition: transform 0.15s, box-shadow 0.15s; }
+.formation-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(28,27,46,0.10);
+}
 .fade-up { animation: fadeUp 0.4s ease-out both; }
 .fade-up-d1 { animation-delay: 0.08s; }
 .fade-up-d2 { animation-delay: 0.16s; }
