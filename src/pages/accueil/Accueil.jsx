@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../lib/AppContext'
 import { LECONS } from '../../data/lecons'
 import logoCE from '../../assets/logo-ce.png'
+import phrasesStopImg from '../../assets/outils/phrases-stop.jpg'
+import thermoImg      from '../../assets/outils/thermometre.jpg'
+import cardsImg       from '../../assets/outils/cards-emotions.jpg'
 
 const TOTAL_LECONS = LECONS.length
 
@@ -108,32 +111,25 @@ export default function Accueil() {
           <p style={s.sectionSub}>3 outils prêts en 5 minutes chrono.</p>
 
           <div style={s.quickGrid}>
-            <button
-              onClick={() => navigate('/outils')}
-              style={{ ...s.quickCard, background: '#7A2040' }}
-            >
-              <span style={s.quickEmoji}>✋</span>
-              <span style={s.quickLabel}>Phrases STOP</span>
-              <span style={s.quickHint}>10 PDFs</span>
-            </button>
-
-            <button
-              onClick={() => triggerDownload('/pdfs/thermometre-emotions.pdf')}
-              style={{ ...s.quickCard, background: '#FF6B4A' }}
-            >
-              <span style={s.quickEmoji}>🌡️</span>
-              <span style={s.quickLabel}>Thermomètre</span>
-              <span style={s.quickHint}>📥 Télécharger</span>
-            </button>
-
-            <button
-              onClick={() => triggerDownload('/pdfs/cards-emotions.pdf')}
-              style={{ ...s.quickCard, background: '#C0506A' }}
-            >
-              <span style={s.quickEmoji}>🃏</span>
-              <span style={s.quickLabel}>Cards Émotions</span>
-              <span style={s.quickHint}>📥 Télécharger</span>
-            </button>
+            {[
+              { img: phrasesStopImg, label: 'Phrases STOP',   color: '#7A2040', onClick: () => navigate('/outils') },
+              { img: thermoImg,      label: 'Thermomètre',    color: '#FF6B4A', onClick: () => triggerDownload('/pdfs/thermometre-emotions.pdf') },
+              { img: cardsImg,       label: 'Cards Émotions', color: '#C0506A', onClick: () => triggerDownload('/pdfs/cards-emotions.pdf') },
+            ].map((it) => (
+              <button
+                key={it.label}
+                onClick={it.onClick}
+                className="formation-card"
+                style={{ ...s.quickCard, borderColor: it.color }}
+              >
+                <div style={s.quickThumbWrap}>
+                  <img src={it.img} alt="" style={s.quickThumb} draggable={false} />
+                </div>
+                <div style={s.quickBody}>
+                  <span style={s.quickLabel}>{it.label}</span>
+                </div>
+              </button>
+            ))}
           </div>
         </section>
 
@@ -321,31 +317,37 @@ const s = {
   quickCard: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    padding: '16px 8px',
-    border: 'none',
-    borderRadius: 14,
+    background: '#FFFFFF',
+    border: '2px solid',
+    borderRadius: 12,
+    overflow: 'hidden',
     cursor: 'pointer',
-    minHeight: 110,
-    color: '#fff',
+    padding: 0,
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
+    textAlign: 'left',
+    fontFamily: 'Inter, sans-serif',
   },
-  quickEmoji: { fontSize: 28, lineHeight: 1, marginBottom: 4 },
+  quickThumbWrap: {
+    width: '100%',
+    aspectRatio: '4 / 3',
+    background: '#E5E5E5',
+  },
+  quickThumb: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  quickBody: {
+    padding: '8px 10px 10px',
+  },
   quickLabel: {
     fontFamily: 'Poppins, sans-serif',
-    fontSize: 11.5,
-    fontWeight: 700,
-    color: '#fff',
-    textAlign: 'center',
-    lineHeight: 1.2,
-  },
-  quickHint: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 9,
-    color: 'rgba(255,255,255,0.7)',
-    textAlign: 'center',
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: 600,
+    color: '#1C1B2E',
+    lineHeight: 1.25,
+    textAlign: 'left',
   },
 
   allTools: {
