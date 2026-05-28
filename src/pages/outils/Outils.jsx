@@ -1,5 +1,23 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDesktop } from '../../hooks/useDesktop'
+import phrasesStopImg from '../../assets/formation/module-2-stop.jpg' // placeholder
+import cardsImg      from '../../assets/outils/cards-emotions.jpg'
+import thermoImg     from '../../assets/outils/thermometre.jpg'
+import kitImg        from '../../assets/outils/kit-anti-crise.jpg'
+import journalImg    from '../../assets/outils/journal.jpg'
+import victoiresImg  from '../../assets/outils/victoires.jpg'
+import quizImg       from '../../assets/formation/module-1-phases-crise.jpg' // placeholder
+
+const IMAGES = {
+  phrasesStop: phrasesStopImg,
+  cards:       cardsImg,
+  thermo:      thermoImg,
+  kit:         kitImg,
+  journal:     journalImg,
+  victoires:   victoiresImg,
+  quiz:        quizImg,
+}
 
 const triggerDownload = async (url) => {
   const filename = url.split('/').pop()
@@ -48,6 +66,7 @@ const STOP_LIST = [
 
 export default function Outils() {
   const navigate = useNavigate()
+  const isWide = useDesktop(640)
   const [stopOpen, setStopOpen] = useState(false)
   const [loadingKey, setLoadingKey] = useState(null)   // tool.id ou file.file
   const [slowLoad, setSlowLoad]     = useState(false)
@@ -81,38 +100,90 @@ export default function Outils() {
         <p style={s.sub}>Tous tes PDFs et le quiz, en un coup d'œil.</p>
       </header>
 
-      <div style={s.grid}>
-        {TOOLS.map((t) => {
-          const isLoading = loadingKey === t.id
-          const isDisabled = !!loadingKey && !isLoading
-          const ctaText = isLoading
-            ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
-            : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
+      {isWide ? (
+        /* ─── GRILLE DESKTOP/TABLETTE ─── */
+        <div style={s.wideGrid}>
+          {TOOLS.map((t) => {
+            const isLoading  = loadingKey === t.id
+            const isDisabled = !!loadingKey && !isLoading
+            const img = IMAGES[t.id]
+            const ctaText = isLoading
+              ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
+              : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
 
-          return (
-            <button
-              key={t.id}
-              onClick={() => handle(t)}
-              disabled={isLoading || isDisabled}
-              style={{
-                ...s.card,
-                background: t.color,
-                color: t.accent,
-                opacity: isDisabled ? 0.55 : 1,
-                cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
-              }}
-            >
-              <span style={s.cardEmoji}>{t.emoji}</span>
-              <span style={s.cardLabel}>{t.label}</span>
-              <span style={{ ...s.cardHint, color: t.accent === '#fff' ? 'rgba(255,255,255,0.7)' : 'rgba(28,27,46,0.7)' }}>{t.hint}</span>
-              <span style={{ ...s.cardCta, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                {isLoading && <span className="spinner" />}
-                <span>{ctaText}</span>
-              </span>
-            </button>
-          )
-        })}
-      </div>
+            return (
+              <button
+                key={t.id}
+                onClick={() => handle(t)}
+                disabled={isLoading || isDisabled}
+                className="formation-card"
+                style={{
+                  ...s.wideCard,
+                  borderColor: t.color,
+                  opacity: isDisabled ? 0.55 : 1,
+                  cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
+                }}
+              >
+                <div style={s.wideThumbWrap}>
+                  {img ? (
+                    <img src={img} alt="" style={s.wideThumb} draggable={false} />
+                  ) : (
+                    <div style={{ ...s.wideThumbFallback, background: t.color, color: t.accent }}>
+                      <span style={{ fontSize: 56, lineHeight: 1 }}>{t.emoji}</span>
+                    </div>
+                  )}
+                  {isLoading && (
+                    <div style={s.wideLoadingOverlay}>
+                      <span className="spinner" style={{ color: '#fff', width: 22, height: 22 }} />
+                    </div>
+                  )}
+                </div>
+                <div style={s.wideBody}>
+                  <p style={s.wideTitle}>{t.label}</p>
+                  <span style={s.wideHint}>{t.hint}</span>
+                  <span style={{ ...s.wideCta, color: t.color }}>
+                    {ctaText}
+                  </span>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      ) : (
+        /* ─── GRILLE MOBILE (compact 2 cols, layout actuel) ─── */
+        <div style={s.grid}>
+          {TOOLS.map((t) => {
+            const isLoading = loadingKey === t.id
+            const isDisabled = !!loadingKey && !isLoading
+            const ctaText = isLoading
+              ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
+              : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
+
+            return (
+              <button
+                key={t.id}
+                onClick={() => handle(t)}
+                disabled={isLoading || isDisabled}
+                style={{
+                  ...s.card,
+                  background: t.color,
+                  color: t.accent,
+                  opacity: isDisabled ? 0.55 : 1,
+                  cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
+                }}
+              >
+                <span style={s.cardEmoji}>{t.emoji}</span>
+                <span style={s.cardLabel}>{t.label}</span>
+                <span style={{ ...s.cardHint, color: t.accent === '#fff' ? 'rgba(255,255,255,0.7)' : 'rgba(28,27,46,0.7)' }}>{t.hint}</span>
+                <span style={{ ...s.cardCta, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  {isLoading && <span className="spinner" />}
+                  <span>{ctaText}</span>
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       {stopOpen && (
         <div style={s.overlay} onClick={() => setStopOpen(false)}>
@@ -209,6 +280,81 @@ const s = {
     marginTop: 'auto',
     paddingTop: 12,
     opacity: 0.85,
+  },
+
+  /* GRILLE TABLETTE/DESKTOP avec images */
+  wideGrid: {
+    padding: '12px 20px 32px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+    gap: 16,
+  },
+  wideCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#FFFFFF',
+    border: '2px solid',
+    borderRadius: 12,
+    overflow: 'hidden',
+    padding: 0,
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
+    textAlign: 'left',
+    fontFamily: 'Inter, sans-serif',
+  },
+  wideThumbWrap: {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '4 / 3',
+    background: '#E5E5E5',
+  },
+  wideThumb: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  wideThumbFallback: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wideLoadingOverlay: {
+    position: 'absolute',
+    inset: 0,
+    background: 'rgba(28,27,46,0.45)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  wideBody: {
+    padding: '12px 14px 14px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+    flex: 1,
+  },
+  wideTitle: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 16,
+    fontWeight: 600,
+    color: '#1C1B2E',
+    margin: 0,
+    lineHeight: 1.25,
+  },
+  wideHint: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 12,
+    color: '#64748B',
+    lineHeight: 1.4,
+  },
+  wideCta: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 13,
+    fontWeight: 700,
+    marginTop: 'auto',
+    paddingTop: 10,
   },
 
   /* Modal Phrases STOP */
