@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDesktop } from '../../hooks/useDesktop'
-import phrasesStopImg from '../../assets/formation/module-2-stop.jpg' // placeholder
-import cardsImg      from '../../assets/outils/cards-emotions.jpg'
-import thermoImg     from '../../assets/outils/thermometre.jpg'
-import kitImg        from '../../assets/outils/kit-anti-crise.jpg'
-import journalImg    from '../../assets/outils/journal.jpg'
-import victoiresImg  from '../../assets/outils/victoires.jpg'
-import quizImg       from '../../assets/formation/module-1-phases-crise.jpg' // placeholder
+import bienvenueImg  from '../../assets/outils/bienvenue.jpg'
+import phrasesStopImg from '../../assets/outils/phrases-stop.jpg'
+import cardsImg       from '../../assets/outils/cards-emotions.jpg'
+import thermoImg      from '../../assets/outils/thermometre.jpg'
+import kitImg         from '../../assets/outils/kit-anti-crise.jpg'
+import journalImg     from '../../assets/outils/journal.jpg'
+import victoiresImg   from '../../assets/outils/victoires.jpg'
+import quizImg        from '../../assets/outils/quiz-emotions.jpg'
 
 const IMAGES = {
+  bienvenue:   bienvenueImg,
   phrasesStop: phrasesStopImg,
   cards:       cardsImg,
   thermo:      thermoImg,
