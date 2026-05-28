@@ -2,6 +2,12 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LECONS } from '../../data/lecons'
 import { AppContext } from '../../lib/AppContext'
+import module1Thumb from '../../assets/formation/module-1-phases-crise.jpg'
+
+// Thumbnails par id de leçon. Si absent → fallback cercle numéro.
+const THUMBS = {
+  1: module1Thumb,
+}
 
 export default function Formation() {
   const navigate = useNavigate()
@@ -43,9 +49,16 @@ export default function Formation() {
                 background: isCurrent ? 'rgba(245,224,109,0.1)' : '#FFFFFF',
               }}
             >
-              <span style={{ ...s.numCircle, background: dotBg, color: dotColor }}>
-                {isDone ? '✓' : l.id}
-              </span>
+              {THUMBS[l.id] ? (
+                <div style={s.thumbWrap}>
+                  <img src={THUMBS[l.id]} alt="" style={s.thumb} draggable={false} />
+                  {isDone && <span style={s.thumbDoneBadge}>✓</span>}
+                </div>
+              ) : (
+                <span style={{ ...s.numCircle, background: dotBg, color: dotColor }}>
+                  {isDone ? '✓' : l.id}
+                </span>
+              )}
               <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
                 <p style={s.lessonTitle}>{l.titre}</p>
                 <span style={s.lessonMeta}>
@@ -110,6 +123,37 @@ const s = {
     fontSize: 13,
     fontWeight: 700,
     flexShrink: 0,
+  },
+  thumbWrap: {
+    position: 'relative',
+    width: 60,
+    height: 60,
+    flexShrink: 0,
+  },
+  thumb: {
+    width: 60,
+    height: 60,
+    borderRadius: 8,
+    objectFit: 'cover',
+    display: 'block',
+  },
+  thumbDoneBadge: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    width: 22,
+    height: 22,
+    borderRadius: '50%',
+    background: '#2A9490',
+    color: '#fff',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 12,
+    fontWeight: 800,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '2px solid #FFFFFF',
+    boxShadow: '0 1px 4px rgba(28,27,46,0.15)',
   },
   lessonTitle: {
     fontSize: 14,
