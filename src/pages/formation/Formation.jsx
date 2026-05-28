@@ -9,6 +9,7 @@ import module4Thumb from '../../assets/formation/module-4-coin-calme.jpg'
 import module5Thumb from '../../assets/formation/module-5-apres-crise.jpg'
 import module6Thumb from '../../assets/formation/module-6-matin.jpg'
 import module7Thumb from '../../assets/formation/module-7-devoirs.jpg'
+import module9Thumb from '../../assets/formation/module-9-coucher.jpg'
 
 // Thumbnails par id de leçon. Si absent → fallback cercle numéro.
 const THUMBS = {
@@ -19,6 +20,7 @@ const THUMBS = {
   5: module5Thumb,
   6: module6Thumb,
   7: module7Thumb,
+  9: module9Thumb,
 }
 
 export default function Formation() {
