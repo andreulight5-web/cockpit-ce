@@ -102,90 +102,53 @@ export default function Outils() {
         <p style={s.sub}>Tous tes PDFs et le quiz, en un coup d'œil.</p>
       </header>
 
-      {isWide ? (
-        /* ─── GRILLE DESKTOP/TABLETTE ─── */
-        <div style={s.wideGrid}>
-          {TOOLS.map((t) => {
-            const isLoading  = loadingKey === t.id
-            const isDisabled = !!loadingKey && !isLoading
-            const img = IMAGES[t.id]
-            const ctaText = isLoading
-              ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
-              : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
+      <div style={isWide ? s.wideGrid : s.mobileGrid}>
+        {TOOLS.map((t) => {
+          const isLoading  = loadingKey === t.id
+          const isDisabled = !!loadingKey && !isLoading
+          const img = IMAGES[t.id]
+          const ctaText = isLoading
+            ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
+            : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
 
-            return (
-              <button
-                key={t.id}
-                onClick={() => handle(t)}
-                disabled={isLoading || isDisabled}
-                className="formation-card"
-                style={{
-                  ...s.wideCard,
-                  borderColor: t.color,
-                  opacity: isDisabled ? 0.55 : 1,
-                  cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
-                }}
-              >
-                <div style={s.wideThumbWrap}>
-                  {img ? (
-                    <img src={img} alt="" style={s.wideThumb} draggable={false} />
-                  ) : (
-                    <div style={{ ...s.wideThumbFallback, background: t.color, color: t.accent }}>
-                      <span style={{ fontSize: 56, lineHeight: 1 }}>{t.emoji}</span>
-                    </div>
-                  )}
-                  {isLoading && (
-                    <div style={s.wideLoadingOverlay}>
-                      <span className="spinner" style={{ color: '#fff', width: 22, height: 22 }} />
-                    </div>
-                  )}
-                </div>
-                <div style={s.wideBody}>
-                  <p style={s.wideTitle}>{t.label}</p>
-                  <span style={s.wideHint}>{t.hint}</span>
-                  <span style={{ ...s.wideCta, color: t.color }}>
-                    {ctaText}
-                  </span>
-                </div>
-              </button>
-            )
-          })}
-        </div>
-      ) : (
-        /* ─── GRILLE MOBILE (compact 2 cols, layout actuel) ─── */
-        <div style={s.grid}>
-          {TOOLS.map((t) => {
-            const isLoading = loadingKey === t.id
-            const isDisabled = !!loadingKey && !isLoading
-            const ctaText = isLoading
-              ? (slowLoad ? 'Encore un instant…' : 'Chargement…')
-              : (t.id === 'quiz' ? '🎯 Jouer' : t.id === 'phrasesStop' ? '📂 Ouvrir' : '📥 Télécharger')
-
-            return (
-              <button
-                key={t.id}
-                onClick={() => handle(t)}
-                disabled={isLoading || isDisabled}
-                style={{
-                  ...s.card,
-                  background: t.color,
-                  color: t.accent,
-                  opacity: isDisabled ? 0.55 : 1,
-                  cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
-                }}
-              >
-                <span style={s.cardEmoji}>{t.emoji}</span>
-                <span style={s.cardLabel}>{t.label}</span>
-                <span style={{ ...s.cardHint, color: t.accent === '#fff' ? 'rgba(255,255,255,0.7)' : 'rgba(28,27,46,0.7)' }}>{t.hint}</span>
-                <span style={{ ...s.cardCta, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                  {isLoading && <span className="spinner" />}
-                  <span>{ctaText}</span>
+          return (
+            <button
+              key={t.id}
+              onClick={() => handle(t)}
+              disabled={isLoading || isDisabled}
+              className="formation-card"
+              style={{
+                ...s.wideCard,
+                borderColor: t.color,
+                opacity: isDisabled ? 0.55 : 1,
+                cursor: isLoading ? 'wait' : isDisabled ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <div style={s.wideThumbWrap}>
+                {img ? (
+                  <img src={img} alt="" style={s.wideThumb} draggable={false} />
+                ) : (
+                  <div style={{ ...s.wideThumbFallback, background: t.color, color: t.accent }}>
+                    <span style={{ fontSize: 44, lineHeight: 1 }}>{t.emoji}</span>
+                  </div>
+                )}
+                {isLoading && (
+                  <div style={s.wideLoadingOverlay}>
+                    <span className="spinner" style={{ color: '#fff', width: 22, height: 22 }} />
+                  </div>
+                )}
+              </div>
+              <div style={isWide ? s.wideBody : s.mobileBody}>
+                <p style={isWide ? s.wideTitle : s.mobileTitle}>{t.label}</p>
+                {isWide && <span style={s.wideHint}>{t.hint}</span>}
+                <span style={{ ...(isWide ? s.wideCta : s.mobileCta), color: t.color }}>
+                  {ctaText}
                 </span>
-              </button>
-            )
-          })}
-        </div>
-      )}
+              </div>
+            </button>
+          )
+        })}
+      </div>
 
       {stopOpen && (
         <div style={s.overlay} onClick={() => setStopOpen(false)}>
@@ -244,44 +207,34 @@ const s = {
   title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
   sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '8px 0 0' },
 
-  grid: {
+  /* GRILLE MOBILE (2 cols, cartes image compactes) */
+  mobileGrid: {
     padding: '12px 20px 32px',
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: 12,
   },
-  card: {
+  mobileBody: {
+    padding: '10px 12px 12px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
     gap: 4,
-    padding: 16,
-    border: 'none',
-    borderRadius: 16,
-    cursor: 'pointer',
-    minHeight: 150,
-    textAlign: 'left',
+    flex: 1,
   },
-  cardEmoji: { fontSize: 32, lineHeight: 1, marginBottom: 8 },
-  cardLabel: {
+  mobileTitle: {
     fontFamily: 'Poppins, sans-serif',
-    fontSize: 14,
-    fontWeight: 700,
-    lineHeight: 1.2,
-  },
-  cardHint: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 11,
-    lineHeight: 1.35,
-    marginTop: 2,
-  },
-  cardCta: {
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: 600,
+    color: '#1C1B2E',
+    margin: 0,
+    lineHeight: 1.25,
+  },
+  mobileCta: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 11,
+    fontWeight: 700,
     marginTop: 'auto',
-    paddingTop: 12,
-    opacity: 0.85,
+    paddingTop: 8,
   },
 
   /* GRILLE TABLETTE/DESKTOP avec images */
