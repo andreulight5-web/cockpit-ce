@@ -5,12 +5,14 @@ import { AppContext } from '../../lib/AppContext'
 import module1Thumb from '../../assets/formation/module-1-phases-crise.jpg'
 import module2Thumb from '../../assets/formation/module-2-stop.jpg'
 import module3Thumb from '../../assets/formation/module-3-valider.jpg'
+import module4Thumb from '../../assets/formation/module-4-coin-calme.jpg'
 
 // Thumbnails par id de leçon. Si absent → fallback cercle numéro.
 const THUMBS = {
   1: module1Thumb,
   2: module2Thumb,
   3: module3Thumb,
+  4: module4Thumb,
 }
 
 export default function Formation() {
