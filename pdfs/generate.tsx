@@ -1676,66 +1676,151 @@ const DigitalCell = ({ n, text, vierge = false }: { n: number; text?: string; vi
   </View>
 )
 
-const VICTOIRE_ROWS = [
-  { start: 1,  reward: '🌟 Mini récompense : ' },
-  { start: 6,  reward: '⭐ Récompense : ' },
-  { start: 11, reward: '🌟🌟 Grande récompense : ' },
-  { start: 16, reward: '🏆 Super récompense : ' },
+/* Path snake 5 rangées × 4 cercles — finit en haut à droite.
+   Visuellement de haut en bas avec ligne de récompense après chaque palier. */
+const VICTOIRE_PATH: { nums: number[]; palier?: { icon: string; label: string; color: string; super?: boolean } }[] = [
+  { nums: [17, 18, 19, 20], palier: { icon: '🏆', label: 'SUPER RÉCOMPENSE', color: C.rose, super: true } },
+  { nums: [16, 15, 14, 13], palier: { icon: '🌟🌟', label: 'Grande récompense', color: C.teal } },
+  { nums: [9, 10, 11, 12], palier: { icon: '⭐', label: 'Récompense', color: C.orange } },
+  { nums: [8, 7, 6, 5], palier: { icon: '🌟', label: 'Mini récompense', color: C.yellow } },
+  { nums: [1, 2, 3, 4] },
 ]
+
+const PALIER_NUMS = new Set([5, 10, 15, 20])
+const CIRCLE_BORDERS = [C.teal, C.orange, C.yellow, C.rose, C.violet]
+
+const VictoireCircle = ({ n }: { n: number }) => {
+  const isPalier = PALIER_NUMS.has(n)
+  const borderColor = isPalier ? C.orange : CIRCLE_BORDERS[(n - 1) % CIRCLE_BORDERS.length]
+  const size = isPalier ? 78 : 58
+  return (
+    <View style={{ width: 130, height: 90, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{
+        width: size, height: size, borderRadius: size / 2,
+        borderWidth: isPalier ? 3 : 2.2,
+        borderColor,
+        backgroundColor: C.white,
+        alignItems: 'center', justifyContent: 'center',
+        position: 'relative',
+      }}>
+        {isPalier && (
+          <Text style={{ position: 'absolute', top: 5, fontSize: 11, color: C.orange }}>★</Text>
+        )}
+        <Text style={{
+          fontFamily: 'Poppins',
+          fontSize: isPalier ? 22 : 18,
+          fontWeight: 800,
+          color: C.dark,
+          marginTop: isPalier ? 8 : 0,
+        }}>
+          {n}
+        </Text>
+      </View>
+    </View>
+  )
+}
+
+const VictoireRow = ({ nums }: { nums: number[] }) => (
+  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    {nums.map((n) => <VictoireCircle key={n} n={n} />)}
+  </View>
+)
+
+const VictoireBanner = ({ icon, label, color, isSuper = false }: { icon: string; label: string; color: string; isSuper?: boolean }) => (
+  <View style={{
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: color,
+    borderRadius: 6,
+    paddingVertical: isSuper ? 10 : 7,
+    paddingHorizontal: 14,
+    marginVertical: 3,
+  }}>
+    {isSuper && <Text style={{ fontSize: 13, marginRight: 6 }}>✨</Text>}
+    <Text style={{ fontSize: isSuper ? 15 : 12, marginRight: 8 }}>{icon}</Text>
+    <Text style={{
+      fontFamily: 'Poppins',
+      fontSize: isSuper ? 11 : 9.5,
+      fontWeight: 800,
+      color: C.dark,
+      letterSpacing: isSuper ? 1.2 : 0.4,
+      marginRight: 10,
+    }}>
+      {label} :
+    </Text>
+    <View style={{
+      flex: 1,
+      height: 1,
+      borderBottomWidth: 1.4,
+      borderBottomColor: C.dark,
+      borderBottomStyle: 'solid',
+      marginBottom: 2,
+    }} />
+    {isSuper && <Text style={{ fontSize: 13, marginLeft: 8 }}>🎉</Text>}
+  </View>
+)
 
 const PdfSystemeVictoiresDigital = () => (
   <Document title="Mon Tableau de Victoires · Cerveau Électrique" author="Cerveau Électrique">
-    <Page size="A4" style={[s.pageCream, { padding: 36, paddingBottom: 30 }]}>
-      {/* Header */}
-      <View style={{ marginBottom: 24 }}>
-        <Text style={{ fontFamily: 'Poppins', fontSize: 28, fontWeight: 700, color: C.dark, lineHeight: 1.15 }}>
-          Mon Tableau de Victoires
-        </Text>
-        <Text style={{ fontFamily: 'Caveat', fontSize: 22, fontWeight: 700, color: C.teal, marginTop: 4 }}>
-          Chaque bon réflexe mérite d'être célébré
-        </Text>
+    <Page size="A4" style={[s.pageCream, { padding: 30, paddingBottom: 28 }]}>
+      {/* Header avec Le Monstre à droite */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 28, fontWeight: 800, color: C.dark, lineHeight: 1.05 }}>
+            Mon Tableau de Victoires
+          </Text>
+          <Text style={{ fontFamily: 'Caveat', fontSize: 22, fontWeight: 700, color: C.teal, marginTop: 2 }}>
+            Chaque bon réflexe mérite d'être célébré
+          </Text>
+        </View>
+        <Image src="./assets/monstre-rigole.png" style={{ width: 90, height: 90, objectFit: 'contain', marginLeft: 10 }} />
       </View>
 
-      {/* 4 rangées × 5 cercles + ligne de récompense */}
-      <View>
-        {VICTOIRE_ROWS.map((row) => (
-          <View key={row.start} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 26 }}>
-            <View style={{ flexDirection: 'row' }}>
-              {[0, 1, 2, 3, 4].map((i) => {
-                const n = row.start + i
-                return (
-                  <View key={n} style={{
-                    width: 46, height: 46, borderRadius: 23,
-                    borderWidth: 1.6, borderColor: C.dark,
-                    backgroundColor: C.white,
-                    alignItems: 'center', justifyContent: 'center',
-                    marginRight: i < 4 ? 12 : 0,
-                  }}>
-                    <Text style={{ fontFamily: 'Poppins', fontSize: 16, fontWeight: 700, color: C.dark }}>
-                      {n}
-                    </Text>
-                  </View>
-                )
-              })}
-            </View>
-            <View style={{ flex: 1, marginLeft: 18 }}>
-              <Text style={{ fontFamily: 'Inter', fontSize: 11, fontWeight: 600, color: C.dark, marginBottom: 4 }}>
-                {row.reward}
-              </Text>
-              <View style={{ height: 1, borderBottomWidth: 1, borderBottomColor: C.dark, borderBottomStyle: 'solid' }} />
-            </View>
-          </View>
+      {/* Parcours sinueux : 5 rangées + 4 bannières intercalées */}
+      <View style={{ marginTop: 4 }}>
+        {VICTOIRE_PATH.map((row, i) => (
+          <React.Fragment key={i}>
+            <VictoireRow nums={row.nums} />
+            {row.palier && (
+              <VictoireBanner
+                icon={row.palier.icon}
+                label={row.palier.label}
+                color={row.palier.color}
+                isSuper={row.palier.super}
+              />
+            )}
+          </React.Fragment>
         ))}
       </View>
 
-      {/* Monstre fier en bas à droite */}
-      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end', paddingBottom: 8 }}>
-        <Image src="./assets/monstre-rigole.png" style={{ width: 150, height: 150, objectFit: 'contain' }} />
+      {/* Encadré teal : Comment ça marche */}
+      <View style={{
+        backgroundColor: 'rgba(42,148,144,0.10)',
+        borderLeftWidth: 4,
+        borderLeftColor: C.teal,
+        padding: 14,
+        marginTop: 16,
+        borderRadius: 4,
+      }}>
+        <Text style={{
+          fontFamily: 'Poppins',
+          fontSize: 10,
+          fontWeight: 800,
+          color: C.teal,
+          textTransform: 'uppercase',
+          letterSpacing: 1.2,
+          marginBottom: 6,
+        }}>
+          Comment ça marche
+        </Text>
+        <Text style={{ fontFamily: 'Inter', fontSize: 10, color: C.dark, lineHeight: 1.55 }}>
+          Chaque bon réflexe de ton enfant = un cercle à colorier. Définissez les récompenses ensemble. Quand le tableau est plein, recommencez !
+        </Text>
       </View>
 
       <Text fixed style={{
-        position: 'absolute', bottom: 16, left: 36, right: 36,
-        fontFamily: 'Inter', fontSize: 9, color: C.muted, textAlign: 'center',
+        position: 'absolute', bottom: 14, left: 30, right: 30,
+        fontFamily: 'Inter', fontSize: 8.5, color: C.muted, textAlign: 'center',
       }}>
         Cerveau Électrique · cerveau-electrique.fr
       </Text>
