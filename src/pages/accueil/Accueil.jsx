@@ -53,7 +53,7 @@ export default function Accueil() {
       <header style={s.header}>
         <img src={logoCE} alt="Cerveau Électrique" style={s.logo} />
         <div>
-          <div style={s.brandSmall}>Cerveau <span style={{ color: '#F5E06D' }}>Électrique</span></div>
+          <div style={s.brandSmall}>Cerveau <span style={{ color: '#2A9490' }}>Électrique</span></div>
           <div style={s.brandBig}>Cockpit Crises ⚡</div>
         </div>
       </header>

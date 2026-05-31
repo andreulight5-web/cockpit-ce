@@ -224,7 +224,7 @@ const S = {
   stepTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 700, color: '#1C1B2E', textAlign: 'center', margin: 0 },
   stepSub: { fontFamily: 'Inter, sans-serif', fontSize: 16, color: '#94A3B8', textAlign: 'center', margin: '0 0 8px', lineHeight: 1.5 },
   timerWrap: { position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 120, height: 120, cursor: 'pointer', margin: '8px 0' },
-  timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#F5E06D' },
+  timerText: { position: 'absolute', fontFamily: 'Poppins, sans-serif', fontSize: 28, fontWeight: 800, color: '#1C1B2E' },
   timerHint: { position: 'absolute', bottom: -18, fontSize: 11, color: '#999', fontFamily: 'Inter, sans-serif' },
   checkCard: { display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, border: '1.5px solid', cursor: 'pointer', transition: 'background 0.2s, border-color 0.2s' },
   scriptCard: { display: 'flex', gap: 10, alignItems: 'flex-start', background: 'rgba(42,148,144,0.08)', border: '1px solid rgba(42,148,144,0.15)', borderRadius: 12, padding: '12px 16px' },

@@ -155,9 +155,9 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
     case 'cortex': return (
       <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '72px 20px 80px', alignItems: 'center' }}>
         <img src={cortex} alt="Cortex" style={{ width: 80, height: 80, objectFit: 'contain' }} draggable={false} />
-        <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 14, color: '#F5E06D', fontWeight: 700, marginTop: 8 }}>Pr. Cortex</span>
-        <div style={{ background: 'rgba(245,224,109,0.08)', border: '1px solid rgba(245,224,109,0.15)', borderRadius: 20, padding: 24, marginTop: 16, width: '100%', textAlign: 'center' }}>
-          <span style={{ fontSize: 48, color: '#F5E06D', opacity: 0.4, lineHeight: 1 }}>"</span>
+        <span style={{ fontFamily: 'Poppins,sans-serif', fontSize: 14, color: '#2A9490', fontWeight: 700, marginTop: 8 }}>Pr. Cortex</span>
+        <div style={{ background: 'rgba(42,148,144,0.06)', border: '1px solid rgba(42,148,144,0.18)', borderRadius: 20, padding: 24, marginTop: 16, width: '100%', textAlign: 'center' }}>
+          <span style={{ fontSize: 48, color: '#2A9490', opacity: 0.35, lineHeight: 1 }}>"</span>
           <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 17, color: '#1C1B2E', fontStyle: 'italic', lineHeight: 1.7, margin: '4px 0 12px' }}>{c.citation}</p>
           <span style={{ fontSize: 12, color: '#64748B' }}>{c.source}</span>
         </div>
@@ -216,7 +216,7 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
               <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#1C1B2E', lineHeight: 1.5 }}>{item}</span>
             </div>
           ))}
-          {c.reflexe && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#F5E06D', fontStyle: 'italic', textAlign: 'center', marginTop: 18, lineHeight: 1.5 }}>💡 Ton réflexe : {c.reflexe}</p>}
+          {c.reflexe && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#2A9490', fontStyle: 'italic', textAlign: 'center', marginTop: 18, lineHeight: 1.5 }}>💡 Ton réflexe : {c.reflexe}</p>}
           <div style={{ marginTop: 'auto', paddingTop: 24, width: '100%' }}>
             {nextL && <button onClick={() => { if (onComplete) onComplete(); nav(`${basePath}/${nextL.id}`) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Lecon suivante →</button>}
             {!nextL && <button onClick={() => { if (onComplete) onComplete(); nav(basePath) }} style={{ ...S.btn, background: '#F5E06D', color: '#1C1B2E', width: '100%', borderRadius: 50, padding: '14px 28px' }}>Retour au programme</button>}
@@ -238,8 +238,8 @@ function Scenario({ scenario, color, openAccordion, setOpenAccordion }) {
   ]
   return (
     <div>
-      <div style={{ background: 'rgba(245,224,109,0.06)', borderRadius: 16, padding: '14px 18px', marginBottom: 12 }}>
-        <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: 18, fontWeight: 700, color: '#F5E06D', margin: 0 }}>📅 Scenario du jour</h3>
+      <div style={{ background: 'rgba(42,148,144,0.08)', borderRadius: 16, padding: '14px 18px', marginBottom: 12 }}>
+        <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: 18, fontWeight: 700, color: '#2A9490', margin: 0 }}>📅 Scenario du jour</h3>
       </div>
       {sections.map((sec) => {
         const open = openAccordion === sec.key
