@@ -2,11 +2,27 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { QUIZ } from '../../data/quiz'
 import { AppContext } from '../../lib/AppContext'
+import { useDesktop } from '../../hooks/useDesktop'
+import quiz1Thumb from '../../assets/quiz/quiz-1-matin.jpg'
+import quiz2Thumb from '../../assets/quiz/quiz-2-soir.jpg'
+import quiz3Thumb from '../../assets/quiz/quiz-3-imprevus.jpg'
+import quiz4Thumb from '../../assets/quiz/quiz-4-ecrans.jpg'
+import quiz5Thumb from '../../assets/quiz/quiz-5-sorties.jpg'
+
+const THUMBS = {
+  1: quiz1Thumb,
+  2: quiz2Thumb,
+  3: quiz3Thumb,
+  4: quiz4Thumb,
+  5: quiz5Thumb,
+}
 
 export default function Quiz() {
   const navigate = useNavigate()
   const { appData } = useContext(AppContext)
+  const isWide = useDesktop(640)
   const done = (appData?.quiz_done || []).map(Number)
+
   return (
     <div style={s.page}>
       <div style={s.header}>
@@ -15,23 +31,31 @@ export default function Quiz() {
         <p style={s.sub}>Réagis aux scènes du quotidien</p>
         <p style={s.intro}>5 quiz · 3 situations chacun · 10 min total. Tu choisis, tu reçois un feedback neuro-validé immédiat.</p>
       </div>
-      <div style={s.body}>
-        {QUIZ.map((q) => {
+
+      <div style={isWide ? s.gridDesktop : s.gridMobile}>
+        {QUIZ.map((q, i) => {
           const isDone = done.includes(q.id)
           return (
             <button
               key={q.id}
               onClick={() => navigate(`/quiz/${q.id}`)}
-              style={{ ...s.card, borderLeft: `3px solid ${q.couleur}` }}
+              className={`fade-up fade-up-d${Math.min(i + 1, 4)} formation-card`}
+              style={{ ...s.card, borderColor: q.couleur }}
             >
-              <span style={{ fontSize: 36, flexShrink: 0 }}>{q.emoji}</span>
-              <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
-                <h3 style={s.cardTitle}>{q.titre}</h3>
-                {q.sousTitre && <p style={s.cardSub}>{q.sousTitre}</p>}
-                <p style={s.cardMeta}>5 questions · ⭐ {q.xp} XP</p>
-                {isDone && <span style={{ ...s.soon, background: 'rgba(42,148,144,0.18)', color: '#2A9490' }}>✓ Terminé</span>}
+              <div style={s.thumbWrap}>
+                {THUMBS[q.id] ? (
+                  <img src={THUMBS[q.id]} alt="" style={s.thumb} draggable={false} />
+                ) : (
+                  <div style={s.thumbFallback}>
+                    <span style={{ fontSize: 36 }}>{q.emoji}</span>
+                  </div>
+                )}
+                {isDone && <span style={s.doneBadge}>Terminé ✓</span>}
               </div>
-              <span style={{ color: '#999', fontSize: 20, flexShrink: 0 }}>›</span>
+              <div style={s.body}>
+                <p style={s.cardTitle}>{q.titre}</p>
+                <span style={s.cardMeta}>5 questions · ⭐ {q.xp} XP</span>
+              </div>
             </button>
           )
         })}
@@ -47,10 +71,85 @@ const s = {
   title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
   sub: { fontFamily: "'Caveat', cursive", fontSize: 18, color: '#2A9490', marginTop: 4 },
   intro: { fontFamily: 'Inter, sans-serif', fontSize: 12, color: '#64748B', marginTop: 10, lineHeight: 1.55 },
-  body: { padding: '12px 20px 40px', display: 'flex', flexDirection: 'column', gap: 12 },
-  card: { display: 'flex', alignItems: 'flex-start', gap: 14, background: '#FFFFFF', border: '1px solid rgba(28,27,46,0.06)', boxShadow: '0 2px 8px rgba(28,27,46,0.04)', borderRadius: 16, padding: 16, cursor: 'pointer', fontFamily: 'Inter, sans-serif', textAlign: 'left' },
-  cardTitle: { fontFamily: 'Poppins, sans-serif', fontSize: 16, fontWeight: 700, color: '#1C1B2E', margin: 0 },
-  cardSub: { fontSize: 12, color: '#64748B', margin: '4px 0 0', lineHeight: 1.45 },
-  cardMeta: { fontSize: 11, color: '#999', margin: '6px 0 0' },
-  soon: { display: 'inline-block', marginTop: 6, background: 'rgba(245,224,109,0.22)', color: '#1C1B2E', fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 99, textTransform: 'uppercase', letterSpacing: 1 },
+
+  gridMobile: {
+    padding: '8px 20px 40px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: 12,
+  },
+  gridDesktop: {
+    padding: '8px 20px 40px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: 16,
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#FFFFFF',
+    border: '2px solid',
+    borderRadius: 12,
+    overflow: 'hidden',
+    cursor: 'pointer',
+    padding: 0,
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
+    textAlign: 'left',
+    fontFamily: 'Inter, sans-serif',
+  },
+  thumbWrap: {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '4 / 3',
+    background: '#E5E5E5',
+    overflow: 'hidden',
+  },
+  thumb: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center center',
+    display: 'block',
+  },
+  thumbFallback: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, #E5E5E5, #F0F0F0)',
+  },
+  doneBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    background: '#2A9490',
+    color: '#fff',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 9,
+    fontWeight: 700,
+    padding: '4px 8px',
+    borderRadius: 99,
+    letterSpacing: 0.5,
+    boxShadow: '0 2px 6px rgba(42,148,144,0.35)',
+  },
+  body: {
+    padding: '10px 12px 12px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+  },
+  cardTitle: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#1C1B2E',
+    margin: 0,
+    lineHeight: 1.25,
+  },
+  cardMeta: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 11,
+    color: '#64748B',
+  },
 }
