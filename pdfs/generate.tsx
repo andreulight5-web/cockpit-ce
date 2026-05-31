@@ -1762,8 +1762,8 @@ const VictoireBanner = ({ icon, label, color, isSuper = false }: { icon: string;
 
 const PdfSystemeVictoiresDigital = () => (
   <Document title="Mon Tableau de Victoires · Cerveau Électrique" author="Cerveau Électrique">
-    {/* Page 1 : Intercalaire (présentation) */}
-    <IntercalaireVictoiresPage />
+    {/* Page 1 : Intercalaire digital (présentation) */}
+    <IntercalaireVictoiresDigitalPage />
 
     {/* Page 2 : Tableau de victoires à colorier */}
     <Page size="A4" style={[s.pageCream, { padding: 30, paddingBottom: 28 }]}>
@@ -3192,12 +3192,26 @@ const INTERCALAIRE_VICTOIRES: IntercalaireConfig = {
   ],
 }
 
+const INTERCALAIRE_VICTOIRES_DIGITAL: IntercalaireConfig = {
+  badge: '🌟 Après la crise',
+  title: 'Système de Victoires',
+  subtitle: 'Chaque bon réflexe mérite une étoile.',
+  image: './assets/scene-victoires.jpg',
+  accent: '#4CAF50',
+  blocs: [
+    { label: '📋 Comment ça marche', body: 'Imprime la page suivante et affiche-la sur le frigo. Chaque bonne réaction de ton enfant = un cercle à colorier au crayon (1 → 20). À 5, 10, 15 et 20 cercles, écris ensemble la récompense dans la bannière : Mini, Récompense, Grande, puis SUPER. Tableau plein ? On réimprime et on recommence.' },
+    { label: '🧠 Ce que ça active', body: 'Le cerveau TDAH a un déficit de dopamine — il a besoin de récompenses fréquentes et immédiates pour rester motivé. Colorier un cercle après chaque effort transforme la réussite en feedback visuel concret. Voir le parcours se remplir, étape par étape, c\'est de la dopamine à chaque coup de crayon.' },
+    { label: '📊 Prouvé par', body: 'L\'économie de jetons (token economy) est recommandée par la HAS comme stratégie de renforcement positif pour les enfants TDAH. Efficacité démontrée sur la réduction des comportements opposants de 45%. (HAS 2024, Niveau A)' },
+  ],
+}
+
 /* ─── Pages réutilisables ─── */
 const IntercalaireCardsEmotionsPage = () => <IntercalairePage {...INTERCALAIRE_CARDS_EMOTIONS} />
 const IntercalaireThermometrePage   = () => <IntercalairePage {...INTERCALAIRE_THERMOMETRE} />
 const IntercalaireKitAntiCrisePage  = () => <IntercalairePage {...INTERCALAIRE_KIT_ANTI_CRISE} />
 const IntercalaireJournalPage       = () => <IntercalairePage {...INTERCALAIRE_JOURNAL} />
 const IntercalaireVictoiresPage     = () => <IntercalairePage {...INTERCALAIRE_VICTOIRES} />
+const IntercalaireVictoiresDigitalPage = () => <IntercalairePage {...INTERCALAIRE_VICTOIRES_DIGITAL} />
 
 /* ─── PDFs standalone ─── */
 const PdfIntercalaireCardsEmotions = () => (
