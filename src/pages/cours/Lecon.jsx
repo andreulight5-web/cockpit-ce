@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { LECONS } from '../../data/lecons'
 import { useSwipe } from '../../hooks/useSwipe'
+import { useDesktop } from '../../hooks/useDesktop'
 import { AppContext } from '../../lib/AppContext'
 
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
@@ -13,6 +14,7 @@ const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne
 function LeconInner({ id }) {
   const navigate = useNavigate()
   const { appData, saveData } = useContext(AppContext)
+  const isDesktop = useDesktop(1024)
   const dataset = LECONS
   const backPath = '/formation'
   const doneKey = 'lecons_done'
@@ -57,9 +59,9 @@ function LeconInner({ id }) {
           <div key={cardIdx} className="fade-up" style={S.cardContainer}>
             <RenderCard carte={lecon.cartes[cardIdx]} color={color} cortex={cortex} lecon={lecon} onShowScenario={() => { markDone(); setShowAfter(true) }} onComplete={markDone} basePath={backPath} />
           </div>
-          <div style={S.navRow}>
-            <button onClick={goPrev} style={{ ...S.navBtn, opacity: cardIdx > 0 ? 1 : 0.25 }}>←</button>
-            <div style={S.dots}>{lecon.cartes.map((_, i) => <span key={i} style={{ ...S.dot, background: i === cardIdx ? '#2A9490' : '#E5E5E5' }} />)}</div>
+          <div style={{ ...S.navRow, paddingBottom: isDesktop ? 24 : 'calc(76px + env(safe-area-inset-bottom))' }}>
+            <button onClick={goPrev} style={{ ...S.navBtn, opacity: cardIdx > 0 ? 1 : 0.4 }} disabled={cardIdx === 0}>←</button>
+            <div style={S.dots}>{lecon.cartes.map((_, i) => <span key={i} style={{ ...S.dot, background: i === cardIdx ? '#2A9490' : '#CBD5E1' }} />)}</div>
             <button onClick={goNext} style={S.navBtn}>→</button>
           </div>
         </div>
@@ -280,8 +282,8 @@ const S = {
   cardArea: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', userSelect: 'none' },
   cardContainer: { flex: 1, display: 'flex', overflow: 'hidden' },
   cardFull: { width: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch', overflowY: 'auto' },
-  navRow: { display: 'flex', alignItems: 'center', padding: '12px 20px 24px', gap: 16 },
-  navBtn: { background: '#FFFFFF', border: '1px solid #E5E5E5', color: '#1C1B2E', width: 44, height: 44, borderRadius: '50%', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  navRow: { display: 'flex', alignItems: 'center', padding: '12px 20px 24px', gap: 16, position: 'relative', zIndex: 5 },
+  navBtn: { background: '#2A9490', border: 'none', color: '#FFFFFF', width: 52, height: 52, borderRadius: '50%', fontSize: 24, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 14px rgba(42,148,144,0.35)' },
   dots: { flex: 1, display: 'flex', justifyContent: 'center', gap: 6, flexWrap: 'wrap' },
   dot: { width: 6, height: 6, borderRadius: '50%', transition: 'background 0.2s' },
   btn: { display: 'block', width: '100%', textAlign: 'center', padding: '14px 28px', borderRadius: 999, fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 15, border: 'none', cursor: 'pointer' },
