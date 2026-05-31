@@ -1692,9 +1692,9 @@ const CIRCLE_BORDERS = [C.teal, C.orange, C.yellow, C.rose, C.violet]
 const VictoireCircle = ({ n }: { n: number }) => {
   const isPalier = PALIER_NUMS.has(n)
   const borderColor = isPalier ? C.orange : CIRCLE_BORDERS[(n - 1) % CIRCLE_BORDERS.length]
-  const size = isPalier ? 78 : 58
+  const size = isPalier ? 70 : 52
   return (
-    <View style={{ width: 130, height: 90, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ width: 130, height: 78, alignItems: 'center', justifyContent: 'center' }}>
       <View style={{
         width: size, height: size, borderRadius: size / 2,
         borderWidth: isPalier ? 3 : 2.2,
@@ -1762,6 +1762,10 @@ const VictoireBanner = ({ icon, label, color, isSuper = false }: { icon: string;
 
 const PdfSystemeVictoiresDigital = () => (
   <Document title="Mon Tableau de Victoires · Cerveau Électrique" author="Cerveau Électrique">
+    {/* Page 1 : Intercalaire (présentation) */}
+    <IntercalaireVictoiresPage />
+
+    {/* Page 2 : Tableau de victoires à colorier */}
     <Page size="A4" style={[s.pageCream, { padding: 30, paddingBottom: 28 }]}>
       {/* Header avec Le Monstre à droite */}
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
