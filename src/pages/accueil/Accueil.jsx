@@ -6,6 +6,7 @@ import logoCE from '../../assets/logo-ce.png'
 import phrasesStopImg from '../../assets/outils/phrases-stop.jpg'
 import thermoImg      from '../../assets/outils/thermometre.jpg'
 import cardsImg       from '../../assets/outils/cards-emotions.jpg'
+import quizImg        from '../../assets/outils/quiz-emotions.jpg'
 
 const TOTAL_LECONS = LECONS.length
 
@@ -97,8 +98,10 @@ export default function Accueil() {
           style={s.quizCard}
           className="fade-up"
         >
-          <span style={{ fontSize: 32, marginRight: 14, flexShrink: 0 }}>🎯</span>
-          <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+          <div style={s.quizThumbWrap}>
+            <img src={quizImg} alt="" style={s.quizThumb} draggable={false} />
+          </div>
+          <div style={{ flex: 1, textAlign: 'left', minWidth: 0, padding: '14px 14px 14px 14px' }}>
             <div style={s.quizLabel}>Quiz Émotions</div>
             <div style={s.quizSub}>Lance une session avec ton enfant — 10 min</div>
           </div>
@@ -264,16 +267,30 @@ const s = {
 
   quizCard: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'stretch',
     width: '100%',
     background: '#FFFFFF',
-    border: '1px solid rgba(28,27,46,0.06)',
+    border: '2px solid #3E8E5E',
     boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
     borderRadius: 16,
-    padding: '16px 18px',
+    padding: 0,
     cursor: 'pointer',
     marginTop: 16,
     color: '#1C1B2E',
+    overflow: 'hidden',
+    textAlign: 'left',
+    fontFamily: 'Inter, sans-serif',
+  },
+  quizThumbWrap: {
+    width: 96,
+    flexShrink: 0,
+    background: '#E5E5E5',
+  },
+  quizThumb: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
   },
   quizLabel: {
     fontFamily: 'Poppins, sans-serif',
@@ -291,7 +308,8 @@ const s = {
   quizArrow: {
     fontSize: 22,
     color: '#999',
-    marginLeft: 8,
+    marginRight: 14,
+    alignSelf: 'center',
     flexShrink: 0,
   },
 
