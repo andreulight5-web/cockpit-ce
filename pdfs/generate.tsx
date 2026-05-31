@@ -1676,157 +1676,68 @@ const DigitalCell = ({ n, text, vierge = false }: { n: number; text?: string; vi
   </View>
 )
 
+const VICTOIRE_ROWS = [
+  { start: 1,  reward: '🌟 Mini récompense : ' },
+  { start: 6,  reward: '⭐ Récompense : ' },
+  { start: 11, reward: '🌟🌟 Grande récompense : ' },
+  { start: 16, reward: '🏆 Super récompense : ' },
+]
+
 const PdfSystemeVictoiresDigital = () => (
-  <Document title="Mon Tableau de Victoires — Version digitale · Cockpit Crises TDAH" author="Cerveaux Électriques">
-    <Page size="A4" style={[s.pageCream, { padding: 24, paddingBottom: 18 }]}>
-      <View style={[s.brandRow, { marginBottom: 6 }]}>
-        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
-          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · MON SYSTÈME DE VICTOIRES · VERSION DIGITALE
+  <Document title="Mon Tableau de Victoires · Cerveau Électrique" author="Cerveau Électrique">
+    <Page size="A4" style={[s.pageCream, { padding: 36, paddingBottom: 30 }]}>
+      {/* Header */}
+      <View style={{ marginBottom: 24 }}>
+        <Text style={{ fontFamily: 'Poppins', fontSize: 28, fontWeight: 700, color: C.dark, lineHeight: 1.15 }}>
+          Mon Tableau de Victoires
         </Text>
-        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
+        <Text style={{ fontFamily: 'Caveat', fontSize: 22, fontWeight: 700, color: C.teal, marginTop: 4 }}>
+          Chaque bon réflexe mérite d'être célébré
+        </Text>
       </View>
 
-      {/* Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-        <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-            <View style={[s.pill, { backgroundColor: C.teal, color: C.white, borderRadius: 0, marginRight: 10 }]}>
-              <Text>Impression simple · pas de découpe</Text>
+      {/* 4 rangées × 5 cercles + ligne de récompense */}
+      <View>
+        {VICTOIRE_ROWS.map((row) => (
+          <View key={row.start} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 26 }}>
+            <View style={{ flexDirection: 'row' }}>
+              {[0, 1, 2, 3, 4].map((i) => {
+                const n = row.start + i
+                return (
+                  <View key={n} style={{
+                    width: 46, height: 46, borderRadius: 23,
+                    borderWidth: 1.6, borderColor: C.dark,
+                    backgroundColor: C.white,
+                    alignItems: 'center', justifyContent: 'center',
+                    marginRight: i < 4 ? 12 : 0,
+                  }}>
+                    <Text style={{ fontFamily: 'Poppins', fontSize: 16, fontWeight: 700, color: C.dark }}>
+                      {n}
+                    </Text>
+                  </View>
+                )
+              })}
+            </View>
+            <View style={{ flex: 1, marginLeft: 18 }}>
+              <Text style={{ fontFamily: 'Inter', fontSize: 11, fontWeight: 600, color: C.dark, marginBottom: 4 }}>
+                {row.reward}
+              </Text>
+              <View style={{ height: 1, borderBottomWidth: 1, borderBottomColor: C.dark, borderBottomStyle: 'solid' }} />
             </View>
           </View>
-          <Text style={[s.h1, { color: C.text, fontSize: 24 }]}>
-            Mon Tableau de Victoires
-          </Text>
-          <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.rose, marginTop: 0 }}>
-            20 victoires à colorier · une par une
-          </Text>
-        </View>
-      </View>
-
-      {/* Grille 4 × 5 = 20 cases */}
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 6 }}>
-        {VICTOIRES_DIGITAL.map((text, i) => (
-          <DigitalCell key={i} n={i + 1} text={text} />
-        ))}
-        {[16, 17, 18, 19].map((_, i) => (
-          <DigitalCell key={`vierge-${i}`} n={17 + i} vierge />
         ))}
       </View>
 
-      {/* Paliers de récompenses — stripe horizontale */}
-      <View style={{ marginTop: 12 }}>
-        <Text style={{ fontFamily: 'Poppins', fontSize: 9, fontWeight: 800, color: C.text, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>
-          🎯 Paliers de récompenses
-        </Text>
-        <View style={{ flexDirection: 'row', gap: 6 }}>
-          {PALIERS.map((p, i) => <PalierBlock key={i} p={p} />)}
-        </View>
+      {/* Monstre fier en bas à droite */}
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end', paddingBottom: 8 }}>
+        <Image src="./assets/monstre-rigole.png" style={{ width: 150, height: 150, objectFit: 'contain' }} />
       </View>
 
-      {/* Bandeau bas : Monstre + caveat */}
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: C.yellow,
-        paddingVertical: 10,
-        paddingHorizontal: 16,
-        marginTop: 12,
-        borderRadius: 0,
+      <Text fixed style={{
+        position: 'absolute', bottom: 16, left: 36, right: 36,
+        fontFamily: 'Inter', fontSize: 9, color: C.muted, textAlign: 'center',
       }}>
-        <Image src="./assets/monstre-rigole.png" style={{ width: 56, height: 56, objectFit: 'contain', marginRight: 14 }} />
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontFamily: 'Caveat', fontSize: 28, fontWeight: 700, color: C.text, lineHeight: 1 }}>
-            Chaque victoire compte !
-          </Text>
-          <Text style={{ fontFamily: 'Inter', fontSize: 9, color: C.text, marginTop: 2, fontStyle: 'italic' }}>
-            Colorie un cercle à chaque fois que tu réussis. Tu en es capable.
-          </Text>
-        </View>
-      </View>
-
-      <Text fixed style={{ position: 'absolute', bottom: 8, left: 24, right: 24, fontFamily: 'Inter', fontSize: 7, color: C.muted, textAlign: 'center' }}>
-        Imprime · affiche sur le frigo · colorie un cercle par victoire · Cerveaux Électriques · cerveau-electrique.fr
-      </Text>
-    </Page>
-
-    {/* ═══ Page 2 — Contrat parent-enfant pleine page ═══ */}
-    <Page size="A4" style={[s.pageCream, { padding: 36, paddingBottom: 30 }]}>
-      <View style={s.brandRow}>
-        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
-          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · MON SYSTÈME DE VICTOIRES · VERSION DIGITALE
-        </Text>
-        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
-      </View>
-
-      <Text style={{ fontFamily: 'Caveat', fontSize: 62, fontWeight: 700, color: C.rose, textAlign: 'center', marginTop: 4, lineHeight: 1 }}>
-        Notre contrat de victoires
-      </Text>
-      <View style={{ height: 3, width: 120, backgroundColor: C.yellow, alignSelf: 'center', marginTop: 4, marginBottom: 22 }} />
-
-      <View style={{
-        padding: 18,
-        backgroundColor: 'rgba(42,148,144,0.10)',
-        borderLeftWidth: 5,
-        borderLeftColor: C.teal,
-        borderRadius: 0,
-        marginBottom: 12,
-      }}>
-        <Text style={{ fontFamily: 'Inter', fontSize: 14, color: C.text, lineHeight: 1.6 }}>
-          Moi,<Text style={{ color: C.muted }}>  ______________________________  </Text>(prénom de l'enfant),
-        </Text>
-        <Text style={{ fontFamily: 'Inter', fontSize: 13.5, color: C.text, lineHeight: 1.5, fontStyle: 'italic', marginTop: 4 }}>
-          je m'engage à essayer de gagner des cercles à colorier.
-        </Text>
-      </View>
-
-      <View style={{
-        padding: 18,
-        backgroundColor: 'rgba(192,80,106,0.08)',
-        borderLeftWidth: 5,
-        borderLeftColor: C.rose,
-        borderRadius: 0,
-        marginBottom: 22,
-      }}>
-        <Text style={{ fontFamily: 'Inter', fontSize: 14, color: C.text, lineHeight: 1.6 }}>
-          Moi,<Text style={{ color: C.muted }}>  ______________________________  </Text>(prénom du parent),
-        </Text>
-        <Text style={{ fontFamily: 'Inter', fontSize: 13.5, color: C.text, lineHeight: 1.5, fontStyle: 'italic', marginTop: 4 }}>
-          je m'engage à encourager chaque victoire, sans en oublier aucune.
-        </Text>
-      </View>
-
-      <Text style={{ fontFamily: 'Poppins', fontSize: 11, fontWeight: 800, color: C.text, letterSpacing: 1.8, textTransform: 'uppercase', marginBottom: 10 }}>
-        🎁 Nos récompenses
-      </Text>
-      <ContratReward n={5}  label="5 victoires" />
-      <ContratReward n={10} label="10 victoires" />
-      <ContratReward n={15} label="15 victoires" />
-      <ContratReward n={20} label="20 victoires — 🏆 Super récompense" />
-
-      <View style={{ flexDirection: 'row', marginTop: 28, marginBottom: 20 }}>
-        <SignLine label="Signature enfant" />
-        <SignLine label="Signature parent" />
-        <SignLine label="Date" />
-      </View>
-
-      <View style={{
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        paddingBottom: 4,
-      }}>
-        <Image src="./assets/monstre-calin.png" style={{ width: 110, height: 110, objectFit: 'contain' }} />
-        <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
-          <Text style={{ fontFamily: 'Caveat', fontSize: 32, fontWeight: 700, color: C.text, textAlign: 'center', lineHeight: 1.05 }}>
-            On est une équipe.{'\n'}On y va ensemble.
-          </Text>
-        </View>
-        <Image src="./assets/cortex-bienveillant.png" style={{ width: 110, height: 110, objectFit: 'contain' }} />
-      </View>
-
-      <Text fixed style={{ position: 'absolute', bottom: 14, left: 0, right: 0, fontFamily: 'Inter', fontSize: 8, color: C.muted, textAlign: 'center' }}>
-        Cerveaux Électriques · cerveau-electrique.fr
+        Cerveau Électrique · cerveau-electrique.fr
       </Text>
     </Page>
   </Document>
