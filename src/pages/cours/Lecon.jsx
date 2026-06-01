@@ -11,6 +11,12 @@ import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 
 const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne, perplexe: cortexPerplexe }
 
+/* Sur fond crème, le jaune #F5E06D est illisible en texte.
+   On retourne un ambre foncé pour le texte tout en gardant la teinte CE pour les fonds/bordures. */
+const accent = (c) => c === '#F5E06D' ? '#A88E1F' : c
+/* Couleur texte lisible sur un cercle/badge à fond solide `color` (yellow & teal → dark, sinon white) */
+const onSolid = (c) => (c === '#F5E06D' || c === '#2A9490') ? '#1C1B2E' : '#fff'
+
 function LeconInner({ id }) {
   const navigate = useNavigate()
   const { appData, saveData } = useContext(AppContext)
@@ -99,7 +105,7 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
           {/* Color band + badge */}
           <div>
             <div style={{ padding: '0 24px' }}>
-              <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600 }}>{lecon.moduleLabel}</span>
+              <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 600 }}>{lecon.moduleLabel}</span>
             </div>
           </div>
           {/* Center: Cortex image + text */}
@@ -110,7 +116,7 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
           </div>
           {/* Bottom card */}
           <div style={{ background: 'rgba(28,27,46,0.06)', borderTop: '1px solid rgba(28,27,46,0.08)', padding: '16px 24px 32px' }}>
-            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 2, color, fontWeight: 600, marginBottom: 12 }}>DANS CETTE LECON</p>
+            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 600, marginBottom: 12 }}>DANS CETTE LECON</p>
             {apercu.map((p, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 8, alignItems: 'flex-start' }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: `${color}99`, marginTop: 5, flexShrink: 0 }} />
@@ -133,7 +139,7 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
         </div>
         <div style={{ padding: 20, flex: 1 }}>
           <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: '#1C1B2E', lineHeight: 1.65, marginBottom: 14 }}>{c.texte}</p>
-          {c.detail && <><div style={S.thinSep} /><p style={{ fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, margin: '14px 0 6px' }}>En pratique :</p><p style={{ fontSize: 15, color, fontStyle: 'italic', lineHeight: 1.5 }}>{c.detail}</p></>}
+          {c.detail && <><div style={S.thinSep} /><p style={{ fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, margin: '14px 0 6px' }}>En pratique :</p><p style={{ fontSize: 15, color: accent(color), fontStyle: 'italic', lineHeight: 1.5 }}>{c.detail}</p></>}
           {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a` }}><p style={{ fontSize: 14, color: '#2A9490', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
         </div>
       </div>
@@ -144,11 +150,11 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
         <div style={{ display: 'flex', gap: 12, flex: 1, alignItems: 'stretch' }}>
           {c.colonnes.map((col, i) => (
             <div key={i} style={{ flex: 1, minHeight: 200, background: 'rgba(28,27,46,0.06)', borderRadius: 16, padding: 16, borderTop: `3px solid ${col.couleur || color}`, display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: 10, color: col.couleur || color, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>{col.label}</span>
+              <span style={{ fontSize: 10, color: accent(col.couleur || color), textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 600 }}>{col.label}</span>
               <span style={{ fontSize: 36, margin: '8px 0' }}>{col.icone}</span>
               <h4 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 15, color: '#1C1B2E', fontWeight: 700, margin: '0 0 6px' }}>{col.titre}</h4>
               <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.6, margin: 0 }}>{col.texte}</p>
-              {col.action && <><div style={{ ...S.thinSep, marginTop: 10 }} /><p style={{ fontSize: 13, color: col.couleur || color, fontStyle: 'italic', margin: '8px 0 0' }}>→ {col.action}</p></>}
+              {col.action && <><div style={{ ...S.thinSep, marginTop: 10 }} /><p style={{ fontSize: 13, color: accent(col.couleur || color), fontStyle: 'italic', margin: '8px 0 0' }}>→ {col.action}</p></>}
             </div>
           ))}
         </div>
@@ -182,26 +188,26 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
     )
     case 'verbatim': return (
       <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '72px 20px 80px', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-        <div style={{ width: 60, height: 60, borderRadius: '50%', background: `${color}4d`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#fff', fontWeight: 700 }}>{c.auteur?.[0] || 'P'}</div>
+        <div style={{ width: 60, height: 60, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: onSolid(color), fontWeight: 700 }}>{c.auteur?.[0] || 'P'}</div>
         <span style={{ fontSize: 60, color, opacity: 0.3, lineHeight: 1, marginTop: 8 }}>"</span>
         <p style={{ fontFamily: 'Poppins,sans-serif', fontSize: 18, color: '#1C1B2E', fontStyle: 'italic', lineHeight: 1.8, margin: '4px 20px 16px', maxWidth: 340 }}>{c.texte}</p>
         <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#2A9490' }}>{c.auteur}</span>
         <div style={S.parentBadge}>Parent Cerveaux Electriques</div>
-        {c.takeaway && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 16, width: '100%', textAlign: 'left' }}><p style={{ fontSize: 14, color, margin: 0, lineHeight: 1.5 }}><strong>Ce que ca change :</strong> {c.takeaway}</p></div>}
+        {c.takeaway && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 16, width: '100%', textAlign: 'left' }}><p style={{ fontSize: 14, color: '#1C1B2E', margin: 0, lineHeight: 1.5 }}><strong style={{ color: accent(color) }}>Ce que ca change :</strong> {c.takeaway}</p></div>}
       </div>
     )
     case 'action': return (
       <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '72px 20px 80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: color === '#2A9490' ? '#1C1B2E' : '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: color, color: onSolid(color), display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <span style={{ fontSize: 22, fontWeight: 800, lineHeight: 1 }}>{c.numero}</span>
             <span style={{ fontSize: 7, textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginTop: 2 }}>ACTION</span>
           </div>
-          <div><span style={{ ...S.tagPill, background: `${color}33`, color }}>{c.tag}</span><h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#fff', margin: '6px 0 0' }}>{c.titre}</h3></div>
+          <div><span style={{ ...S.tagPill, background: `${color}33`, color: accent(color) }}>{c.tag}</span><h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#1C1B2E', margin: '6px 0 0' }}>{c.titre}</h3></div>
         </div>
         <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#1C1B2E', lineHeight: 1.7, marginBottom: 14 }}>{c.texte}</p>
         {c.resultat && <><div style={S.thinSep} /><div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: 14, marginTop: 12 }}><p style={{ fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 600, marginBottom: 4 }}>Resultat attendu</p><p style={{ fontSize: 15, color: '#2A9490', margin: 0, lineHeight: 1.5 }}>{c.resultat}</p></div></>}
-        {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 10 }}><p style={{ fontSize: 14, color: '#fff', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
+        {c.exemple && <div style={{ ...S.exCard, borderColor: color, background: `${color}1a`, marginTop: 10 }}><p style={{ fontSize: 14, color: '#1C1B2E', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>{c.exemple}</p></div>}
       </div>
     )
     case 'memo': {
@@ -209,12 +215,12 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
       return (
         <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '72px 20px 80px' }}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: `${color}33`, border: `2px solid ${color}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color }}>✓</div>
+            <div style={{ width: 48, height: 48, borderRadius: '50%', background: `${color}33`, border: `2px solid ${color}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: accent(color) }}>✓</div>
             <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 22, fontWeight: 700, color: '#1C1B2E', marginTop: 12 }}>A retenir</h3>
           </div>
           {c.items.map((item, i) => (
             <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(28,27,46,0.08)', borderLeft: `3px solid ${color}`, borderRadius: 12, padding: '14px 16px', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ color, fontSize: 14, fontWeight: 700, flexShrink: 0 }}>✓</span>
+              <span style={{ color: accent(color), fontSize: 14, fontWeight: 700, flexShrink: 0 }}>✓</span>
               <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#1C1B2E', lineHeight: 1.5 }}>{item}</span>
             </div>
           ))}
