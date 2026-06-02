@@ -1409,6 +1409,51 @@ const ContratReward = ({ n, label }: { n: number; label: string }) => (
   </View>
 )
 
+/* ═══════════════════════════════════════════════════ */
+/* Recharge stock — 16 cartes à personnaliser (usage perso) */
+/* Même format que les cartes vierges de systeme-victoires  */
+/* ═══════════════════════════════════════════════════ */
+const PdfCartesPersonnaliserX16 = () => (
+  <Document title="Recharge — 16 cartes victoires à personnaliser · Cerveau Électrique" author="Cerveau Électrique">
+    <Page size="A4" style={[s.pageCream, { padding: 24, paddingBottom: 28 }]}>
+      <View style={[s.brandRow, { marginBottom: 6 }]}>
+        <Text style={[s.brand, { color: C.text, fontSize: 7 }]}>
+          CERVEAUX <Text style={s.brandAccent}>ÉLECTRIQUES</Text> · RECHARGE CARTES VICTOIRES
+        </Text>
+        <Text style={[s.brand, { color: C.muted, fontSize: 7 }]}>cerveau-electrique.fr</Text>
+      </View>
+
+      <View style={[s.pill, { backgroundColor: C.yellow, color: C.text, borderRadius: 0 }]}>
+        <Text>16 cartes vierges · 45 × 45 mm</Text>
+      </View>
+      <Text style={[s.h1, { color: C.text, marginTop: 6, fontSize: 22 }]}>Cartes à personnaliser</Text>
+
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: C.teal,
+        padding: 10,
+        marginTop: 8,
+        marginBottom: 10,
+        borderRadius: 0,
+      }}>
+        <Text style={{ fontSize: 16, marginRight: 10 }}>✏️</Text>
+        <Text style={{ fontFamily: 'Poppins', fontSize: 10.5, fontWeight: 700, color: C.white, flex: 1, lineHeight: 1.4 }}>
+          Écris les victoires propres à ton enfant. Découpe ensuite sur les bords.
+        </Text>
+      </View>
+
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 8 }}>
+        {Array.from({ length: 16 }).map((_, i) => (
+          <VictoireCard key={i} vierge />
+        ))}
+      </View>
+
+      <Footer text="Imprime sur papier épais · Plastifie pour les garder longtemps · Découpe sur les bords pointillés" />
+    </Page>
+  </Document>
+)
+
 const PdfSystemeVictoires = () => (
   <Document title="Mon Système de Victoires · Cockpit Crises TDAH" author="Cerveaux Électriques">
     <IntercalaireVictoiresPage />
@@ -3264,6 +3309,7 @@ const docs = [
   { name: 'thermometre-emotions.pdf', doc: <PdfThermometre /> },
   { name: 'systeme-victoires.pdf', doc: <PdfSystemeVictoires /> },
   { name: 'systeme-victoires-digital.pdf', doc: <PdfSystemeVictoiresDigital /> },
+  { name: 'cartes-personnaliser-x16.pdf', doc: <PdfCartesPersonnaliserX16 /> },
   { name: 'kit-anti-crise.pdf', doc: <PdfKitAntiCrise /> },
   { name: 'journal-simple.pdf', doc: <PdfJournalSimple /> },
   { name: 'journal-simple-planche.pdf', doc: <PdfJournalPlanche /> },
