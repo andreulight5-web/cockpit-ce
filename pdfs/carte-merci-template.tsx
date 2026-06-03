@@ -147,7 +147,7 @@ const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: str
     {/* Titre + soulignement jaune */}
     <View style={{ alignItems: 'center', marginTop: 2 }}>
       <Text style={{ fontFamily: 'Caveat', fontSize: 34, fontWeight: 700, color: C.teal, lineHeight: 1 }}>
-        Merci "{prenom}"
+        Merci {prenom}
       </Text>
       <View style={{ height: 2, width: 42, backgroundColor: C.yellow, marginTop: 3 }} />
     </View>
