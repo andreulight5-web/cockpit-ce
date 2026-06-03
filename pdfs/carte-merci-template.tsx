@@ -171,25 +171,47 @@ const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: str
 )
 
 /* ── Carte : VERSO ─────────────────────────────────── */
-const CardVerso = () => (
+const CardVerso = ({ code }: { code?: string }) => (
   <View style={{
     position: 'absolute',
     left: CARD_X, top: CARD_Y,
     width: CARD_W, height: CARD_H,
     backgroundColor: C.cream,
-    padding: 14,
+    padding: 12,
     flexDirection: 'row',
     fontFamily: 'Inter',
     overflow: 'hidden',
   }}>
-    {/* Colonne gauche : QR + URL */}
-    <View style={{ width: 100, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={{ padding: 4, backgroundColor: C.white }}>
-        <Qr value={APP_URL} size={88} fg={C.dark} />
+    {/* Colonne gauche : QR + URL + (code si fourni) */}
+    <View style={{ width: 100, alignItems: 'center' }}>
+      <View style={{ padding: 3, backgroundColor: C.white }}>
+        <Qr value={APP_URL} size={code ? 72 : 88} fg={C.dark} />
       </View>
-      <Text style={{ fontFamily: 'Inter', fontSize: 7, color: C.muted, marginTop: 5, textAlign: 'center' }}>
+      <Text style={{ fontFamily: 'Inter', fontSize: 6.5, color: C.muted, marginTop: 3, textAlign: 'center' }}>
         cockpit-ce.pages.dev
       </Text>
+
+      {code && (
+        <View style={{
+          backgroundColor: C.yellow,
+          borderRadius: 6,
+          paddingVertical: 6,
+          paddingHorizontal: 8,
+          marginTop: 6,
+          width: '100%',
+          alignItems: 'center',
+        }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 6, fontWeight: 700, color: C.dark, letterSpacing: 0.8, textTransform: 'uppercase' }}>
+            Ton code d'accès personnel
+          </Text>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 11, fontWeight: 700, color: C.dark, letterSpacing: 1.5, marginTop: 3 }}>
+            {code}
+          </Text>
+          <Text style={{ fontFamily: 'Inter', fontSize: 6, color: C.dark, marginTop: 3, textAlign: 'center', lineHeight: 1.25 }}>
+            Entre ce code sur{'\n'}cockpit-ce.pages.dev
+          </Text>
+        </View>
+      )}
     </View>
 
     {/* Colonne droite : tagline + signature */}
@@ -222,10 +244,11 @@ const CardVerso = () => (
 /* ── Composant principal ───────────────────────────── */
 export type CarteMerciProps = {
   prenom: string
+  code?: string
   message?: string
 }
 
-export const CarteMerci = ({ prenom, message }: CarteMerciProps) => {
+export const CarteMerci = ({ prenom, code, message }: CarteMerciProps) => {
   const finalMessage = message || pickRandomMessage(prenom)
   return (
     <Document title={`Carte merci · ${prenom}`} author="Cerveau Électrique">
@@ -239,7 +262,7 @@ export const CarteMerci = ({ prenom, message }: CarteMerciProps) => {
       {/* ═══ Page 2 — A4, VERSO centré ═══ */}
       <Page size="A4" style={{ backgroundColor: C.white }}>
         <PrintHint label="Verso" />
-        <CardVerso />
+        <CardVerso code={code} />
         <CropMarks />
       </Page>
     </Document>
