@@ -184,6 +184,10 @@ export function buildShippingNotification({
     ? `<tr><td style="padding:6px 0;color:#64748B;">Téléphone</td><td>${escapeHtml(customerPhone)}</td></tr>`
     : ''
 
+  // Prénom = premier mot du nom complet du client (fallback "Client" si absent)
+  const firstName = (customerName ?? '').trim().split(/\s+/)[0] || 'Client'
+  const carteMerciCmd = `node pdfs/generate-carte-merci.js "${firstName}" "${code}"`
+
   const html = `<!doctype html>
 <html lang="fr"><body style="font-family:Inter,Arial,sans-serif;background:#FAFAF5;padding:24px;">
   <div style="max-width:560px;margin:0 auto;background:#FFFFFF;padding:24px;border-radius:12px;border:1px solid rgba(28,27,46,0.08);">
@@ -199,6 +203,9 @@ export function buildShippingNotification({
           <td style="padding:8px 0 6px;line-height:1.55;">${addrBlock}</td></tr>
       <tr><td style="padding:6px 0;color:#64748B;">Stripe session</td><td style="font-family:monospace;font-size:11px;">${escapeHtml(sessionId)}</td></tr>
     </table>
+
+    <h3 style="font-family:Poppins,Arial,sans-serif;font-size:14px;color:#1C1B2E;margin:24px 0 8px;">📋 Carte personnalisée</h3>
+    <pre style="background:#F0F0F0;font-family:Menlo,Consolas,monospace;font-size:13px;color:#1C1B2E;padding:12px;border-radius:8px;margin:0;overflow-x:auto;white-space:pre;">${escapeHtml(carteMerciCmd)}</pre>
   </div>
 </body></html>`
 
