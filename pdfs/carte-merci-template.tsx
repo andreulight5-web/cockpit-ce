@@ -132,8 +132,8 @@ const PrintHint = ({ label }: { label: string }) => (
 const STEPS = [
   'Ouvre ta pochette kraft',
   'Commence par les 2 premières pages — elles t\'expliquent tout le kit',
-  'Scanne le QR code ci-dessous pour accéder à ton app',
-  'Entre ton code d\'accès personnel',
+  'Scanne le QR code au dos pour accéder à ton app',
+  'Entre ton code d\'accès personnel (imprimé au dos)',
 ]
 
 const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: string }) => (
