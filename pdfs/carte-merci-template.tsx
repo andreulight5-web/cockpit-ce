@@ -129,46 +129,43 @@ const PrintHint = ({ label }: { label: string }) => (
   </Text>
 )
 
-/* ── Carte : RECTO ─────────────────────────────────── */
+/* ── Carte : RECTO (tout Caveat, pas de rose) ─────── */
 const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: string }) => (
   <View style={{
     position: 'absolute',
     left: CARD_X, top: CARD_Y,
     width: CARD_W, height: CARD_H,
     backgroundColor: C.cream,
-    padding: 14,
-    fontFamily: 'Inter',
+    padding: 10,
+    fontFamily: 'Caveat',
     overflow: 'hidden',
   }}>
-    {/* Header brand */}
+    {/* Logo discret en haut */}
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Image src="./assets/logo-ce.png" style={{ width: 16, height: 16, marginRight: 6 }} />
-      <Text style={{ fontFamily: 'Poppins', fontSize: 7, fontWeight: 800, color: C.dark, letterSpacing: 1.4, textTransform: 'uppercase' }}>
-        Cerveau <Text style={{ color: C.yellow }}>Électrique</Text>
-      </Text>
+      <Image src="./assets/logo-ce.png" style={{ width: 18, height: 18 }} />
     </View>
 
     {/* Titre + soulignement jaune */}
-    <View style={{ alignItems: 'center', marginTop: 6 }}>
-      <Text style={{ fontFamily: 'Caveat', fontSize: 32, fontWeight: 700, color: C.rose, lineHeight: 1 }}>
+    <View style={{ alignItems: 'center', marginTop: 2 }}>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 34, fontWeight: 700, color: C.teal, lineHeight: 1 }}>
         Merci {prenom}
       </Text>
-      <View style={{ height: 2, width: 38, backgroundColor: C.yellow, marginTop: 3 }} />
+      <View style={{ height: 2, width: 42, backgroundColor: C.yellow, marginTop: 3 }} />
     </View>
 
-    {/* Message personnalisé */}
-    <View style={{ paddingHorizontal: 8, marginTop: 8 }}>
-      <Text style={{ fontFamily: 'Inter', fontSize: 8.5, color: C.dark, lineHeight: 1.4, textAlign: 'center', fontStyle: 'italic' }}>
-        « {finalMessage} »
+    {/* Message personnalisé en Caveat */}
+    <View style={{ paddingHorizontal: 16, marginTop: 6 }}>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 14, fontWeight: 700, color: C.dark, lineHeight: 1.15, textAlign: 'center' }}>
+        {finalMessage}
       </Text>
     </View>
 
-    {/* 4 personnages en bas */}
-    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', paddingBottom: 2 }}>
-      <Image src="./assets/maman-main-tendue.png"   style={{ width: 36, height: 36, objectFit: 'contain' }} />
-      <Image src="./assets/monstre-rigole.png"      style={{ width: 36, height: 36, objectFit: 'contain' }} />
-      <Image src="./assets/cortex-bienveillant.png" style={{ width: 36, height: 36, objectFit: 'contain' }} />
-      <Image src="./assets/papa-encourageant.png"   style={{ width: 36, height: 36, objectFit: 'contain' }} />
+    {/* 4 personnages plus grands */}
+    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', paddingBottom: 0 }}>
+      <Image src="./assets/maman-main-tendue.png"   style={{ width: 56, height: 56, objectFit: 'contain' }} />
+      <Image src="./assets/monstre-rigole.png"      style={{ width: 56, height: 56, objectFit: 'contain' }} />
+      <Image src="./assets/cortex-bienveillant.png" style={{ width: 56, height: 56, objectFit: 'contain' }} />
+      <Image src="./assets/papa-encourageant.png"   style={{ width: 56, height: 56, objectFit: 'contain' }} />
     </View>
   </View>
 )
@@ -215,8 +212,8 @@ const CardVerso = () => (
       </View>
 
       {/* Signature */}
-      <Text style={{ fontFamily: 'Caveat', fontSize: 16, fontWeight: 700, color: C.rose, lineHeight: 1.1 }}>
-        Avec affection,{'\n'}Rémi & l'équipe CE
+      <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.dark, lineHeight: 1.1 }}>
+        André <Text style={{ color: C.yellow }}>⚡</Text> Cerveau Électrique
       </Text>
     </View>
   </View>
