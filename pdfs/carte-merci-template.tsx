@@ -213,7 +213,7 @@ const CardVerso = () => (
 
       {/* Signature */}
       <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.dark, lineHeight: 1.1 }}>
-        André <Text style={{ color: C.yellow }}>⚡</Text> Cerveau Électrique
+        André, Cerveau Électrique
       </Text>
     </View>
   </View>
