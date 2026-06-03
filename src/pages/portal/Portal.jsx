@@ -37,7 +37,7 @@ export default function Portal() {
     localStorage.setItem('cockpit_install_date', d)
     return d
   })
-  const dayIndex = Math.floor((Date.now() - new Date(installDate).getTime()) / 86400000) % 30
+  const dayIndex = Math.floor((Date.now() - new Date(installDate).getTime()) / 86400000) % CAS_DU_JOUR.length
   const casJour = CAS_DU_JOUR[dayIndex]
   const [casExpanded, setCasExpanded] = useState(false)
 
