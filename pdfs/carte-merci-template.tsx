@@ -128,7 +128,7 @@ const PrintHint = ({ label }: { label: string }) => (
   </Text>
 )
 
-/* ── Carte : RECTO — Merci + encadré + QR + code ──── */
+/* ── Carte : RECTO — Merci + message + encadré PAR OÙ COMMENCER ─── */
 const STEPS = [
   'Ouvre ta pochette kraft',
   'Commence par les 2 premières pages — elles t\'expliquent tout le kit',
@@ -136,7 +136,7 @@ const STEPS = [
   'Entre ton code d\'accès personnel',
 ]
 
-const CardRecto = ({ prenom, code }: { prenom: string; code?: string }) => (
+const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: string }) => (
   <View style={{
     position: 'absolute',
     left: CARD_X, top: CARD_Y,
@@ -157,41 +157,69 @@ const CardRecto = ({ prenom, code }: { prenom: string; code?: string }) => (
       <View style={{ height: 2, width: 40, backgroundColor: C.yellow, marginTop: 3 }} />
     </View>
 
+    {/* Message manuscrit */}
+    <View style={{ paddingHorizontal: 16, marginTop: 6 }}>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 14, fontWeight: 700, color: C.dark, lineHeight: 1.2, textAlign: 'center' }}>
+        {finalMessage}
+      </Text>
+    </View>
+
     {/* Encadré PAR OÙ COMMENCER */}
     <View style={{
       backgroundColor: 'rgba(42,148,144,0.08)',
       borderLeftWidth: 3,
       borderLeftColor: C.teal,
       borderRadius: 4,
-      paddingVertical: 8,
-      paddingHorizontal: 10,
-      marginTop: 8,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      marginTop: 10,
     }}>
       <Text style={{
-        fontFamily: 'Poppins', fontSize: 7.5, fontWeight: 800, color: C.teal,
-        letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 4,
+        fontFamily: 'Poppins', fontSize: 8, fontWeight: 800, color: C.teal,
+        letterSpacing: 1.4, textTransform: 'uppercase', marginBottom: 6,
       }}>
         Par où commencer
       </Text>
       {STEPS.map((step, i) => (
-        <View key={i} style={{ flexDirection: 'row', marginBottom: 1.5 }}>
-          <Text style={{ fontFamily: 'Poppins', fontSize: 8, fontWeight: 700, color: C.teal, width: 11, lineHeight: 1.35 }}>
+        <View key={i} style={{ flexDirection: 'row', marginBottom: 2 }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 8.5, fontWeight: 700, color: C.teal, width: 12, lineHeight: 1.35 }}>
             {i + 1}.
           </Text>
-          <Text style={{ fontFamily: 'Inter', fontSize: 8, color: C.dark, flex: 1, lineHeight: 1.35 }}>
+          <Text style={{ fontFamily: 'Inter', fontSize: 8.5, color: C.dark, flex: 1, lineHeight: 1.35 }}>
             {step}
           </Text>
         </View>
       ))}
     </View>
+  </View>
+)
 
-    {/* QR + encadré code en bas */}
-    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 8, gap: 14 }}>
+/* ── Carte : VERSO — QR + code + 4 personnages ──────── */
+const CardVerso = ({ code }: { code?: string }) => (
+  <View style={{
+    position: 'absolute',
+    left: CARD_X, top: CARD_Y,
+    width: CARD_W, height: CARD_H,
+    backgroundColor: C.cream,
+    padding: 14,
+    fontFamily: 'Caveat',
+    overflow: 'hidden',
+  }}>
+    {/* Header brand */}
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Image src="./assets/logo-ce.png" style={{ width: 16, height: 16, marginRight: 6 }} />
+      <Text style={{ fontFamily: 'Poppins', fontSize: 7, fontWeight: 800, color: C.dark, letterSpacing: 1.4, textTransform: 'uppercase' }}>
+        Cerveau <Text style={{ color: C.yellow }}>Électrique</Text>
+      </Text>
+    </View>
+
+    {/* Ligne QR + code */}
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 18, marginTop: 8 }}>
       <View style={{ alignItems: 'center' }}>
-        <View style={{ padding: 3, backgroundColor: C.white }}>
-          <Qr value={APP_URL} size={66} fg={C.dark} />
+        <View style={{ padding: 4, backgroundColor: C.white }}>
+          <Qr value={APP_URL} size={70} fg={C.dark} />
         </View>
-        <Text style={{ fontFamily: 'Inter', fontSize: 6, color: C.muted, marginTop: 2 }}>
+        <Text style={{ fontFamily: 'Inter', fontSize: 6.5, color: C.muted, marginTop: 3 }}>
           cockpit-ce.pages.dev
         </Text>
       </View>
@@ -212,41 +240,6 @@ const CardRecto = ({ prenom, code }: { prenom: string; code?: string }) => (
           </Text>
         </View>
       )}
-    </View>
-  </View>
-)
-
-/* ── Carte : VERSO — tagline + message + 4 perso + signature ── */
-const CardVerso = ({ finalMessage }: { finalMessage: string }) => (
-  <View style={{
-    position: 'absolute',
-    left: CARD_X, top: CARD_Y,
-    width: CARD_W, height: CARD_H,
-    backgroundColor: C.cream,
-    padding: 14,
-    fontFamily: 'Caveat',
-    overflow: 'hidden',
-  }}>
-    {/* Header brand */}
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Image src="./assets/logo-ce.png" style={{ width: 16, height: 16, marginRight: 6 }} />
-      <Text style={{ fontFamily: 'Poppins', fontSize: 7, fontWeight: 800, color: C.dark, letterSpacing: 1.4, textTransform: 'uppercase' }}>
-        Cerveau <Text style={{ color: C.yellow }}>Électrique</Text>
-      </Text>
-    </View>
-
-    {/* Tagline */}
-    <View style={{ alignItems: 'center', marginTop: 4 }}>
-      <Text style={{ fontFamily: 'Caveat', fontSize: 28, fontWeight: 700, color: C.teal, lineHeight: 1 }}>
-        On est une équipe.
-      </Text>
-    </View>
-
-    {/* Message manuscrit */}
-    <View style={{ paddingHorizontal: 16, marginTop: 4 }}>
-      <Text style={{ fontFamily: 'Caveat', fontSize: 14, fontWeight: 700, color: C.dark, lineHeight: 1.2, textAlign: 'center' }}>
-        {finalMessage}
-      </Text>
     </View>
 
     {/* 4 personnages */}
@@ -278,14 +271,14 @@ export const CarteMerci = ({ prenom, code, message }: CarteMerciProps) => {
       {/* ═══ Page 1 — A4, RECTO centré ═══ */}
       <Page size="A4" style={{ backgroundColor: C.white }}>
         <PrintHint label="Recto" />
-        <CardRecto prenom={prenom} code={code} />
+        <CardRecto prenom={prenom} finalMessage={finalMessage} />
         <CropMarks />
       </Page>
 
       {/* ═══ Page 2 — A4, VERSO centré ═══ */}
       <Page size="A4" style={{ backgroundColor: C.white }}>
         <PrintHint label="Verso" />
-        <CardVerso finalMessage={finalMessage} />
+        <CardVerso code={code} />
         <CropMarks />
       </Page>
     </Document>
