@@ -54,18 +54,17 @@ const CROP_GAP = 4     // espace entre coin carte et repère
 const CROP_COL = '#999'
 
 /* ── Messages par défaut (rotation aléatoire) ─────── */
+// Pas de prénom en tête : le titre "Merci «Prénom»" est juste au-dessus.
 export const DEFAULT_MESSAGES = [
-  '{P}, merci de nous faire confiance. Ce kit a été préparé avec soin pour toi et ton enfant.',
-  '{P}, bienvenue dans le Cockpit. On est avec toi pour les 30 prochains jours.',
-  '{P}, ce kit est entre de bonnes mains. Ton enfant a de la chance de t\'avoir.',
-  '{P}, chaque outil de ce kit répond à un vrai besoin de parent. Merci d\'être là.',
-  '{P}, tu viens de faire le premier pas. Le plus dur est derrière toi.',
+  'Merci de nous faire confiance. Ce kit a été préparé avec soin pour toi et ton enfant.',
+  'Bienvenue dans le Cockpit. On est avec toi pour les 30 prochains jours.',
+  'Ce kit est entre de bonnes mains. Ton enfant a de la chance de t\'avoir.',
+  'Chaque outil de ce kit répond à un vrai besoin de parent. Merci d\'être là.',
+  'Tu viens de faire le premier pas. Le plus dur est derrière toi.',
 ]
 
-export const pickRandomMessage = (prenom: string): string => {
-  const tpl = DEFAULT_MESSAGES[Math.floor(Math.random() * DEFAULT_MESSAGES.length)]
-  return tpl.replace('{P}', prenom)
-}
+export const pickRandomMessage = (): string =>
+  DEFAULT_MESSAGES[Math.floor(Math.random() * DEFAULT_MESSAGES.length)]
 
 /* ── QR code en SVG ────────────────────────────────── */
 const Qr = ({ value, size = 90, fg = C.dark }: { value: string; size?: number; fg?: string }) => {
@@ -148,7 +147,7 @@ const CardRecto = ({ prenom, finalMessage }: { prenom: string; finalMessage: str
     {/* Titre + soulignement jaune */}
     <View style={{ alignItems: 'center', marginTop: 2 }}>
       <Text style={{ fontFamily: 'Caveat', fontSize: 34, fontWeight: 700, color: C.teal, lineHeight: 1 }}>
-        Merci {prenom}
+        Merci "{prenom}"
       </Text>
       <View style={{ height: 2, width: 42, backgroundColor: C.yellow, marginTop: 3 }} />
     </View>
@@ -182,39 +181,14 @@ const CardVerso = ({ code }: { code?: string }) => (
     fontFamily: 'Inter',
     overflow: 'hidden',
   }}>
-    {/* Colonne gauche : QR + URL + (code si fourni) */}
-    <View style={{ width: 100, alignItems: 'center' }}>
-      <View style={{ padding: 3, backgroundColor: C.white }}>
-        <Qr value={APP_URL} size={code ? 72 : 88} fg={C.dark} />
+    {/* Colonne gauche : QR seul, centré */}
+    <View style={{ width: 100, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ padding: 4, backgroundColor: C.white }}>
+        <Qr value={APP_URL} size={92} fg={C.dark} />
       </View>
-      <Text style={{ fontFamily: 'Inter', fontSize: 6.5, color: C.muted, marginTop: 3, textAlign: 'center' }}>
-        cockpit-ce.pages.dev
-      </Text>
-
-      {code && (
-        <View style={{
-          backgroundColor: C.yellow,
-          borderRadius: 6,
-          paddingVertical: 6,
-          paddingHorizontal: 8,
-          marginTop: 6,
-          width: '100%',
-          alignItems: 'center',
-        }}>
-          <Text style={{ fontFamily: 'Poppins', fontSize: 6, fontWeight: 700, color: C.dark, letterSpacing: 0.8, textTransform: 'uppercase' }}>
-            Ton code d'accès personnel
-          </Text>
-          <Text style={{ fontFamily: 'Poppins', fontSize: 11, fontWeight: 700, color: C.dark, letterSpacing: 1.5, marginTop: 3 }}>
-            {code}
-          </Text>
-          <Text style={{ fontFamily: 'Inter', fontSize: 6, color: C.dark, marginTop: 3, textAlign: 'center', lineHeight: 1.25 }}>
-            Entre ce code sur{'\n'}cockpit-ce.pages.dev
-          </Text>
-        </View>
-      )}
     </View>
 
-    {/* Colonne droite : tagline + signature */}
+    {/* Colonne droite : brand + tagline + code + signature */}
     <View style={{ flex: 1, paddingLeft: 14, justifyContent: 'space-between' }}>
       <View>
         {/* Header brand */}
@@ -225,16 +199,34 @@ const CardVerso = ({ code }: { code?: string }) => (
           </Text>
         </View>
 
-        <Text style={{ fontFamily: 'Caveat', fontSize: 28, fontWeight: 700, color: C.teal, lineHeight: 1, marginTop: 8 }}>
+        <Text style={{ fontFamily: 'Caveat', fontSize: 24, fontWeight: 700, color: C.teal, lineHeight: 1, marginTop: 6 }}>
           On est une équipe.
-        </Text>
-        <Text style={{ fontFamily: 'Inter', fontSize: 8, color: C.dark, lineHeight: 1.4, marginTop: 6 }}>
-          Scan le QR code pour entrer dans ton Cockpit.
         </Text>
       </View>
 
+      {/* Encadré code d'accès */}
+      {code && (
+        <View style={{
+          backgroundColor: C.yellow,
+          borderRadius: 6,
+          paddingVertical: 5,
+          paddingHorizontal: 8,
+          alignItems: 'center',
+        }}>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 6, fontWeight: 700, color: C.dark, letterSpacing: 0.8, textTransform: 'uppercase' }}>
+            Ton code d'accès personnel
+          </Text>
+          <Text style={{ fontFamily: 'Poppins', fontSize: 13, fontWeight: 700, color: C.dark, letterSpacing: 2, marginTop: 2 }}>
+            {code}
+          </Text>
+          <Text style={{ fontFamily: 'Inter', fontSize: 6, color: C.dark, marginTop: 2, textAlign: 'center' }}>
+            Entre ce code sur cockpit-ce.pages.dev
+          </Text>
+        </View>
+      )}
+
       {/* Signature */}
-      <Text style={{ fontFamily: 'Caveat', fontSize: 18, fontWeight: 700, color: C.dark, lineHeight: 1.1 }}>
+      <Text style={{ fontFamily: 'Caveat', fontSize: 16, fontWeight: 700, color: C.dark, lineHeight: 1.1 }}>
         André, Cerveau Électrique
       </Text>
     </View>
@@ -249,7 +241,7 @@ export type CarteMerciProps = {
 }
 
 export const CarteMerci = ({ prenom, code, message }: CarteMerciProps) => {
-  const finalMessage = message || pickRandomMessage(prenom)
+  const finalMessage = message || pickRandomMessage()
   return (
     <Document title={`Carte merci · ${prenom}`} author="Cerveau Électrique">
       {/* ═══ Page 1 — A4, RECTO centré ═══ */}
