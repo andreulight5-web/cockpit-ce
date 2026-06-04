@@ -6,6 +6,7 @@ import logoCE from '../../assets/logo-ce.png'
 const NAV_ITEMS = [
   { to: '/accueil',   icon: '🏠', label: 'Accueil' },
   { to: '/formation', icon: '📚', label: 'Formation' },
+  { to: '/quiz',      icon: '🎯', label: 'Quiz' },
   { to: '/outils',    icon: '🧰', label: 'Outils' },
   { to: '/aide',      icon: '💬', label: 'Aide' },
 ]
