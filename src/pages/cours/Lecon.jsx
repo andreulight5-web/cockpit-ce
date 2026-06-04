@@ -9,7 +9,22 @@ import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveilla
 import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 
+import module1Thumb from '../../assets/formation/module-1-phases-crise.jpg'
+import module2Thumb from '../../assets/formation/module-2-stop.jpg'
+import module3Thumb from '../../assets/formation/module-3-valider.jpg'
+import module4Thumb from '../../assets/formation/module-4-coin-calme.jpg'
+import module5Thumb from '../../assets/formation/module-5-apres-crise.jpg'
+import module6Thumb from '../../assets/formation/module-6-matin.jpg'
+import module7Thumb from '../../assets/formation/module-7-devoirs.jpg'
+import module8Thumb from '../../assets/formation/module-8-ecrans.jpg'
+import module9Thumb from '../../assets/formation/module-9-coucher.jpg'
+import module10Thumb from '../../assets/formation/module-10-crise-public.jpg'
+
 const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne, perplexe: cortexPerplexe }
+const THUMBS = {
+  1: module1Thumb, 2: module2Thumb, 3: module3Thumb, 4: module4Thumb, 5: module5Thumb,
+  6: module6Thumb, 7: module7Thumb, 8: module8Thumb, 9: module9Thumb, 10: module10Thumb,
+}
 
 /* Sur fond crème, le jaune #F5E06D est illisible en texte.
    On retourne un ambre foncé pour le texte tout en gardant la teinte CE pour les fonds/bordures. */
@@ -100,19 +115,24 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
   switch (c.type) {
     case 'intro': {
       const apercu = lecon.apercu || c.points || []
+      const moduleImg = THUMBS[lecon.id]
       return (
-        <div style={{ ...S.cardFull, background: '#FAFAF5', justifyContent: 'space-between', padding: '60px 0 0 0' }}>
-          {/* Color band + badge */}
-          <div>
-            <div style={{ padding: '0 24px' }}>
-              <span style={{ display: 'inline-block', background: `${color}33`, border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 600 }}>{lecon.moduleLabel}</span>
+        <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '56px 0 0 0' }}>
+          {/* Hero image — module visuel */}
+          {moduleImg && (
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', overflow: 'hidden', flexShrink: 0 }}>
+              <img src={moduleImg} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} draggable={false} />
+              {/* Badge module overlay */}
+              <span style={{ position: 'absolute', bottom: 12, left: 16, display: 'inline-block', background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(6px)', border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700 }}>
+                {lecon.moduleLabel}
+              </span>
             </div>
-          </div>
-          {/* Center: Cortex image + text */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
-            <img src={cortex} alt="Cortex" className="sway" style={{ height: 200, objectFit: 'contain' }} draggable={false} />
-            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 28, fontWeight: 800, color: '#1C1B2E', textAlign: 'center', margin: '24px 0 0', padding: '0 8px' }}>{c.titre}</h2>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: '#64748B', textAlign: 'center', lineHeight: 1.5, margin: '8px 0 0', padding: '0 16px' }}>{c.texte}</p>
+          )}
+          {/* Center: Cortex + titre + texte */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 24px' }}>
+            <img src={cortex} alt="Cortex" className="sway" style={{ height: 130, objectFit: 'contain' }} draggable={false} />
+            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 24, fontWeight: 800, color: '#1C1B2E', textAlign: 'center', margin: '16px 0 0', padding: '0 8px' }}>{c.titre}</h2>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#64748B', textAlign: 'center', lineHeight: 1.5, margin: '8px 0 0', padding: '0 16px' }}>{c.texte}</p>
           </div>
           {/* Bottom card */}
           <div style={{ background: 'rgba(28,27,46,0.06)', borderTop: '1px solid rgba(28,27,46,0.08)', padding: '16px 24px 32px' }}>
@@ -124,8 +144,8 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
               </div>
             ))}
             <div style={{ height: 1, background: 'rgba(28,27,46,0.08)', marginTop: 14 }} />
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#999', textAlign: 'center', marginTop: 10 }}>
-              ⏱ {lecon.duree} · {lecon.cartes.length} cartes  →  Tape pour commencer
+            <p className="pulse" style={{ fontFamily: 'Inter,sans-serif', fontWeight: 500, fontSize: 13, color: '#2A9490', textAlign: 'center', marginTop: 12 }}>
+              ⏱ {lecon.duree} · {lecon.cartes.length} cartes · Tape pour commencer
             </p>
           </div>
         </div>
@@ -279,7 +299,7 @@ function Scenario({ scenario, color, openAccordion, setOpenAccordion }) {
 
 /* ═══════ Styles ═══════ */
 const S = {
-  header: { position: 'fixed', top: 0, left: 0, right: 0, maxWidth: 430, margin: '0 auto', zIndex: 10, display: 'flex', alignItems: 'center', padding: '12px 16px', background: 'linear-gradient(to bottom, rgba(250,250,245,0.95) 0%, rgba(250,250,245,0) 100%)' },
+  header: { position: 'fixed', top: 0, left: 0, right: 0, maxWidth: 800, margin: '0 auto', zIndex: 10, display: 'flex', alignItems: 'center', padding: '12px 24px', background: 'linear-gradient(to bottom, rgba(250,250,245,0.95) 0%, rgba(250,250,245,0) 100%)' },
   backCircle: { width: 36, height: 36, borderRadius: '50%', background: '#FFFFFF', border: '1px solid #E5E5E5', color: '#1C1B2E', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter,sans-serif', flexShrink: 0 },
   backBtn: { background: 'none', border: 'none', color: '#1C1B2E', fontSize: 22, cursor: 'pointer', padding: '4px 8px', fontWeight: 300 },
   headerRight: { display: 'flex', alignItems: 'center', gap: 8 },

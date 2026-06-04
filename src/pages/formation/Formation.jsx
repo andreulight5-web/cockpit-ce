@@ -40,99 +40,113 @@ export default function Formation() {
   const doneCount = ordered.filter((l) => done.includes(l.id)).length
   const totalPct  = Math.round((doneCount / ordered.length) * 100)
 
+  const module1 = ordered.filter((l) => l.id <= 5)
+  const module2 = ordered.filter((l) => l.id > 5)
+
+  const renderGridCard = (l, i) => {
+    const isDone = done.includes(l.id)
+    const isCurrent = l.id === currentId
+    return (
+      <button
+        key={l.id}
+        onClick={() => navigate(`/formation/${l.id}`)}
+        className={`fade-up fade-up-d${Math.min(i + 1, 4)} formation-card`}
+        style={{
+          ...s.gridCard,
+          borderColor: isCurrent ? '#2A9490' : 'rgba(28,27,46,0.08)',
+          borderWidth: isCurrent ? 2 : 1,
+        }}
+      >
+        <div style={s.gridThumbWrap}>
+          {THUMBS[l.id] ? (
+            <img src={THUMBS[l.id]} alt="" style={s.gridThumb} draggable={false} />
+          ) : (
+            <div style={s.gridThumbFallback}>
+              <span style={s.gridThumbNum}>{l.id}</span>
+            </div>
+          )}
+          {isDone && <span style={s.gridDoneBadge}>Terminée ✓</span>}
+        </div>
+        <div style={s.gridBody}>
+          <p style={s.gridTitle}>{l.titre}</p>
+          <span style={s.gridMeta}>
+            {l.duree}
+            {isCurrent && !isDone && ' · En cours'}
+          </span>
+        </div>
+      </button>
+    )
+  }
+
+  const renderListRow = (l, i) => {
+    const isDone = done.includes(l.id)
+    const isCurrent = l.id === currentId
+    const dotBg = isDone ? '#2A9490' : isCurrent ? '#F5E06D' : '#E5E5E5'
+    const dotColor = isDone ? '#fff' : isCurrent ? '#1C1B2E' : '#999'
+    return (
+      <button
+        key={l.id}
+        onClick={() => navigate(`/formation/${l.id}`)}
+        className={`fade-up fade-up-d${Math.min(i + 1, 4)}`}
+        style={{
+          ...s.lessonRow,
+          borderColor: isCurrent ? 'rgba(245,224,109,0.6)' : 'rgba(28,27,46,0.06)',
+          background: isCurrent ? 'rgba(245,224,109,0.1)' : '#FFFFFF',
+        }}
+      >
+        {THUMBS[l.id] ? (
+          <div style={s.thumbWrap}>
+            <img src={THUMBS[l.id]} alt="" style={s.thumb} draggable={false} />
+            {isDone && <span style={s.thumbDoneBadge}>✓</span>}
+          </div>
+        ) : (
+          <span style={{ ...s.numCircle, background: dotBg, color: dotColor }}>
+            {isDone ? '✓' : l.id}
+          </span>
+        )}
+        <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
+          <p style={s.lessonTitle}>{l.titre}</p>
+          <span style={s.lessonMeta}>
+            {l.duree}
+            {isDone && ' · Terminée'}
+            {isCurrent && !isDone && ' · En cours'}
+          </span>
+        </div>
+        <span style={{ color: '#999', fontSize: 18 }}>›</span>
+      </button>
+    )
+  }
+
   return (
     <div style={s.page}>
       <header style={s.header}>
-        <h1 style={s.title}>Formation</h1>
-        <p style={s.sub}>{ordered.length} leçons pour installer les bons réflexes à froid.</p>
+        <p style={s.greeting}>Continue ta formation</p>
+        <p style={s.sub}>Un geste à la fois. 5 minutes par leçon.</p>
 
         <div style={s.globalBar}>
           <div style={{ ...s.globalFill, width: `${totalPct}%` }} />
         </div>
-        <div style={s.globalMeta}>{doneCount}/{ordered.length} leçons · {totalPct}%</div>
+        <div style={s.globalMeta}>{doneCount}/{ordered.length} leçons terminées</div>
       </header>
 
       {isWide ? (
         /* ─── GRILLE (tablette + desktop) ─── */
-        <div style={s.grid}>
-          {ordered.map((l, i) => {
-            const isDone = done.includes(l.id)
-            const isCurrent = l.id === currentId
-            return (
-              <button
-                key={l.id}
-                onClick={() => navigate(`/formation/${l.id}`)}
-                className={`fade-up fade-up-d${Math.min(i + 1, 4)} formation-card`}
-                style={{
-                  ...s.gridCard,
-                  borderColor: isCurrent ? '#2A9490' : 'rgba(28,27,46,0.08)',
-                  borderWidth: isCurrent ? 2 : 1,
-                }}
-              >
-                <div style={s.gridThumbWrap}>
-                  {THUMBS[l.id] ? (
-                    <img src={THUMBS[l.id]} alt="" style={s.gridThumb} draggable={false} />
-                  ) : (
-                    <div style={s.gridThumbFallback}>
-                      <span style={s.gridThumbNum}>{l.id}</span>
-                    </div>
-                  )}
-                  {isDone && <span style={s.gridDoneBadge}>Terminée ✓</span>}
-                </div>
-                <div style={s.gridBody}>
-                  <p style={s.gridTitle}>{l.titre}</p>
-                  <span style={s.gridMeta}>
-                    {l.duree}
-                    {isCurrent && !isDone && ' · En cours'}
-                  </span>
-                </div>
-              </button>
-            )
-          })}
-        </div>
+        <>
+          <h2 style={s.moduleTitle}>Module 1 — Comprendre la crise</h2>
+          <div style={s.grid}>{module1.map(renderGridCard)}</div>
+          <div style={s.divider} />
+          <h2 style={s.moduleTitle}>Module 2 — Le quotidien</h2>
+          <div style={s.grid}>{module2.map(renderGridCard)}</div>
+        </>
       ) : (
         /* ─── LISTE (mobile < 640px) ─── */
-        <div style={s.body}>
-          {ordered.map((l, i) => {
-            const isDone = done.includes(l.id)
-            const isCurrent = l.id === currentId
-            const dotBg = isDone ? '#2A9490' : isCurrent ? '#F5E06D' : '#E5E5E5'
-            const dotColor = isDone ? '#fff' : isCurrent ? '#1C1B2E' : '#999'
-
-            return (
-              <button
-                key={l.id}
-                onClick={() => navigate(`/formation/${l.id}`)}
-                className={`fade-up fade-up-d${Math.min(i + 1, 4)}`}
-                style={{
-                  ...s.lessonRow,
-                  borderColor: isCurrent ? 'rgba(245,224,109,0.6)' : 'rgba(28,27,46,0.06)',
-                  background: isCurrent ? 'rgba(245,224,109,0.1)' : '#FFFFFF',
-                }}
-              >
-                {THUMBS[l.id] ? (
-                  <div style={s.thumbWrap}>
-                    <img src={THUMBS[l.id]} alt="" style={s.thumb} draggable={false} />
-                    {isDone && <span style={s.thumbDoneBadge}>✓</span>}
-                  </div>
-                ) : (
-                  <span style={{ ...s.numCircle, background: dotBg, color: dotColor }}>
-                    {isDone ? '✓' : l.id}
-                  </span>
-                )}
-                <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
-                  <p style={s.lessonTitle}>{l.titre}</p>
-                  <span style={s.lessonMeta}>
-                    {l.duree}
-                    {isDone && ' · Terminée'}
-                    {isCurrent && !isDone && ' · En cours'}
-                  </span>
-                </div>
-                <span style={{ color: '#999', fontSize: 18 }}>›</span>
-              </button>
-            )
-          })}
-        </div>
+        <>
+          <h2 style={s.moduleTitle}>Module 1 — Comprendre la crise</h2>
+          <div style={s.body}>{module1.map(renderListRow)}</div>
+          <div style={s.divider} />
+          <h2 style={s.moduleTitle}>Module 2 — Le quotidien</h2>
+          <div style={s.body}>{module2.map(renderListRow)}</div>
+        </>
       )}
     </div>
   )
@@ -141,8 +155,29 @@ export default function Formation() {
 const s = {
   page: { minHeight: '100dvh', background: '#FAFAF5' },
   header: { padding: '40px 20px 18px' },
-  title: { fontFamily: 'Poppins, sans-serif', fontSize: 24, fontWeight: 700, color: '#1C1B2E', margin: 0 },
-  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '8px 0 18px' },
+  greeting: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: 32,
+    fontWeight: 700,
+    color: '#2A9490',
+    margin: '0',
+    lineHeight: 1.1,
+  },
+  sub: { fontFamily: 'Inter, sans-serif', fontSize: 13, color: '#64748B', lineHeight: 1.55, margin: '6px 0 16px' },
+  moduleTitle: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 14,
+    fontWeight: 600,
+    color: '#64748B',
+    letterSpacing: 0.4,
+    margin: '4px 0 12px',
+    padding: '0 20px',
+  },
+  divider: {
+    height: 1,
+    background: 'rgba(28,27,46,0.08)',
+    margin: '20px 20px 18px',
+  },
   globalBar: {
     height: 6,
     background: '#E5E5E5',
