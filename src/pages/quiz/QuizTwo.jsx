@@ -97,7 +97,7 @@ export default function QuizTwo() {
         )}
 
         {step === 'recap' && (
-          <Recap defi={answers[5]?.value} onClose={() => navigate('/outils')} />
+          <Recap defi={answers[5]?.value} onNext={() => navigate('/quiz/3')} onSommaire={() => navigate('/quiz')} />
         )}
       </main>
     </div>
@@ -446,7 +446,7 @@ function FeedbackBox({ text, extra }) {
 /* ═══════════════════════════════════════════════════ */
 /* RECAP                                              */
 /* ═══════════════════════════════════════════════════ */
-function Recap({ defi, onClose }) {
+function Recap({ defi, onNext, onSommaire }) {
   return (
     <div style={{ ...s.card, textAlign: 'center' }}>
       <img src={monstreRigole} alt="" style={s.monstreImg} />
@@ -459,8 +459,13 @@ function Recap({ defi, onClose }) {
       <p style={s.recapHint}>
         Essaie-le pendant <strong>5 matins</strong>. Si ça marche, pose une carte victoire sur ton tableau.
       </p>
-      <button onClick={onClose} style={s.primaryBtn}>
-        Retour aux outils
+      {onNext && (
+        <button onClick={onNext} style={s.primaryBtn}>
+          Quiz suivant →
+        </button>
+      )}
+      <button onClick={onSommaire} style={s.secondaryBtn}>
+        Sommaire des quiz
       </button>
     </div>
   )
@@ -696,6 +701,14 @@ const s = {
     padding: '14px 18px',
     fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 14,
     cursor: 'pointer', marginTop: 18,
+  },
+  secondaryBtn: {
+    width: '100%',
+    background: 'transparent', color: DARK,
+    border: '1px solid rgba(28,27,46,0.15)', borderRadius: 50,
+    padding: '12px 18px',
+    fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: 13,
+    cursor: 'pointer', marginTop: 10,
   },
 
   /* RECAP */

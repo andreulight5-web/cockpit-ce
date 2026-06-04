@@ -97,7 +97,7 @@ export default function QuizFive() {
         )}
 
         {step === 'recap' && (
-          <Recap defi={answers[5]?.value} onClose={() => navigate('/outils')} />
+          <Recap defi={answers[5]?.value} onSommaire={() => navigate('/quiz')} />
         )}
       </main>
     </div>
@@ -446,7 +446,7 @@ function FeedbackBox({ text, extra }) {
 /* ═══════════════════════════════════════════════════ */
 /* RECAP                                              */
 /* ═══════════════════════════════════════════════════ */
-function Recap({ defi, onClose }) {
+function Recap({ defi, onSommaire }) {
   return (
     <div style={{ ...s.card, textAlign: 'center' }}>
       <img src={monstreRigole} alt="" style={s.monstreImg} />
@@ -459,8 +459,8 @@ function Recap({ defi, onClose }) {
       <p style={s.recapHint}>
         Essaie-le pendant <strong>5 matins</strong>. Si ça marche, pose une carte victoire sur ton tableau.
       </p>
-      <button onClick={onClose} style={s.primaryBtn}>
-        Retour aux outils
+      <button onClick={onSommaire} style={s.primaryBtn}>
+        Sommaire des quiz
       </button>
     </div>
   )
