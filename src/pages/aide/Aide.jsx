@@ -21,10 +21,6 @@ const FAQ = [
     q: 'Support prioritaire — qu\'est-ce qui est inclus ?',
     a: 'Pendant 30 jours après ton achat, tu as un accès direct à mon email. Écris-moi sur info@cerveau-electrique.fr avec ta question (utilisation d\'un outil, problème technique, conseil personnalisé sur une situation), je te réponds personnellement sous 24 à 48h ouvrées.',
   },
-  {
-    q: 'Remboursement — est-ce possible ?',
-    a: 'Oui. Si tu n\'es pas convaincu(e) dans les 14 jours suivant ton achat, je te rembourse intégralement — sans question. Tu m\'écris à info@cerveau-electrique.fr en mentionnant ton email d\'achat, c\'est fait.',
-  },
 ]
 
 const SUPPORT_ENDPOINT = 'https://cockpit-stripe-webhook.cerveau-electrique.workers.dev/support'
