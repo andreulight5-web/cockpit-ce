@@ -7,6 +7,7 @@ const DEFAULT_DATA = {
   lecons_done: [],
   annexes_done: [],
   quiz_done: [],
+  quiz_scores: {},
   badges: [],
   xp_total: 0,
   journal: [],

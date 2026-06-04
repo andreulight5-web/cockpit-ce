@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { QUIZ } from '../../data/quiz'
 import { AppContext } from '../../lib/AppContext'
 import { useDesktop } from '../../hooks/useDesktop'
+import { getStars } from '../../lib/gamification'
 import quiz1Thumb from '../../assets/quiz/quiz-1-matin.jpg'
 import quiz2Thumb from '../../assets/quiz/quiz-2-soir.jpg'
 import quiz3Thumb from '../../assets/quiz/quiz-3-imprevus.jpg'
@@ -22,6 +23,7 @@ export default function Quiz() {
   const { appData } = useContext(AppContext)
   const isWide = useDesktop(640)
   const done = (appData?.quiz_done || []).map(Number)
+  const scores = appData?.quiz_scores || {}
 
   return (
     <div style={s.page}>
@@ -35,6 +37,8 @@ export default function Quiz() {
       <div style={isWide ? s.gridDesktop : s.gridMobile}>
         {QUIZ.map((q, i) => {
           const isDone = done.includes(q.id)
+          const score = scores[q.id] || scores[String(q.id)]
+          const stars = getStars(score)
           return (
             <button
               key={q.id}
@@ -50,11 +54,22 @@ export default function Quiz() {
                     <span style={{ fontSize: 36 }}>{q.emoji}</span>
                   </div>
                 )}
-                {isDone && <span style={s.doneBadge}>Terminé ✓</span>}
+                {!isDone && <span style={s.newBadge}>NOUVEAU</span>}
+                {isDone && (
+                  <span style={s.starsBadge}>
+                    {[1, 2, 3].map((n) => (
+                      <span key={n} style={{ opacity: n <= stars ? 1 : 0.25 }}>★</span>
+                    ))}
+                  </span>
+                )}
               </div>
               <div style={s.body}>
                 <p style={s.cardTitle}>{q.titre}</p>
-                <span style={s.cardMeta}>5 questions · ⭐ {q.xp} XP</span>
+                {score?.xp ? (
+                  <span style={s.cardMetaXp}>⚡ {score.xp} XP gagnés</span>
+                ) : (
+                  <span style={s.cardMeta}>7 questions · à découvrir</span>
+                )}
               </div>
             </button>
           )
@@ -132,6 +147,41 @@ const s = {
     borderRadius: 99,
     letterSpacing: 0.5,
     boxShadow: '0 2px 6px rgba(42,148,144,0.35)',
+  },
+  newBadge: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    background: '#F5E06D',
+    color: '#1C1B2E',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 9,
+    fontWeight: 800,
+    padding: '4px 8px',
+    borderRadius: 99,
+    letterSpacing: 1,
+    boxShadow: '0 2px 6px rgba(245,224,109,0.5)',
+  },
+  starsBadge: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    background: 'rgba(28,27,46,0.85)',
+    color: '#F5E06D',
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 13,
+    fontWeight: 800,
+    padding: '3px 8px',
+    borderRadius: 99,
+    letterSpacing: 1,
+    display: 'inline-flex',
+    gap: 2,
+  },
+  cardMetaXp: {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 700,
+    fontSize: 11,
+    color: '#2A9490',
   },
   body: {
     padding: '10px 12px 12px',

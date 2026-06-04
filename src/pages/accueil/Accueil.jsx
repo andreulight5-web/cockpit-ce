@@ -2,6 +2,7 @@ import { useContext, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../lib/AppContext'
 import { LECONS } from '../../data/lecons'
+import { BADGES, getLevel } from '../../lib/gamification'
 import logoCE from '../../assets/logo-ce.png'
 import phrasesStopImg from '../../assets/outils/phrases-stop.jpg'
 import thermoImg      from '../../assets/outils/thermometre.jpg'
@@ -47,6 +48,11 @@ export default function Accueil() {
 
   const isFormationDone = leconsDone.length >= TOTAL_LECONS
 
+  const xpTotal = appData?.xp_total || 0
+  const level = getLevel(xpTotal)
+  const earnedBadgeIds = appData?.badges || []
+  const earnedBadges = BADGES.filter((b) => earnedBadgeIds.includes(b.id))
+
   return (
     <div style={s.page}>
       {/* Header */}
@@ -88,6 +94,40 @@ export default function Accueil() {
             <div style={s.formationDone}>
               <span style={{ fontSize: 20 }}>🎉</span>
               <span>Formation complétée. Bravo !</span>
+            </div>
+          )}
+        </section>
+
+        {/* Carte XP / Niveau / Badges */}
+        <section style={s.xpCard} className="fade-up">
+          <div style={s.xpHead}>
+            <div>
+              <div style={s.xpLevelLabel}>⚡ Niveau {level.num}</div>
+              <div style={s.xpLevelName}>{level.name}</div>
+            </div>
+            <div style={s.xpTotal}>{xpTotal} XP</div>
+          </div>
+          <div style={s.xpBar}>
+            <div style={{ ...s.xpFill, width: `${level.pct}%` }} />
+          </div>
+          <div style={s.xpMeta}>
+            {level.max === Infinity
+              ? 'Niveau maximum atteint — bravo !'
+              : `${level.max - xpTotal} XP avant le niveau ${level.num + 1}`}
+          </div>
+
+          {earnedBadges.length > 0 ? (
+            <div style={s.badgesRow}>
+              {earnedBadges.map((b) => (
+                <div key={b.id} style={s.badgePill} title={b.desc}>
+                  <span style={s.badgePillIcon}>{b.icon}</span>
+                  <span style={s.badgePillLabel}>{b.label}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={s.badgesEmpty}>
+              Tes badges apparaîtront ici quand tu compléteras des quiz.
             </div>
           )}
         </section>
@@ -263,6 +303,94 @@ const s = {
     fontSize: 13,
     color: '#2A9490',
     fontWeight: 600,
+  },
+
+  /* XP / Niveau / Badges */
+  xpCard: {
+    background: '#FFFFFF',
+    border: '1px solid rgba(28,27,46,0.06)',
+    boxShadow: '0 2px 8px rgba(28,27,46,0.04)',
+    borderRadius: 16,
+    padding: 18,
+    marginTop: 14,
+  },
+  xpHead: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  xpLevelLabel: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#1C1B2E',
+  },
+  xpLevelName: {
+    fontFamily: "'Caveat', cursive",
+    fontSize: 18,
+    color: '#2A9490',
+    lineHeight: 1.1,
+    marginTop: 2,
+  },
+  xpTotal: {
+    fontFamily: 'Poppins, sans-serif',
+    fontSize: 20,
+    fontWeight: 800,
+    color: '#F5E06D',
+    background: '#1C1B2E',
+    padding: '4px 12px',
+    borderRadius: 99,
+  },
+  xpBar: {
+    height: 8,
+    background: 'rgba(28,27,46,0.08)',
+    borderRadius: 99,
+    overflow: 'hidden',
+  },
+  xpFill: {
+    height: '100%',
+    background: 'linear-gradient(90deg, #2A9490, #F5E06D)',
+    borderRadius: 99,
+    transition: 'width 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+  xpMeta: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 11,
+    color: '#64748B',
+    marginTop: 6,
+    textAlign: 'right',
+  },
+  badgesRow: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginTop: 12,
+  },
+  badgePill: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+    background: 'rgba(245,224,109,0.18)',
+    border: '1px solid rgba(245,224,109,0.55)',
+    borderRadius: 99,
+    padding: '4px 10px 4px 6px',
+  },
+  badgePillIcon: { fontSize: 14 },
+  badgePillLabel: {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 700,
+    fontSize: 10,
+    color: '#1C1B2E',
+    letterSpacing: 0.3,
+  },
+  badgesEmpty: {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 11,
+    color: '#94A3B8',
+    fontStyle: 'italic',
+    marginTop: 12,
+    textAlign: 'center',
   },
 
   quizCard: {

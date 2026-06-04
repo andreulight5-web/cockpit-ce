@@ -1,6 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../lib/AppContext'
+import {
+  XP_ANSWER, XP_CORRECT_BONUS, XP_COMPLETE_BONUS, XP_DEFI_BONUS,
+  BADGE_BY_ID, computeBadges, getLevel,
+} from '../../lib/gamification'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
 
 const TEAL = '#2A9490'
@@ -30,43 +34,116 @@ export default function QuizEngine({
   const [qIdx, setQIdx]       = useState(0)
   const [answers, setAnswers] = useState({})
   const [showFeedback, setShowFeedback] = useState(false)
+  const [xpGained, setXpGained] = useState(0)
+  const [correctCount, setCorrectCount] = useState(0)
+  const [floats, setFloats] = useState([])
+  const [recapData, setRecapData] = useState(null)
 
   const question = quiz.questions[qIdx]
   const total = quiz.questions.length
-  const challengeQ = quiz.questions.find((q) => q.isChallenge) || quiz.questions[total - 1]
+  const challengeQ = useMemo(
+    () => quiz.questions.find((q) => q.isChallenge) || quiz.questions[total - 1],
+    [quiz, total]
+  )
 
   const handleBack = () => navigate('/outils')
+
+  const pushFloat = (text, color) => {
+    const id = Date.now() + Math.random()
+    setFloats((f) => [...f, { id, text, color }])
+    setTimeout(() => setFloats((f) => f.filter((x) => x.id !== id)), 1500)
+  }
 
   const handleAnswer = (qId, value) => {
     setAnswers((a) => ({ ...a, [qId]: value }))
     setShowFeedback(true)
+
+    setXpGained((cur) => cur + XP_ANSWER)
+    pushFloat(`+${XP_ANSWER} XP`, GREEN)
+
+    if (question.hasCorrectAnswer && value?.correct === true) {
+      setCorrectCount((c) => c + 1)
+      setTimeout(() => {
+        setXpGained((cur) => cur + XP_CORRECT_BONUS)
+        pushFloat(`+${XP_CORRECT_BONUS} BONUS`, YELLOW)
+      }, 280)
+    }
   }
 
   const handleNext = () => {
     setShowFeedback(false)
     if (qIdx + 1 < total) {
       setQIdx(qIdx + 1)
-    } else {
-      const defi = answers[challengeQ.id]?.value || null
-      try {
-        const done = JSON.parse(localStorage.getItem('cockpit_quiz_done') || '[]')
-        if (!done.includes(quizId)) {
-          done.push(quizId)
-          localStorage.setItem('cockpit_quiz_done', JSON.stringify(done))
-        }
-      } catch { /* ignore */ }
-      if (saveData) {
-        const quizDone = appData?.quiz_done || []
-        const newQuizDone = quizDone.some((x) => String(x) === String(quizId)) ? quizDone : [...quizDone, quizId]
-        saveData({
-          quiz_done: newQuizDone,
-          [`quiz_${quizId}_defi`]: defi,
-          xp_total: (appData?.xp_total || 0) + (newQuizDone.length === quizDone.length ? 0 : 30),
-        })
-      }
-      setStep('recap')
+      return
     }
+    finalize()
   }
+
+  const finalize = () => {
+    const defi = answers[challengeQ.id]?.value || null
+    const totalCorrectable = quiz.questions.filter((q) => q.hasCorrectAnswer).length
+
+    const completeBonus = XP_COMPLETE_BONUS
+    const defiBonus     = defi ? XP_DEFI_BONUS : 0
+    const xpForQuiz     = xpGained + completeBonus + defiBonus
+
+    const prevBadges = appData?.badges || []
+    const prevQuizDone = appData?.quiz_done || []
+    const newQuizDone = prevQuizDone.some((x) => String(x) === String(quizId))
+      ? prevQuizDone
+      : [...prevQuizDone, quizId]
+    const newXpTotal = (appData?.xp_total || 0) + xpForQuiz
+    const newScore = {
+      xp: xpForQuiz,
+      correctCount,
+      totalCount: totalCorrectable,
+      completedAt: new Date().toISOString(),
+    }
+    const newScores = { ...(appData?.quiz_scores || {}), [quizId]: newScore }
+
+    const merged = {
+      ...appData,
+      quiz_done: newQuizDone,
+      xp_total: newXpTotal,
+      quiz_scores: newScores,
+      [`quiz_${quizId}_defi`]: defi,
+    }
+    const earnedBadges = computeBadges(merged)
+    const justEarned = earnedBadges.filter((id) => !prevBadges.includes(id))
+
+    try {
+      const done = JSON.parse(localStorage.getItem('cockpit_quiz_done') || '[]')
+      if (!done.includes(quizId)) {
+        done.push(quizId)
+        localStorage.setItem('cockpit_quiz_done', JSON.stringify(done))
+      }
+    } catch { /* ignore */ }
+
+    if (saveData) {
+      saveData({
+        quiz_done: newQuizDone,
+        quiz_scores: newScores,
+        xp_total: newXpTotal,
+        badges: earnedBadges,
+        [`quiz_${quizId}_defi`]: defi,
+      })
+    }
+
+    setRecapData({
+      defi,
+      xpForQuiz,
+      completeBonus,
+      defiBonus,
+      correctCount,
+      totalCorrectable,
+      newXpTotal,
+      prevXpTotal: appData?.xp_total || 0,
+      justEarned,
+    })
+    setStep('recap')
+  }
+
+  const liveTotalXp = (appData?.xp_total || 0) + xpGained
 
   return (
     <div style={s.page}>
@@ -78,7 +155,28 @@ export default function QuizEngine({
             <div style={s.headerProgress}>Question {qIdx + 1}/{total}</div>
           )}
         </div>
-        <div style={{ width: 36 }} />
+
+        {step === 'question' ? (
+          <div style={s.xpPill}>
+            <span style={s.xpPillIcon}>⚡</span>
+            <span style={s.xpPillValue}>{liveTotalXp}</span>
+            <div style={s.xpFloatStack}>
+              {floats.map((f) => (
+                <span
+                  key={f.id}
+                  style={{
+                    ...s.xpFloat,
+                    color: f.color,
+                  }}
+                >
+                  {f.text}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div style={{ width: 36 }} />
+        )}
       </header>
 
       {step === 'question' && (
@@ -88,7 +186,7 @@ export default function QuizEngine({
       )}
 
       <main style={s.body}>
-        {step === 'intro'    && <Intro quiz={quiz} onStart={() => setStep('question')} />}
+        {step === 'intro' && <Intro quiz={quiz} onStart={() => setStep('question')} />}
 
         {step === 'question' && (
           <QuestionStep
@@ -100,9 +198,9 @@ export default function QuizEngine({
           />
         )}
 
-        {step === 'recap' && (
+        {step === 'recap' && recapData && (
           <Recap
-            defi={answers[challengeQ.id]?.value}
+            data={recapData}
             recapTitle={recapTitle}
             recapHint={recapHint}
             onNext={nextRoute ? () => navigate(nextRoute) : null}
@@ -146,7 +244,7 @@ function Intro({ quiz, onStart }) {
 
       <h1 style={s.introTitle}>{quiz.title}</h1>
       <p style={s.introDesc}>
-        Un mini-coaching à faire avec ton enfant — {total} questions, quelques minutes. Pas de stress, juste mieux se connaître.
+        Un mini-coaching à faire avec ton enfant — {total} questions, quelques minutes. Chaque réponse rapporte des XP. Pas de stress, juste mieux se connaître.
       </p>
 
       <button onClick={onStart} style={s.primaryBtn}>
@@ -610,7 +708,7 @@ function Ordering({ question, answer, showFeedback, onAnswer }) {
       ? `Bien essayé ! Voici l'ordre idéal :\n${correctOrdered.map((i, j) => `${j + 1}. ${i.label}`).join('\n')}`
       : null
 
-    onAnswer({ value: items.map((i) => i.id), feedbackExtra })
+    onAnswer({ value: items.map((i) => i.id), feedbackExtra, correct: isCorrect })
   }
 
   return (
@@ -665,25 +763,143 @@ function FeedbackBox({ text, extra }) {
 }
 
 /* ═══════════════════════════════════════════════════ */
-/* RECAP                                              */
+/* RECAP — CELEBRATION                                */
 /* ═══════════════════════════════════════════════════ */
-function Recap({ defi, recapTitle, recapHint, onNext, onSommaire }) {
-  const defiText = Array.isArray(defi) ? defi.join(' · ') : defi
+function Confetti() {
+  const pieces = useMemo(() => {
+    const colors = [YELLOW, TEAL, ROSE, GREEN, '#7A2040']
+    return Array.from({ length: 42 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.6,
+      duration: 2.2 + Math.random() * 1.6,
+      color: colors[i % colors.length],
+      rotate: Math.random() * 360,
+      size: 6 + Math.random() * 8,
+      radius: Math.random() < 0.4 ? '50%' : '2px',
+    }))
+  }, [])
   return (
-    <div style={{ ...s.card, textAlign: 'center' }}>
-      <img src={monstreRigole} alt="" style={s.monstreImg} />
-      <div style={s.recapKicker}>BRAVO !</div>
-      <h2 style={s.recapTitle}>{recapTitle}</h2>
+    <div style={s.confettiLayer} aria-hidden="true">
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          style={{
+            position: 'absolute',
+            left: `${p.left}%`,
+            top: 0,
+            width: p.size,
+            height: p.size,
+            background: p.color,
+            borderRadius: p.radius,
+            transform: `rotate(${p.rotate}deg)`,
+            animation: `confettiFall ${p.duration}s ${p.delay}s linear forwards`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function Recap({ data, recapTitle, recapHint, onNext, onSommaire }) {
+  const { defi, xpForQuiz, completeBonus, defiBonus, correctCount, totalCorrectable, newXpTotal, prevXpTotal, justEarned } = data
+
+  const defiText = Array.isArray(defi) ? defi.join(' · ') : defi
+
+  const [animatedXp, setAnimatedXp] = useState(prevXpTotal)
+  const lvl = getLevel(animatedXp)
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimatedXp(newXpTotal), 350)
+    return () => clearTimeout(t)
+  }, [newXpTotal])
+
+  return (
+    <div style={{ ...s.card, textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <Confetti />
+
+      <img
+        src={monstreRigole}
+        alt=""
+        className="bounce-joy"
+        style={{ ...s.monstreImg, position: 'relative', zIndex: 1 }}
+      />
+
+      <div style={{ ...s.recapKicker, position: 'relative', zIndex: 1 }}>BRAVO !</div>
+      <h2 style={{ ...s.recapTitleBig, position: 'relative', zIndex: 1 }}>{recapTitle}</h2>
+
+      <div style={s.xpHeadline}>
+        <span style={s.xpHeadlineIcon}>⚡</span>
+        <span style={s.xpHeadlineValue}>+{xpForQuiz}</span>
+        <span style={s.xpHeadlineSuffix}>XP gagnés !</span>
+      </div>
+
+      <div style={s.xpBreakdown}>
+        <div style={s.xpBreakdownRow}>
+          <span>Réponses ({totalCorrectable > 0 ? `${correctCount}/${totalCorrectable} correctes` : 'toutes'})</span>
+          <span style={s.xpBreakdownVal}>+{xpForQuiz - completeBonus - defiBonus}</span>
+        </div>
+        <div style={s.xpBreakdownRow}>
+          <span>Quiz complété</span>
+          <span style={s.xpBreakdownVal}>+{completeBonus}</span>
+        </div>
+        {defiBonus > 0 && (
+          <div style={s.xpBreakdownRow}>
+            <span>Défi de la semaine choisi</span>
+            <span style={s.xpBreakdownVal}>+{defiBonus}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Level bar */}
+      <div style={s.levelCard}>
+        <div style={s.levelHead}>
+          <span style={s.levelName}>⚡ Niveau {lvl.num} · {lvl.name}</span>
+          <span style={s.levelXp}>{animatedXp} XP</span>
+        </div>
+        <div style={s.levelBar}>
+          <div style={{ ...s.levelFill, width: `${lvl.pct}%` }} />
+        </div>
+        {lvl.max !== Infinity && (
+          <div style={s.levelHint}>{lvl.max - animatedXp} XP avant le niveau {lvl.num + 1}</div>
+        )}
+      </div>
+
+      {/* Défi de la semaine */}
       <p style={s.recapSub}>Ton défi de la semaine :</p>
       <div style={s.recapDefi}>{defiText || 'Le secret que tu veux essayer'}</div>
       <p style={s.recapHint}>{recapHint}</p>
+
+      {/* Nouveaux badges */}
+      {justEarned && justEarned.length > 0 && (
+        <div style={s.newBadges}>
+          <div style={s.newBadgesTitle}>🎉 Nouveau{justEarned.length > 1 ? 'x' : ''} badge{justEarned.length > 1 ? 's' : ''} débloqué{justEarned.length > 1 ? 's' : ''} !</div>
+          <div style={s.newBadgesRow}>
+            {justEarned.map((id, i) => {
+              const b = BADGE_BY_ID[id]
+              if (!b) return null
+              return (
+                <div
+                  key={id}
+                  className="badge-pop"
+                  style={{ ...s.newBadgeItem, animationDelay: `${0.2 + i * 0.15}s` }}
+                >
+                  <span style={s.newBadgeIcon}>{b.icon}</span>
+                  <span style={s.newBadgeLabel}>{b.label}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {onNext && (
         <button onClick={onNext} style={s.primaryBtn}>
           Quiz suivant →
         </button>
       )}
       <button onClick={onSommaire} style={s.secondaryBtn}>
-        Sommaire des quiz
+        Retour aux quiz
       </button>
     </div>
   )
@@ -725,6 +941,37 @@ const s = {
     fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(28,27,46,0.55)',
     marginTop: 2,
   },
+
+  xpPill: {
+    position: 'relative',
+    display: 'flex', alignItems: 'center', gap: 4,
+    padding: '6px 10px',
+    background: DARK, color: '#fff',
+    borderRadius: 999,
+    flexShrink: 0,
+    minWidth: 36,
+    boxShadow: '0 2px 8px rgba(28,27,46,0.15)',
+  },
+  xpPillIcon: { fontSize: 12 },
+  xpPillValue: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 13, color: YELLOW,
+  },
+  xpFloatStack: {
+    position: 'absolute',
+    left: '50%', top: -4,
+    width: 1, height: 1,
+    pointerEvents: 'none',
+  },
+  xpFloat: {
+    position: 'absolute',
+    left: 0, top: 0,
+    transform: 'translate(-50%, 0)',
+    fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 13,
+    whiteSpace: 'nowrap',
+    animation: 'xpFloat 1.5s ease-out forwards',
+    textShadow: '0 1px 4px rgba(0,0,0,0.25)',
+  },
+
   progressBar: { height: 3, background: 'rgba(28,27,46,0.06)' },
   progressFill: { height: '100%', background: TEAL, transition: 'width 0.4s' },
 
@@ -736,8 +983,9 @@ const s = {
     padding: 22,
   },
 
+  monstreImg: { width: 110, height: 110, objectFit: 'contain' },
+
   /* INTRO */
-  monstreImg: { width: 100, height: 100, objectFit: 'contain' },
   videoPlaceholder: {
     background: 'rgba(42,148,144,0.06)',
     border: '1px dashed rgba(42,148,144,0.35)',
@@ -813,16 +1061,13 @@ const s = {
     lineHeight: 1.4, flex: 1,
   },
 
-  /* TEXT INPUT result */
   textInputResult: {
     marginTop: 14,
     padding: '12px 14px',
     background: 'rgba(42,148,144,0.06)',
     border: '1px solid rgba(42,148,144,0.2)',
     borderRadius: 12,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2,
+    display: 'flex', flexDirection: 'column', gap: 2,
   },
   textInputResultLabel: {
     fontFamily: 'Poppins, sans-serif', fontSize: 9, fontWeight: 800,
@@ -934,27 +1179,135 @@ const s = {
     cursor: 'pointer', marginTop: 10,
   },
 
-  /* RECAP */
+  /* CONFETTI */
+  confettiLayer: {
+    position: 'absolute',
+    inset: 0,
+    pointerEvents: 'none',
+    overflow: 'hidden',
+    zIndex: 0,
+  },
+
+  /* RECAP — CELEBRATION */
   recapKicker: {
-    fontFamily: 'Poppins, sans-serif', fontSize: 11, fontWeight: 800,
-    color: ROSE, letterSpacing: 2, textTransform: 'uppercase', marginTop: 6,
+    fontFamily: 'Poppins, sans-serif', fontSize: 13, fontWeight: 800,
+    color: ROSE, letterSpacing: 3, textTransform: 'uppercase', marginTop: 10,
   },
-  recapTitle: {
-    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 20,
-    color: DARK, margin: '8px 0 16px', lineHeight: 1.25,
+  recapTitleBig: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 22,
+    color: DARK, margin: '6px 0 14px', lineHeight: 1.2,
   },
+  xpHeadline: {
+    display: 'inline-flex', alignItems: 'baseline', gap: 6,
+    background: YELLOW,
+    borderRadius: 999,
+    padding: '8px 18px',
+    margin: '4px auto 14px',
+    boxShadow: '0 4px 14px rgba(245,224,109,0.6)',
+    position: 'relative', zIndex: 1,
+  },
+  xpHeadlineIcon: { fontSize: 16 },
+  xpHeadlineValue: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 26, color: DARK,
+  },
+  xpHeadlineSuffix: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: DARK,
+  },
+  xpBreakdown: {
+    display: 'flex', flexDirection: 'column', gap: 4,
+    margin: '0 auto 16px',
+    maxWidth: 320,
+    textAlign: 'left',
+    position: 'relative', zIndex: 1,
+  },
+  xpBreakdownRow: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    fontFamily: 'Inter, sans-serif', fontSize: 12,
+    color: 'rgba(28,27,46,0.7)',
+    padding: '4px 10px',
+    borderBottom: '1px dashed rgba(28,27,46,0.08)',
+  },
+  xpBreakdownVal: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13,
+    color: GREEN,
+  },
+
+  levelCard: {
+    background: 'rgba(28,27,46,0.04)',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 16,
+    position: 'relative', zIndex: 1,
+  },
+  levelHead: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+    marginBottom: 8,
+  },
+  levelName: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 13, color: DARK,
+  },
+  levelXp: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 800, fontSize: 13, color: TEAL,
+  },
+  levelBar: {
+    height: 8, background: 'rgba(28,27,46,0.1)', borderRadius: 99, overflow: 'hidden',
+  },
+  levelFill: {
+    height: '100%',
+    background: 'linear-gradient(90deg, #2A9490, #F5E06D)',
+    borderRadius: 99,
+    transition: 'width 1.2s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+  levelHint: {
+    fontFamily: 'Inter, sans-serif', fontSize: 11,
+    color: 'rgba(28,27,46,0.55)', marginTop: 6, textAlign: 'right',
+  },
+
   recapSub: {
     fontFamily: 'Inter, sans-serif', fontSize: 13,
     color: 'rgba(28,27,46,0.6)', margin: '0 0 10px',
+    position: 'relative', zIndex: 1,
   },
   recapDefi: {
     background: YELLOW, color: DARK,
     fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 15,
     padding: '14px 18px', borderRadius: 12,
     marginBottom: 16,
+    position: 'relative', zIndex: 1,
   },
   recapHint: {
     fontFamily: 'Inter, sans-serif', fontSize: 13,
     color: 'rgba(28,27,46,0.65)', lineHeight: 1.55, margin: '0 0 4px',
+    position: 'relative', zIndex: 1,
+  },
+
+  newBadges: {
+    margin: '18px 0 4px',
+    padding: '14px 12px',
+    background: 'rgba(245,224,109,0.18)',
+    border: '1px solid rgba(245,224,109,0.5)',
+    borderRadius: 14,
+    position: 'relative', zIndex: 1,
+  },
+  newBadgesTitle: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 12,
+    color: DARK, marginBottom: 10, letterSpacing: 0.5,
+  },
+  newBadgesRow: {
+    display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10,
+  },
+  newBadgeItem: {
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+    background: '#fff',
+    border: '2px solid rgba(245,224,109,0.8)',
+    borderRadius: 12,
+    padding: '10px 12px',
+    minWidth: 78,
+    opacity: 0,
+  },
+  newBadgeIcon: { fontSize: 26 },
+  newBadgeLabel: {
+    fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontSize: 10,
+    color: DARK, textAlign: 'center', lineHeight: 1.2,
   },
 }
