@@ -93,12 +93,12 @@ export default function Access({ onSuccess }) {
         </form>
 
         <a
-          href="https://cerveau-electrique.fr"
+          href="https://cerveau-electrique.fr/cockpit-anti-crise/"
           target="_blank"
           rel="noopener noreferrer"
           style={s.buyLink}
         >
-          Tu n'as pas de code ? <span style={s.buyLinkAccent}>Acheter le Cockpit →</span>
+          Tu n'as pas encore acheté ton Cockpit ? <span style={s.buyLinkAccent}>Rendez-vous ici →</span>
         </a>
       </div>
     </div>
