@@ -9,7 +9,22 @@ import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveilla
 import cortexPassionne from '../../assets/characters/cortex/cortex-passionne.webp'
 import cortexPerplexe from '../../assets/characters/cortex/cortex-perplexe.webp'
 
+import intro1 from '../../assets/formation/intro-1-phases.jpg'
+import intro2 from '../../assets/formation/intro-2-stop.jpg'
+import intro3 from '../../assets/formation/intro-3-valider.jpg'
+import intro4 from '../../assets/formation/intro-4-coin-calme.jpg'
+import intro5 from '../../assets/formation/intro-5-apres.jpg'
+import intro6 from '../../assets/formation/intro-6-matin.jpg'
+import intro7 from '../../assets/formation/intro-7-devoirs.jpg'
+import intro8 from '../../assets/formation/intro-8-ecrans.jpg'
+import intro9 from '../../assets/formation/intro-9-coucher.jpg'
+import intro10 from '../../assets/formation/intro-10-public.jpg'
+
 const cortexMap = { bienveillant: cortexBienveillant, passionne: cortexPassionne, perplexe: cortexPerplexe }
+const INTRO_HEROES = {
+  1: intro1, 2: intro2, 3: intro3, 4: intro4, 5: intro5,
+  6: intro6, 7: intro7, 8: intro8, 9: intro9, 10: intro10,
+}
 
 /* Sur fond crème, le jaune #F5E06D est illisible en texte.
    On retourne un ambre foncé pour le texte tout en gardant la teinte CE pour les fonds/bordures. */
@@ -100,30 +115,51 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
   switch (c.type) {
     case 'intro': {
       const apercu = lecon.apercu || c.points || []
+      const heroImg = INTRO_HEROES[lecon.id]
       return (
-        <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '56px 0 0 0' }}>
-          {/* Center: titre + texte */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 24px' }}>
-            <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700, marginBottom: 16 }}>
+        <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '56px 0 24px 0', display: 'flex', flexDirection: 'column' }}>
+          {/* 1. Badge module */}
+          <div style={{ padding: '0 24px' }}>
+            <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700 }}>
               {lecon.moduleLabel}
             </span>
-            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 26, fontWeight: 800, color: '#1C1B2E', textAlign: 'center', margin: 0, padding: '0 8px', lineHeight: 1.2 }}>{c.titre}</h2>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#64748B', textAlign: 'center', lineHeight: 1.55, margin: '12px 0 0', padding: '0 16px' }}>{c.texte}</p>
           </div>
-          {/* Bottom card */}
-          <div style={{ background: 'rgba(28,27,46,0.06)', borderTop: '1px solid rgba(28,27,46,0.08)', padding: '16px 24px 32px' }}>
-            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 600, marginBottom: 12 }}>DANS CETTE LECON</p>
+
+          {/* 2. Titre + 3. Sous-titre */}
+          <div style={{ padding: '14px 24px 0' }}>
+            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 28, fontWeight: 800, color: '#1C1B2E', margin: 0, lineHeight: 1.18 }}>{c.titre}</h2>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 16, color: '#64748B', lineHeight: 1.55, margin: '12px 0 0' }}>{c.texte}</p>
+          </div>
+
+          {/* 4. Dans cette leçon + puces */}
+          <div style={{ padding: '20px 24px 0' }}>
+            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700, marginBottom: 10 }}>DANS CETTE LEÇON</p>
             {apercu.map((p, i) => (
               <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 8, alignItems: 'flex-start' }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: `${color}99`, marginTop: 5, flexShrink: 0 }} />
-                <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#1C1B2E', lineHeight: 1.4 }}>{p}</span>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: `${color}99`, marginTop: 6, flexShrink: 0 }} />
+                <span style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#1C1B2E', lineHeight: 1.45 }}>{p}</span>
               </div>
             ))}
-            <div style={{ height: 1, background: 'rgba(28,27,46,0.08)', marginTop: 14 }} />
-            <p className="pulse" style={{ fontFamily: 'Inter,sans-serif', fontWeight: 500, fontSize: 13, color: '#2A9490', textAlign: 'center', marginTop: 12 }}>
+          </div>
+
+          {/* 5. Ligne durée */}
+          <div style={{ padding: '14px 24px 0' }}>
+            <p className="pulse" style={{ fontFamily: 'Inter,sans-serif', fontWeight: 500, fontSize: 13, color: '#2A9490', textAlign: 'center', margin: 0 }}>
               ⏱ {lecon.duree} · {lecon.cartes.length} cartes · Tape pour commencer
             </p>
           </div>
+
+          {/* 6. Image hero en bas */}
+          {heroImg && (
+            <div style={{ marginTop: 'auto', padding: '20px 16px 0', width: '100%' }}>
+              <img
+                src={heroImg}
+                alt=""
+                draggable={false}
+                style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', display: 'block', borderRadius: 16 }}
+              />
+            </div>
+          )}
         </div>
       )
     }
