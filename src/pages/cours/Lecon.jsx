@@ -165,8 +165,11 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
     }
     case 'fact': return (
       <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '72px 0 80px 0' }}>
-        <div style={{ background: color, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div><span style={{ fontSize: 10, color: '#64748B', textTransform: 'uppercase', letterSpacing: 2, fontWeight: 600 }}>{c.label}</span><h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#1C1B2E', margin: '4px 0 0', fontWeight: 700 }}>{c.titre}</h3></div>
+        <div style={{ borderLeft: `4px solid ${color}`, padding: '4px 20px', margin: '0 20px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <span style={{ fontSize: 10, color: accent(color), textTransform: 'uppercase', letterSpacing: 2, fontWeight: 700 }}>{c.label}</span>
+            <h3 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 20, color: '#1C1B2E', margin: '4px 0 0', fontWeight: 700 }}>{c.titre}</h3>
+          </div>
           <span style={{ fontSize: 36 }}>{c.icone}</span>
         </div>
         <div style={{ padding: 20, flex: 1 }}>
