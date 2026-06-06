@@ -1,9 +1,0 @@
-{
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "cockpit-ce",
-  "compatibility_date": "2025-10-01",
-  "pages_build_output_dir": "./dist",
-  "assets": {
-    "not_found_handling": "single-page-application"
-  }
-}
