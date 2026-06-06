@@ -49,7 +49,7 @@ const TOOLS = [
   { id: 'thermo',     emoji: '🌡️', label: 'Thermomètre',            hint: 'À afficher au mur',            color: '#FF6B4A', accent: '#fff',    action: { type: 'pdf',  url: '/pdfs/thermometre-emotions.pdf' } },
   { id: 'kit',        emoji: '🏠', label: 'Kit Anti-Crise',         hint: 'Coin calme + déclencheurs',    color: '#2A9490', accent: '#fff',    action: { type: 'pdf',  url: '/pdfs/kit-anti-crise.pdf' } },
   { id: 'journal',    emoji: '📓', label: 'Journal des crises',     hint: 'Planche 4 fiches',             color: '#5D4192', accent: '#fff',    action: { type: 'pdf',  url: '/pdfs/journal-simple-planche.pdf' } },
-  { id: 'victoires',  emoji: '🏆', label: 'Système de Victoires',   hint: 'Cartes + tableau + contrat',   color: '#A88E1F', accent: '#fff',    action: { type: 'pdf',  url: '/pdfs/systeme-victoires.pdf' } },
+  { id: 'victoires',  emoji: '🏆', label: 'Système de Victoires',   hint: 'Cartes + tableau + contrat',   color: '#A88E1F', accent: '#fff',    action: { type: 'pdf',  url: '/pdfs/systeme-victoires-digital.pdf' } },
   { id: 'quiz',       emoji: '🎯', label: 'Quiz Émotions',          hint: '5 quiz · 10 min',              color: '#3E8E5E', accent: '#fff',    action: { type: 'route', url: '/quiz' } },
 ]
 

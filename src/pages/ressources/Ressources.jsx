@@ -36,7 +36,7 @@ const PDF_MAP = {
   2:  '/pdfs/thermometre-emotions.pdf',
   4:  '/pdfs/kit-anti-crise.pdf',                 // recto coin calme + verso déclencheurs
   6:  '/pdfs/journal-simple-planche.pdf',         // planche 4 fiches A6
-  10: '/pdfs/systeme-victoires.pdf',
+  10: '/pdfs/systeme-victoires-digital.pdf',
 }
 
 // Bibliothèque Phrases STOP — deck + universel + 8 contextes
