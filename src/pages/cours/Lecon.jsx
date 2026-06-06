@@ -102,14 +102,13 @@ function RenderCard({ carte: c, color, cortex, lecon, onShowScenario, onComplete
       const apercu = lecon.apercu || c.points || []
       return (
         <div style={{ ...S.cardFull, background: '#FAFAF5', padding: '56px 0 0 0' }}>
-          {/* Center: Cortex + titre + texte */}
+          {/* Center: titre + texte */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 24px' }}>
-            <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700, marginBottom: 14 }}>
+            <span style={{ display: 'inline-block', background: '#fff', border: `1px solid ${color}66`, borderRadius: 20, padding: '5px 12px', fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, color: accent(color), fontWeight: 700, marginBottom: 16 }}>
               {lecon.moduleLabel}
             </span>
-            <img src={cortex} alt="Cortex" className="sway" style={{ height: 130, objectFit: 'contain' }} draggable={false} />
-            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 24, fontWeight: 800, color: '#1C1B2E', textAlign: 'center', margin: '16px 0 0', padding: '0 8px' }}>{c.titre}</h2>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#64748B', textAlign: 'center', lineHeight: 1.5, margin: '8px 0 0', padding: '0 16px' }}>{c.texte}</p>
+            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 26, fontWeight: 800, color: '#1C1B2E', textAlign: 'center', margin: 0, padding: '0 8px', lineHeight: 1.2 }}>{c.titre}</h2>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 15, color: '#64748B', textAlign: 'center', lineHeight: 1.55, margin: '12px 0 0', padding: '0 16px' }}>{c.texte}</p>
           </div>
           {/* Bottom card */}
           <div style={{ background: 'rgba(28,27,46,0.06)', borderTop: '1px solid rgba(28,27,46,0.08)', padding: '16px 24px 32px' }}>
