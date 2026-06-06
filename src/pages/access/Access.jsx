@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import logoCE from '../../assets/logo-ce.png'
+import logoCE from '../../assets/logo-ce.webp'
 import { supabase } from '../../lib/supabase'
 
 export default function Access({ onSuccess }) {

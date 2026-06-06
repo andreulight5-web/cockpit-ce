@@ -9,7 +9,7 @@ import papaEncourageant from '../../assets/characters/papa/encourageant.webp'
 import cortexBienveillant from '../../assets/characters/cortex/cortex-bienveillant.webp'
 import monstreCalin from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreRigole from '../../assets/characters/monstre~/monstre-rigole.webp'
-import logoCE from '../../assets/logo-ce.png'
+import logoCE from '../../assets/logo-ce.webp'
 
 const personnages = [
   { label: 'Maman', img: mamanFiere },

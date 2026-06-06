@@ -6,7 +6,7 @@ import { AppContext } from '../../lib/AppContext'
 import monstreCalin     from '../../assets/characters/monstre~/monstre-calin.webp'
 import monstreSurexcite from '../../assets/characters/monstre~/monstre-surexcite.webp'
 import monstreChuchote  from '../../assets/characters/monstre~/monstre-chuchote.webp'
-import monstreMalicieux from '../../assets/characters/monstre~/Malicieux.webp'
+import monstreMalicieux from '../../assets/characters/monstre~/monstre-malicieux.webp'
 import monstreTriste    from '../../assets/characters/monstre~/monstre-triste.webp'
 import monstreRigole    from '../../assets/characters/monstre~/monstre-rigole.webp'
 

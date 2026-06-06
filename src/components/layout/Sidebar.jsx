@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppContext } from '../../lib/AppContext'
-import logoCE from '../../assets/logo-ce.png'
+import logoCE from '../../assets/logo-ce.webp'
 
 const NAV_ITEMS = [
   { to: '/accueil',   icon: '🏠', label: 'Accueil' },
