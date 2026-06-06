@@ -120,7 +120,7 @@ export function buildCustomerEmail({
     </div>
 
     <div style="background:#FAFAF5;padding:18px 28px;border-top:1px solid rgba(28,27,46,0.06);font-family:Inter,sans-serif;font-size:11.5px;color:#64748B;text-align:center;">
-      Cerveau Électrique · cerveau-electrique.fr
+      Cerveau Électrique · <a href="https://cerveau-electrique.fr/cerveau-electrique/" style="color:#2A9490;text-decoration:none;">cerveau-electrique.fr</a>
     </div>
   </div>
 </body></html>`
