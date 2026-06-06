@@ -93,7 +93,7 @@ export default function Access({ onSuccess }) {
         </form>
 
         <a
-          href="https://cerveau-electrique.fr/cockpit-anti-crise/"
+          href="https://cerveau-electrique.fr/cockpit/"
           target="_blank"
           rel="noopener noreferrer"
           style={s.buyLink}
